@@ -88,6 +88,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                 dan mudah
                 digunakan.
             </p>
+            <a href="../index.php" class="btn-kembali">Kembali</a>
         </div>
 
         <div class="content">

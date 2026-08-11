@@ -70,6 +70,35 @@ body {
     color: white;
 }
 
+.btn-kembali {
+    position: absolute;
+    left: 38px;
+    bottom: 55px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 45px;
+    border: 2px solid #ffd84d;
+    border-radius: 25px;
+    color: #ffffff;
+    background-color: transparent;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 700;
+    transition: all 0.25s ease;
+}
+
+.btn-kembali:hover {
+    background-color: #ffd84d;
+    color: #2d8b2d;
+    transform: translateY(-2px);
+}
+
+.btn-kembali:active {
+    transform: translateY(0);
+}
+
 .content {
     flex: 1;
     min-height: 100vh;
