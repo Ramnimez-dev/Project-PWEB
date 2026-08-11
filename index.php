@@ -175,7 +175,7 @@ body {
     <h1>Tentang Kami</h1>
     
     <p>
-        <strong>Tentang Halo SarPras SMK Taruna Bangsa</strong> adalah platform layanan pengaduan sarana, prasarana, dan kebersihan di <strong>SMK Taruna Bangsa</strong>. Diciptakan untuk mempermudah seluruh warga sekolah dalam melaporkan kerusakan fasilitas secara cepat, transparan, dan terintegrasi.
+        <strong>Halo SarPras SMK Taruna Bangsa</strong> adalah platform layanan pengaduan sarana, prasarana, dan kebersihan di <strong>SMK Taruna Bangsa</strong>. Diciptakan untuk mempermudah seluruh warga sekolah dalam melaporkan kerusakan fasilitas secara cepat, transparan, dan terintegrasi.
     </p>
 
     <p>
