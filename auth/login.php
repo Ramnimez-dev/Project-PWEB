@@ -46,7 +46,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif($data['role'] == 'user') {
         echo "<script>
         alert('Login Berhasil! Selamat Datang {$data['nama']}');
-        window.location.href = '../user/index.php';
+        window.location.href = '../user/dashboard.php';
         </script>";
         exit;
     } else {
