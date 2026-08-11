@@ -4,9 +4,22 @@
     box-sizing: border-box;
 }
 
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background-color: #e5e5e5;
+    background-color: #e3e3e3;
+}
+
+.container {
+    width: 100%;
+    min-height: calc(100vh - 8px);
+    display: flex;
+    background-color: #e3e3e3;
 }
 
 .container {
@@ -72,14 +85,14 @@ body {
 
 .content {
     flex: 1;
-    min-height: 100vh;
+    min-height: calc(100vh - 8px);
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 30px;
+    padding: 20px 30px;
 }
 
-.login-wrapper {
+.register-wrapper {
     width: 100%;
     max-width: 500px;
     display: flex;
@@ -87,132 +100,162 @@ body {
     align-items: center;
 }
 
-.header-login {
+.header-register {
+    width: 100%;
     text-align: center;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
-.header-login h1 {
+.header-register h1 {
     color: #2d8b2d;
     font-size: 36px;
+    line-height: 1;
     font-weight: 700;
     text-transform: uppercase;
-    line-height: 1;
     margin-bottom: 5px;
 }
 
-.header-login p {
+.header-register p {
     color: #111;
     font-size: 12px;
     line-height: 1.35;
+    width: 160px;
+    margin: 0 auto;
 }
 
-.card-login {
+.card-register {
     width: 300px;
-    min-height: 345px;
-    background-color: white;
+    background-color: #ffffff;
     border-radius: 14px;
-    padding: 38px 32px 25px;
+    padding: 12px 32px 15px;
+    box-shadow: none;
 }
 
 .form-group {
     width: 100%;
-    margin-bottom: 14px;
+    margin-bottom: 6px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 10px;
-    color: #151515;
-    font-size: 14px;
+    color: #161616;
+    font-size: 11px;
     font-weight: 700;
+    margin-bottom: 4px;
 }
 
 .form-group input {
     width: 100%;
-    height: 37px;
-    padding: 0 16px;
+    height: 30px;
+    padding: 0 14px;
     border: 1px solid #555;
-    border-radius: 9px;
+    border-radius: 8px;
     outline: none;
-    background-color: white;
-    font-size: 11px;
-    font-style: italic;
+    background-color: #ffffff;
     color: #333;
+    font-size: 9px;
+    font-style: italic;
+    transition: 0.2s;
 }
 
 .form-group input::placeholder {
     color: #999;
     opacity: 1;
+    text-align: center;
 }
 
 .form-group input:focus {
     border-color: #2d8b2d;
-    box-shadow: 0 0 0 2px rgba(45, 139, 45, 0.12);
+    box-shadow: 0 0 0 2px rgba(45, 139, 45, 0.1);
 }
 
-.card-login button {
+.form-group select {
+    width: 100%;
+    height: 31px;
+    padding: 0 14px;
+    border: 1px solid #555;
+    border-radius: 8px;
+    outline: none;
+    background-color: white;
+    color: #999;
+    font-size: 9px;
+    font-style: italic;
+    text-align: center;
+    cursor: pointer;
+}
+
+.form-group select:focus {
+    border-color: #2d8b2d;
+    box-shadow: 0 0 0 2px rgba(45, 139, 45, 0.1);
+}
+
+.form-group select option {
+    color: #333;
+    font-style: normal;
+}
+
+.card-register button {
     display: block;
-    width: 196px;
-    height: 49px;
-    margin: 17px auto 0;
+    width: 164px;
+    height: 40px;
+    margin: 15px auto 0;
     border: none;
-    border-radius: 30px;
+    border-radius: 25px;
     background-color: #ffd65a;
     color: #111;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
-.card-login button:hover {
+.card-register button:hover {
     background-color: #f5c943;
     transform: translateY(-1px);
 }
 
-.card-login button:active {
+.card-register button:active {
     transform: translateY(0);
 }
 
-.login-wrapper > p {
-    margin-top: 13px;
-    font-size: 12px;
+.register-wrapper > p {
+    margin-top: 10px;
+    font-size: 11px;
     color: #333;
     text-align: center;
 }
 
-.login-wrapper > p a {
+.register-wrapper > p a {
     color: #2d8b2d;
     font-weight: 700;
     text-decoration: none;
 }
 
-.login-wrapper > p a:hover {
+.register-wrapper > p a:hover {
     text-decoration: underline;
 }
 
 @media (max-width: 768px) {
 
     .sidebar {
-        width: 250px;
-        padding: 25px;
+        width: 230px;
+        padding: 25px 20px;
     }
 
     .logo {
-        width: 110px;
+        width: 115px;
         height: 130px;
     }
 
     .brand-text h1 {
-        font-size: 34px;
+        font-size: 33px;
     }
 
     .content {
         padding: 20px;
     }
 
-    .card-login {
+    .card-register {
         width: 300px;
     }
 }
@@ -254,18 +297,18 @@ body {
     .content {
         width: 100%;
         min-height: auto;
-        padding: 40px 20px;
+        padding: 35px 15px;
     }
 
-    .login-wrapper {
+    .register-wrapper {
         width: 100%;
     }
 
-    .header-login h1 {
+    .header-register h1 {
         font-size: 32px;
     }
 
-    .card-login {
+    .card-register {
         width: 100%;
         max-width: 300px;
     }

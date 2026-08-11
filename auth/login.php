@@ -72,7 +72,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="sidebar">
             <div class="logo">
-                <img src="" alt="">
+                <img src="../img/logo sapras.png" alt="Logo Sarpras">
             </div>
             <div class="brand-text">
                 <h1>
