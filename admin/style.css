@@ -1,4 +1,6 @@
-/* dashboard */
+/* ==========================================================================
+   dashboard
+   ========================================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap');
 :root {
   --paper:#F2F3ED; --surface:#FFF; --ink:#1B231F; --sub:#6B756C; --line:#DCE0D6;
@@ -260,8 +262,9 @@ a {
 
 
 
-
-/* data aduan */
+/* ==========================================================================
+   data aduan
+   ========================================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
 :root {
@@ -819,4 +822,916 @@ tbody tr.clickable:hover {
      .sidebar { display: none; } 
      .content { padding: 14px; } 
      .meta-grid { grid-template-columns: 1fr; } 
-    }
+}
+
+
+/* ==========================================================================
+   data pengguna
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  /* Color Palette */
+  --paper: #F2F3ED;
+  --surface: #FFFFFF;
+  --ink: #1B231F;
+  --sub: #6B756C;
+  --line: #DCE0D6;
+
+  /* Primary Brand */
+  --primary: #2C4A38;
+  --primary-dark: #1D3226;
+  --primary-faint: #E4EAE3;
+
+  /* Accents & Statuses */
+  --amber: #B4711A;
+  --amber-faint: #F6E7D2;
+  --red: #A63A2E;
+  --red-faint: #F3DED9;
+  --green: #3D7A55;
+  --green-faint: #DEEAE1;
+  --gold: #C9A15A;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: 'Inter', sans-serif;
+}
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.content {
+  flex: 1;
+  padding: 26px 28px;
+}
+
+.sidebar {
+  width: 232px;
+  flex-shrink: 0;
+  background-color: var(--primary-dark);
+  display: flex;
+  flex-direction: column;
+  padding: 22px 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  margin-bottom: 30px;
+}
+
+.brand-mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background-color: var(--gold);
+  color: var(--primary-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.brand-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 17px;
+  color: #FFFFFF;
+  line-height: 1.1;
+}
+
+.brand-sub {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.04em;
+}
+
+.nav-label {
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 0 14px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 14px;
+  margin-bottom: 4px;
+  border: none;
+  border-left: 3px solid transparent;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+.nav-item span.label {
+  flex: 1;
+}
+
+.nav-item.active {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-left-color: var(--gold);
+  color: #FFFFFF;
+}
+
+.nav-item .badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.sidebar-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 14px;
+  margin-top: 14px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  border-bottom: 1px solid var(--line);
+  background-color: var(--surface);
+}
+
+.topbar-date {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--sub);
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.avatar-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: var(--primary-faint);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.admin-name {
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.admin-role {
+  font-size: 10.5px;
+  color: var(--sub);
+}
+
+.bell-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--sub);
+  position: relative;
+}
+
+.bell-dot {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--red);
+  border: 1.5px solid var(--surface);
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--primary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.section-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  background-color: var(--surface);
+  color: var(--ink);
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: #FFFFFF;
+  border-color: var(--primary);
+}
+
+.btn-ghost {
+  border: 1px solid var(--line);
+  background: none;
+  color: var(--sub);
+  padding: 5px 9px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-danger-ghost {
+  border: 1px solid var(--line);
+  background: none;
+  color: var(--red);
+  padding: 5px 9px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Toolbar, Search, & Filters */
+.toolbar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px 12px;
+  background-color: var(--surface);
+  flex: 1;
+  min-width: 220px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  flex: 1;
+  background: transparent;
+}
+
+.filter-group {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  padding: 8px 13px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 500;
+  border: 1px solid var(--line);
+  background-color: var(--surface);
+  color: var(--ink);
+  text-transform: capitalize;
+}
+
+.filter-chip.active {
+  border-color: var(--primary);
+  background-color: var(--primary);
+  color: #FFFFFF;
+}
+
+.table-card {
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead tr {
+  background-color: var(--paper);
+}
+
+th {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--sub);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid var(--line);
+}
+
+td {
+  padding: 13px 14px;
+  font-size: 13.5px;
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+
+td.mono {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12.5px;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background-color: var(--paper);
+}
+
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: var(--primary-faint);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 12.5px;
+  flex-shrink: 0;
+}
+
+.user-name {
+  font-weight: 500;
+}
+
+.role-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  background-color: var(--paper);
+  color: var(--sub);
+}
+
+.role-badge.admin {
+  background-color: var(--primary-faint);
+  color: var(--primary);
+}
+
+.row-actions {
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 860px) {
+  .sidebar {
+    display: none;
+  }
+
+  .content {
+    padding: 18px;
+  }
+}
+
+/* ==========================================================================
+   kategori barang
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  /* Color Palette */
+  --paper: #F2F3ED;
+  --surface: #FFFFFF;
+  --ink: #1B231F;
+  --sub: #6B756C;
+  --line: #DCE0D6;
+
+  /* Primary Brand */
+  --primary: #2C4A38;
+  --primary-dark: #1D3226;
+  --primary-faint: #E4EAE3;
+
+  /* Accents & Statuses */
+  --amber: #B4711A;
+  --amber-faint: #F6E7D2;
+  --red: #A63A2E;
+  --red-faint: #F3DED9;
+  --green: #3D7A55;
+  --green-faint: #DEEAE1;
+  --gold: #C9A15A;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: 'Inter', sans-serif;
+}
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.content {
+  flex: 1;
+  padding: 26px 28px;
+}
+
+.sidebar {
+  width: 232px;
+  flex-shrink: 0;
+  background-color: var(--primary-dark);
+  display: flex;
+  flex-direction: column;
+  padding: 22px 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  margin-bottom: 30px;
+}
+
+.brand-mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background-color: var(--gold);
+  color: var(--primary-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.brand-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 17px;
+  color: #FFFFFF;
+  line-height: 1.1;
+}
+
+.brand-sub {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.04em;
+}
+
+.nav-label {
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 0 14px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 14px;
+  margin-bottom: 4px;
+  border: none;
+  border-left: 3px solid transparent;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+.nav-item span.label {
+  flex: 1;
+}
+
+.nav-item.active {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-left-color: var(--gold);
+  color: #FFFFFF;
+}
+
+.nav-item .badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.sidebar-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 14px;
+  margin-top: 14px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  border-bottom: 1px solid var(--line);
+  background-color: var(--surface);
+}
+
+.topbar-date {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--sub);
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.avatar-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: var(--primary-faint);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.admin-name {
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.admin-role {
+  font-size: 10.5px;
+  color: var(--sub);
+}
+
+.bell-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--sub);
+  position: relative;
+}
+
+.bell-dot {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--red);
+  border: 1.5px solid var(--surface);
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--primary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.section-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  background-color: var(--surface);
+  color: var(--ink);
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: #FFFFFF;
+  border-color: var(--primary);
+}
+
+.btn-ghost {
+  border: 1px solid var(--line);
+  background: none;
+  color: var(--sub);
+  padding: 5px 9px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-danger-ghost {
+  border: 1px solid var(--line);
+  background: none;
+  color: var(--red);
+  padding: 5px 9px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Toolbar & Search Box */
+.toolbar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px 12px;
+  background-color: var(--surface);
+  flex: 1;
+  min-width: 220px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  flex: 1;
+  background: transparent;
+}
+
+.kategori-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.kategori-card {
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px 18px;
+  position: relative;
+}
+
+.kategori-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  background-color: var(--primary-faint);
+  margin-bottom: 12px;
+  color: var(--primary);
+}
+
+.kategori-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.kategori-count {
+  font-size: 12px;
+  color: var(--sub);
+  margin-top: 2px;
+}
+
+.kategori-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.kategori-rank {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  color: var(--sub);
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 50px 20px;
+  color: var(--sub);
+}
+
+.empty-state svg {
+  opacity: 0.35;
+  margin-bottom: 10px;
+}
+
+/* Modal Dialog */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(27, 35, 31, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 20px;
+}
+
+.modal-box {
+  background-color: var(--surface);
+  width: 420px;
+  max-width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+}
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.modal-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--sub);
+  padding: 6px;
+}
+
+.modal-body {
+  padding: 20px 22px;
+}
+
+.field-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--sub);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 6px;
+}
+
+.field-input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 9px 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  box-sizing: border-box;
+  margin-bottom: 18px;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.sidebar {
+    display: none;
+}
+
+.content {
+    padding: 18px;
+}
