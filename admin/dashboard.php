@@ -20,20 +20,6 @@ function statusPill(string $status): string {
     return '<span class="pill ' . $class . '"><span class="pill-dot"></span>' . htmlspecialchars($status) . '</span>';
 }
 
-// Data Dummy & Stats Calculation (Lebih singkat)
-$aduanDummy = [
-    ['id' => 1042, 'barang' => 'AC Ruang Kelas 3B mati total', 'kategori' => 'Elektronik', 'lokasi' => 'Gedung B, Lt. 2, R.3B', 'status' => 'Belum Dikerjakan'],
-    ['id' => 1041, 'barang' => 'Kursi kuliah patah bagian sandaran', 'kategori' => 'Furnitur', 'lokasi' => 'Gedung A, Lt. 1, R.1A', 'status' => 'Sedang Dikerjakan'],
-    ['id' => 1040, 'barang' => 'Wastafel toilet lantai 2 bocor', 'kategori' => 'Sanitasi', 'lokasi' => 'Gedung C, Lt. 2, Toilet Pria', 'status' => 'Selesai'],
-    ['id' => 1039, 'barang' => 'Wifi lab komputer tidak stabil', 'kategori' => 'Jaringan & IT', 'lokasi' => 'Gedung D, Lab Komputer 1', 'status' => 'Sedang Dikerjakan'],
-    ['id' => 1038, 'barang' => 'Plafon ruang rapat retak', 'kategori' => 'Bangunan', 'lokasi' => 'Gedung A, Lt. 3, R. Rapat', 'status' => 'Belum Dikerjakan'],
-];
-
-$statMap = array_count_values(array_column($aduanDummy, 'status'));
-$counts = array_merge(['Belum Dikerjakan' => 0, 'Sedang Dikerjakan' => 0, 'Selesai' => 0], $statMap);
-$total = count($aduanDummy);
-$adminName = 'Budi Santoso';
-
 // Format Tanggal Singkat
 $hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][date('w')];
 $bulan = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'][date('n')];
