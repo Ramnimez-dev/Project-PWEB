@@ -58,6 +58,7 @@ $belumCount = 2; // dummy badge sidebar, nanti diganti query COUNT status 'Belum
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kategori Barang — Sarpras</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="layout">
@@ -72,12 +73,12 @@ $belumCount = 2; // dummy badge sidebar, nanti diganti query COUNT status 'Belum
         </div>
 
         <div class="nav-label">Menu</div>
-        <a href="dashboard.php" class="nav-item"><?= icon('grid') ?><span class="label">Dasbor</span></a>
-        <a href="aduan.php" class="nav-item"><?= icon('clipboard') ?><span class="label">Data Aduan</span>
+        <a href="dashboard.php" class="nav-item"><?= icon('grid') ?><span class="label">Dashboard</span></a>
+        <a href="data_aduan.php" class="nav-item"><?= icon('clipboard') ?><span class="label">Data Aduan</span>
             <?php if ($belumCount > 0): ?><span class="badge"><?= $belumCount ?></span><?php endif; ?>
         </a>
-        <a href="kategori.php" class="nav-item active"><?= icon('tags') ?><span class="label">Kategori Barang</span></a>
-        <a href="users.php" class="nav-item"><?= icon('users') ?><span class="label">Data Pengguna</span></a>
+        <a href="kategori_barang.php" class="nav-item active"><?= icon('tags') ?><span class="label">Kategori Barang</span></a>
+        <a href="data_pengguna.php" class="nav-item"><?= icon('users') ?><span class="label">Data Pengguna</span></a>
 
         <div style="flex:1"></div>
         <div class="sidebar-footer">

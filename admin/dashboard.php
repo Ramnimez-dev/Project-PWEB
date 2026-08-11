@@ -54,14 +54,16 @@ $tanggalText = "$hari, " . date('j') . " $bulan " . date('Y');
             <div><div class="brand-name">SARPRAS</div><div class="brand-sub">PANEL ADMIN</div></div>
         </div>
         <div class="nav-label">Menu</div>
-        <a href="#" class="nav-item active"><?= icon('grid') ?> <span>Dasbor</span></a>
-        <a href="#" class="nav-item"><?= icon('clipboard') ?> <span>Data Aduan</span>
+        <a href="dashboard.php" class="nav-item active"><?= icon('grid') ?> <span>Dashboard</span></a>
+        <a href="data_aduan.php" class="nav-item"><?= icon('clipboard') ?> <span>Data Aduan</span>
             <?php if ($counts['Belum Dikerjakan']): ?><span class="badge"><?= $counts['Belum Dikerjakan'] ?></span><?php endif; ?>
         </a>
-        <a href="#" class="nav-item"><?= icon('tags') ?> <span>Kategori Barang</span></a>
-        <a href="#" class="nav-item"><?= icon('users') ?> <span>Data Pengguna</span></a>
+        <a href="kategori_barang.php" class="nav-item"><?= icon('tags') ?> <span>Kategori Barang</span></a>
+        <a href="data_pengguna.php" class="nav-item"><?= icon('users') ?> <span>Data Pengguna</span></a>
+        
+        <div style="flex:1"></div>
         <div class="sidebar-footer">
-            <a href="#" class="nav-item"><?= icon('logout') ?> <span>Keluar</span></a>
+            <a href="#" class="nav-item"><?= icon('logout') ?><span class="label">Keluar</span></a>
         </div>
     </aside>
 

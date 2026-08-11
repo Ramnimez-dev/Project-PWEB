@@ -1728,10 +1728,7 @@ button {
   justify-content: flex-end;
 }
 
-.sidebar {
-    display: none;
-}
-
-.content {
-    padding: 18px;
+@media (max-width: 860px) {
+  .sidebar { display: none; }
+  .content { padding: 18px; }
 }
