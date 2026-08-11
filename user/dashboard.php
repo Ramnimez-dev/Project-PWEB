@@ -188,12 +188,12 @@ button, input, select, textarea { font-family: 'Inter', sans-serif; }
         </div>
 
         <div class="nav-label">Menu</div>
-        <a href="user_dashboard.php" class="nav-item active"><?= icon('grid') ?><span class="label">Dashboard</span></a>
-        <a href="user_riwayat.php" class="nav-item"><?= icon('history') ?><span class="label">Riwayat Aduan</span></a>
+        <a href="dashboard.php" class="nav-item active"><?= icon('grid') ?><span class="label">Dashboard</span></a>
+        <a href="riwayat.php" class="nav-item"><?= icon('history') ?><span class="label">Riwayat Aduan</span></a>
 
         <div style="flex:1"></div>
         <div class="sidebar-footer">
-            <a href="#" class="nav-item"><?= icon('logout') ?><span class="label">Keluar</span></a>
+            <a href="../auth/logout.php" onclick="return confirm('Yakin Ingin Logout?')" class="nav-item"><?= icon('logout') ?><span class="label">Keluar</span></a>
         </div>
     </aside>
 

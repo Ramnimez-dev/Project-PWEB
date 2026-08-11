@@ -84,21 +84,58 @@ body {
   display: block;
 }
 
+/* Styling Bagian Tentang Kami */
 .about-section {
   width: 50%;
-  padding: 25px 30px;
+  padding: 40px 45px;
+  background-color: #ffffff;
 }
 
 .about-section h1 {
-  font-size: 2rem;
-  font-weight: normal;
-  color: #111111;
-  margin-bottom: 15px;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #1f5c1f; /* Hijau SarPras */
+  margin-bottom: 20px;
+  position: relative;
+  display: inline-block;
+  letter-spacing: -0.5px;
+}
+
+/* Garis dekorasi di bawah Judul */
+.about-section h1::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 60px;
+  height: 4px;
+  background-color: #fbd65c; /* Kuning SarPras */
+  border-radius: 2px;
 }
 
 .about-section p {
-  font-size: 1.2rem;
-  color: #333333;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #444444;
+  margin-bottom: 16px;
+  text-align: justify;
+}
+
+.about-section strong {
+  color: #1f5c1f;
+}
+
+/* Highlight Box untuk Jargon / Slogan */
+.slogan-box {
+  margin-top: 25px;
+  padding: 15px 20px;
+  background-color: #f4fbf4;
+  border-left: 4px solid #2b802b;
+  border-radius: 0 10px 10px 0;
+  font-weight: 600;
+  color: #2b802b;
+  font-style: italic;
+  font-size: 0.98rem;
 }
 
 /* Footer */
@@ -135,9 +172,20 @@ body {
       <img src="img/Banner.jpeg" alt="Banner Halo SarPras" class="banner-img">
     </div>
     <div class="about-section">
-      <h1>Tentang Kami</h1>
-      <p>lorem ipsum</p>
+    <h1>Tentang Kami</h1>
+    
+    <p>
+        <strong>Tentang Halo SarPras SMK Taruna Bangsa</strong> adalah platform layanan pengaduan sarana, prasarana, dan kebersihan di <strong>SMK Taruna Bangsa</strong>. Diciptakan untuk mempermudah seluruh warga sekolah dalam melaporkan kerusakan fasilitas secara cepat, transparan, dan terintegrasi.
+    </p>
+
+    <p>
+        Melalui sistem ini, setiap laporan yang masuk akan langsung diverifikasi oleh tim admin dan ditindaklanjuti oleh petugas secara <em>real-time</em>.
+    </p>
+
+    <div class="slogan-box">
+        "Laporkan, Kami Tindaklanjuti, Sekolah Lebih Nyaman!"
     </div>
+</div>
   </main>
 
   <!-- Footer -->
