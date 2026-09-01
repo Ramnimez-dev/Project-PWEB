@@ -818,6 +818,228 @@ tbody tr.clickable:hover {
     border-color: var(--primary); 
 }
 
+/* --- BACKDROP & CONTAINER MODAL --- */
+.modal-backdrop {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 16px;
+}
+
+.modal-box {
+    background: #ffffff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 580px;
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+    overflow: hidden;
+    animation: modalSlideUp 0.2s ease-out;
+}
+
+@keyframes modalSlideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- HEADER MODAL --- */
+.modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 24px 24px 16px 24px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.modal-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    color: #9ca3af;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+    margin: 4px 0 10px 0;
+}
+
+.modal-meta {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.modal-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.modal-close {
+    padding: 4px;
+    border-radius: 8px;
+    color: #9ca3af;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.modal-close:hover {
+    background-color: #f3f4f6;
+}
+
+/* --- BODY MODAL --- */
+.modal-body {
+    padding: 20px 24px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.field-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #9ca3af;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Isi Keluhan Box */
+.keluhan-box {
+    background-color: #f7f6f2;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.5;
+}
+
+/* Ubah Status Button Group */
+.status-form {
+    display: flex;
+    gap: 8px;
+}
+
+.status-option {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #4b5563;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.status-option:hover {
+    background-color: #f9fafb;
+}
+
+.status-option.selected {
+    background-color: #e6f4ea;
+    border-color: #a7f3d0;
+    color: #065f46;
+    font-weight: 600;
+}
+
+/* Lampiran Chips */
+.lampiran-container {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.lampiran-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-family: monospace;
+    color: #4b5563;
+}
+
+/* Komentar Section */
+.komentar-list {
+    margin-bottom: 12px;
+}
+
+.komentar-item {
+    margin-bottom: 8px;
+}
+
+.komentar-header {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.komentar-admin {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.komentar-time {
+    font-size: 11px;
+    color: #9ca3af;
+}
+
+.komentar-text {
+    font-size: 12px;
+    color: #4b5563;
+}
+
+/* Input Textarea & Submit Button */
+.komentar-form textarea {
+    width: 100%;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 12px;
+    color: #1f2937;
+    outline: none;
+    resize: none;
+    box-sizing: border-box;
+}
+
+.komentar-form textarea:focus {
+    border-color: #273b34;
+    box-shadow: 0 0 0 1px #273b34;
+}
+
+.btn-submit {
+    background-color: #273b34;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-submit:hover {
+    background-color: #1e2d28;
+}
+
 @media (max-width: 768px) {
      .sidebar { display: none; } 
      .content { padding: 14px; } 

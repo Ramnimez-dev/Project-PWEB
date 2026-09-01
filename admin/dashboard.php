@@ -9,6 +9,8 @@ if (empty($_SESSION['id_user']) || ($_SESSION['role'] ?? '') !== 'admin') {
 }
 
 $adminName = $_SESSION['nama'];
+$potongNama = explode(' ', trim($adminName));
+$inisial = strtoupper(substr($potongNama[0], 0, 1) . substr(end($potongNama), 0, 1));
 
 // Hitung jumlah aduan per status
 $counts = ['Belum Dikerjakan' => 0, 'Sedang Dikerjakan' => 0, 'Selesai' => 0];
@@ -101,7 +103,7 @@ $tanggalText = "$hari, " . date('j') . " $bulan " . date('Y');
                     <?php if ($counts['Belum Dikerjakan']): ?><span class="bell-dot"></span><?php endif; ?>
                 </button>
                 <div style="display:flex;align-items:center;gap:8px;">
-                    <div class="avatar-circle">BS</div>
+                    <div class="avatar-circle"><?= $inisial ?></div>
                     <div>
                         <div style="font-size:12.5px;font-weight:600;"><?= htmlspecialchars($adminName) ?></div>
                         <div style="font-size:10.5px;color:var(--sub);">Administrator</div>

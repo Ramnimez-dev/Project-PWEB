@@ -214,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <?= statusPill($a['status']) ?>
                             </div>
                         <?php endforeach; ?>
-                        <a href="user_riwayat.php" class="see-all">Lihat semua riwayat &rarr;</a>
+                        <a href="riwayat.php" class="see-all">Lihat semua riwayat &rarr;</a>
                     </div>
                 </div>
             </div>

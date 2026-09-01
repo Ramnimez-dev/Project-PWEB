@@ -1,9 +1,114 @@
 <?php
 /**
- * HALAMAN DATA ADUAN — versi preview UI Ringkas & Clean
- * Jalankan: php -S localhost:8000 lalu buka http://localhost:8000/aduan.php
+ * HALAMAN DATA ADUAN — Full Functionality (Single File)
+ * Semua proses (Update Status & Tambah Komentar) diproses di file ini.
  */
 
+session_start();
+
+// ---------- DATA DUMMY (Disimpan dalam SESSION agar perubahan tetap persis/interaktif) ----------
+if (!isset($_SESSION['aduanData'])) {
+    $_SESSION['aduanData'] = [
+        1042 => [
+            'id' => 1042, 'barang' => 'AC Ruang Kelas 3B mati total', 'kategori' => 'Elektronik',
+            'pelapor' => 'Rangga Prasetyo', 'jumlah' => 1, 'lokasi' => 'Gedung B, Lt. 2, R.3B',
+            'isi' => 'AC sudah tidak menyala sejak Senin pagi, sudah dicoba remote baru tetap tidak merespon.',
+            'status' => 'Belum Dikerjakan', 'tanggal' => '2026-08-01 08:12',
+            'lampiran' => ['foto_ac_1.jpg', 'foto_ac_2.jpg'],
+            'komentar' => [
+                ['admin' => 'Budi Santoso', 'isi' => 'Sudah dijadwalkan teknisi hari Kamis.', 'tanggal' => '2026-08-01 10:20'],
+            ],
+        ],
+        1041 => [
+            'id' => 1041, 'barang' => 'Kursi kuliah patah bagian sandaran', 'kategori' => 'Furnitur',
+            'pelapor' => 'Sinta Wulandari', 'jumlah' => 3, 'lokasi' => 'Gedung A, Lt. 1, R.1A',
+            'isi' => '3 kursi di baris belakang sandarannya lepas dan berbahaya untuk diduduki.',
+            'status' => 'Sedang Dikerjakan', 'tanggal' => '2026-07-30 13:45',
+            'lampiran' => ['kursi_rusak.jpg'],
+            'komentar' => [
+                ['admin' => 'Budi Santoso', 'isi' => 'Sudah dicek, menunggu suku cadang.', 'tanggal' => '31/07/2026 09:00'],
+                ['admin' => 'Budi Santoso', 'isi' => 'Perbaikan dimulai besok pagi.', 'tanggal' => '02/08/2026 08:00'],
+            ],
+        ],
+        1040 => [
+            'id' => 1040, 'barang' => 'Wastafel toilet lantai 2 bocor', 'kategori' => 'Sanitasi',
+            'pelapor' => 'Fajar Nugroho', 'jumlah' => 1, 'lokasi' => 'Gedung C, Lt. 2, Toilet Pria',
+            'isi' => 'Pipa di bawah wastafel bocor, air menggenang di lantai.',
+            'status' => 'Selesai', 'tanggal' => '2026-07-26 07:30',
+            'lampiran' => ['wastafel_1.jpg', 'wastafel_2.jpg', 'nota_perbaikan.pdf'],
+            'komentar' => [
+                ['admin' => 'Budi Santoso', 'isi' => 'Sudah diperbaiki dan dicek ulang, aman.', 'tanggal' => '27/07/2026 11:15'],
+            ],
+        ],
+        1039 => [
+            'id' => 1039, 'barang' => 'Wifi lab komputer tidak stabil', 'kategori' => 'Jaringan & IT',
+            'pelapor' => 'Aulia Rahma', 'jumlah' => 1, 'lokasi' => 'Gedung D, Lab Komputer 1',
+            'isi' => 'Koneksi wifi putus-putus terutama saat jam praktikum siang.',
+            'status' => 'Sedang Dikerjakan', 'tanggal' => '2026-07-29 11:05',
+            'lampiran' => [],
+            'komentar' => [
+                ['admin' => 'Budi Santoso', 'isi' => 'Sedang koordinasi dengan tim IT pusat.', 'tanggal' => '30/07/2026 14:40'],
+            ],
+        ],
+        1038 => [
+            'id' => 1038, 'barang' => 'Plafon ruang rapat retak', 'kategori' => 'Bangunan',
+            'pelapor' => 'Rangga Prasetyo', 'jumlah' => 1, 'lokasi' => 'Gedung A, Lt. 3, R. Rapat',
+            'isi' => 'Terdapat retakan cukup panjang di plafon, dikhawatirkan bisa runtuh.',
+            'status' => 'Belum Dikerjakan', 'tanggal' => '2026-08-02 16:20',
+            'lampiran' => ['plafon_retak.jpg'],
+            'komentar' => [],
+        ],
+        1037 => [
+            'id' => 1037, 'barang' => 'Proyektor R.2C gambar buram', 'kategori' => 'Elektronik',
+            'pelapor' => 'Sinta Wulandari', 'jumlah' => 1, 'lokasi' => 'Gedung B, Lt. 2, R.2C',
+            'isi' => 'Gambar proyektor buram walau sudah diatur fokusnya.',
+            'status' => 'Selesai', 'tanggal' => '2026-07-20 09:00',
+            'lampiran' => ['proyektor.jpg'],
+            'komentar' => [
+                ['admin' => 'Budi Santoso', 'isi' => 'Lensa dibersihkan, sudah normal kembali.', 'tanggal' => '21/07/2026 10:00'],
+            ],
+        ],
+    ];
+}
+
+$aduanData = &$_SESSION['aduanData'];
+
+// ---------- PROSES AKSI FORM (UPDATE STATUS & TAMBAH KOMENTAR) ----------
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = $_POST['action'] ?? '';
+    $idAduan = (int)($_POST['id_aduan'] ?? 0);
+    $qRedirect = $_POST['redirect_q'] ?? '';
+    $statusRedirect = $_POST['redirect_status'] ?? 'Semua';
+
+    if (isset($aduanData[$idAduan])) {
+        // Aksi 1: Update Status
+        if ($action === 'update_status') {
+            $newStatus = $_POST['status'] ?? '';
+            if (in_array($newStatus, ['Belum Dikerjakan', 'Sedang Dikerjakan', 'Selesai'])) {
+                $aduanData[$idAduan]['status'] = $newStatus;
+            }
+        }
+        
+        // Aksi 2: Tambah Komentar
+        if ($action === 'tambah_komentar') {
+            $isiKomentar = trim($_POST['komentar'] ?? '');
+            if (!empty($isiKomentar)) {
+                $aduanData[$idAduan]['komentar'][] = [
+                    'admin' => 'Budi Santoso',
+                    'isi' => $isiKomentar,
+                    'tanggal' => date('Y-m-d H:i')
+                ];
+            }
+        }
+    }
+
+    // Redirect kembali ke halaman ini agar pop-up tetap terbuka & data diperbarui
+    $queryStr = http_build_query(['q' => $qRedirect, 'status' => $statusRedirect, 'id' => $idAduan]);
+    header("Location: data_aduan.php?$queryStr");
+    exit;
+}
+
+// ---------- HELPER ICON & PILL ----------
 function icon(string $name, int $size = 16, string $color = 'currentColor'): string
 {
     $stroke = "stroke=\"$color\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"";
@@ -36,69 +141,6 @@ function statusPill(string $status): string
     };
     return '<span class="pill ' . $class . '"><span class="pill-dot"></span>' . htmlspecialchars($status) . '</span>';
 }
-
-// ---------- DATA DUMMY ----------
-$aduanData = [
-    1042 => [
-        'id' => 1042, 'barang' => 'AC Ruang Kelas 3B mati total', 'kategori' => 'Elektronik',
-        'pelapor' => 'Rangga Prasetyo', 'jumlah' => 1, 'lokasi' => 'Gedung B, Lt. 2, R.3B',
-        'isi' => 'AC sudah tidak menyala sejak Senin pagi, sudah dicoba remote baru tetap tidak merespon.',
-        'status' => 'Belum Dikerjakan', 'tanggal' => '2026-08-01 08:12',
-        'lampiran' => ['foto_ac_1.jpg', 'foto_ac_2.jpg'],
-        'komentar' => [
-            ['admin' => 'Budi Santoso', 'isi' => 'Sudah dijadwalkan teknisi hari Kamis.', 'tanggal' => '01/08/2026 10:20'],
-        ],
-    ],
-    1041 => [
-        'id' => 1041, 'barang' => 'Kursi kuliah patah bagian sandaran', 'kategori' => 'Furnitur',
-        'pelapor' => 'Sinta Wulandari', 'jumlah' => 3, 'lokasi' => 'Gedung A, Lt. 1, R.1A',
-        'isi' => '3 kursi di baris belakang sandarannya lepas dan berbahaya untuk diduduki.',
-        'status' => 'Sedang Dikerjakan', 'tanggal' => '2026-07-30 13:45',
-        'lampiran' => ['kursi_rusak.jpg'],
-        'komentar' => [
-            ['admin' => 'Budi Santoso', 'isi' => 'Sudah dicek, menunggu suku cadang.', 'tanggal' => '31/07/2026 09:00'],
-            ['admin' => 'Budi Santoso', 'isi' => 'Perbaikan dimulai besok pagi.', 'tanggal' => '02/08/2026 08:00'],
-        ],
-    ],
-    1040 => [
-        'id' => 1040, 'barang' => 'Wastafel toilet lantai 2 bocor', 'kategori' => 'Sanitasi',
-        'pelapor' => 'Fajar Nugroho', 'jumlah' => 1, 'lokasi' => 'Gedung C, Lt. 2, Toilet Pria',
-        'isi' => 'Pipa di bawah wastafel bocor, air menggenang di lantai.',
-        'status' => 'Selesai', 'tanggal' => '2026-07-26 07:30',
-        'lampiran' => ['wastafel_1.jpg', 'wastafel_2.jpg', 'nota_perbaikan.pdf'],
-        'komentar' => [
-            ['admin' => 'Budi Santoso', 'isi' => 'Sudah diperbaiki dan dicek ulang, aman.', 'tanggal' => '27/07/2026 11:15'],
-        ],
-    ],
-    1039 => [
-        'id' => 1039, 'barang' => 'Wifi lab komputer tidak stabil', 'kategori' => 'Jaringan & IT',
-        'pelapor' => 'Aulia Rahma', 'jumlah' => 1, 'lokasi' => 'Gedung D, Lab Komputer 1',
-        'isi' => 'Koneksi wifi putus-putus terutama saat jam praktikum siang.',
-        'status' => 'Sedang Dikerjakan', 'tanggal' => '2026-07-29 11:05',
-        'lampiran' => [],
-        'komentar' => [
-            ['admin' => 'Budi Santoso', 'isi' => 'Sedang koordinasi dengan tim IT pusat.', 'tanggal' => '30/07/2026 14:40'],
-        ],
-    ],
-    1038 => [
-        'id' => 1038, 'barang' => 'Plafon ruang rapat retak', 'kategori' => 'Bangunan',
-        'pelapor' => 'Rangga Prasetyo', 'jumlah' => 1, 'lokasi' => 'Gedung A, Lt. 3, R. Rapat',
-        'isi' => 'Terdapat retakan cukup panjang di plafon, dikhawatirkan bisa runtuh.',
-        'status' => 'Belum Dikerjakan', 'tanggal' => '2026-08-02 16:20',
-        'lampiran' => ['plafon_retak.jpg'],
-        'komentar' => [],
-    ],
-    1037 => [
-        'id' => 1037, 'barang' => 'Proyektor R.2C gambar buram', 'kategori' => 'Elektronik',
-        'pelapor' => 'Sinta Wulandari', 'jumlah' => 1, 'lokasi' => 'Gedung B, Lt. 2, R.2C',
-        'isi' => 'Gambar proyektor buram walau sudah diatur fokusnya.',
-        'status' => 'Selesai', 'tanggal' => '2026-07-20 09:00',
-        'lampiran' => ['proyektor.jpg'],
-        'komentar' => [
-            ['admin' => 'Budi Santoso', 'isi' => 'Lensa dibersihkan, sudah normal kembali.', 'tanggal' => '21/07/2026 10:00'],
-        ],
-    ],
-];
 
 // ---------- FILTER & PENCARIAN ----------
 $q            = trim($_GET['q'] ?? '');
@@ -220,7 +262,7 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
                         <tr><td colspan="6" style="text-align:center;color:var(--sub);padding:24px;">Tidak ada aduan yang ditemukan.</td></tr>
                     <?php endif; ?>
                     <?php foreach ($filtered as $a): ?>
-                        <tr class="clickable" onclick="window.location='aduan.php?<?= http_build_query(['q' => $q, 'status' => $statusFilter, 'id' => $a['id']]) ?>'">
+                        <tr class="clickable" onclick="window.location='data_aduan.php?<?= http_build_query(['q' => $q, 'status' => $statusFilter, 'id' => $a['id']]) ?>'">
                             <td class="mono">#<?= $a['id'] ?></td>
                             <td>
                                 <div class="row-title"><?= htmlspecialchars($a['barang']) ?></div>
@@ -244,33 +286,40 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
     </main>
 </div>
 
+<!-- ================= POP UP MODAL DETAIL ADUAN ================= -->
 <?php if ($detail): ?>
-<div class="modal-backdrop" onclick="if(event.target===this) window.location='aduan.php?<?= $backQuery ?>'">
+<div class="modal-backdrop" onclick="if(event.target===this) window.location='data_aduan.php?<?= $backQuery ?>'">
     <div class="modal-box">
+        
+        <!-- Header Pop Up -->
         <div class="modal-head">
             <div>
-                <div class="modal-eyebrow">ADUAN #<?= $detail['id'] ?> &middot; <?= $detail['tanggal'] ?></div>
-                <div class="modal-title"><?= htmlspecialchars($detail['barang']) ?></div>
+                <div class="modal-eyebrow">ADUAN #<?= $detail['id'] ?></div>
+                <h2 class="modal-title"><?= htmlspecialchars($detail['barang']) ?></h2>
+                <div class="modal-meta">
+                    <span><?= icon('package', 13, '#9ca3af') ?> <?= htmlspecialchars($detail['kategori']) ?> &middot; <?= $detail['jumlah'] ?> unit</span>
+                    <span><?= icon('pin', 13, '#9ca3af') ?> <?= htmlspecialchars($detail['lokasi']) ?></span>
+                </div>
             </div>
-            <a class="modal-close" href="aduan.php?<?= $backQuery ?>"><?= icon('x', 18) ?></a>
+            <a class="modal-close" href="data_aduan.php?<?= $backQuery ?>" aria-label="Tutup"><?= icon('x', 18, '#9ca3af') ?></a>
         </div>
+
+        <!-- Body Pop Up -->
         <div class="modal-body">
-            <div class="meta-grid">
-                <div class="meta-item"><?= icon('package', 13) ?> Kategori: <strong><?= htmlspecialchars($detail['kategori']) ?> (<?= $detail['jumlah'] ?> unit)</strong></div>
-                <div class="meta-item"><?= icon('pin', 13) ?> Lokasi: <strong><?= htmlspecialchars($detail['lokasi']) ?></strong></div>
-                <div class="meta-item"><?= icon('users', 13) ?> Pelapor: <strong><?= htmlspecialchars($detail['pelapor']) ?></strong></div>
-            </div>
-
+            
+            <!-- Isi Keluhan -->
             <div>
-                <div class="field-label">Isi Keluhan</div>
-                <p class="keluhan-box"><?= nl2br(htmlspecialchars($detail['isi'])) ?></p>
+                <div class="field-label">ISI KELUHAN</div>
+                <div class="keluhan-box"><?= nl2br(htmlspecialchars($detail['isi'])) ?></div>
             </div>
 
-            <form method="post" action="update_status.php">
+            <!-- Ubah Status (Mengirim Form ke Halaman Ini) -->
+            <form method="post" action="data_aduan.php">
+                <input type="hidden" name="action" value="update_status">
                 <input type="hidden" name="id_aduan" value="<?= $detail['id'] ?>">
                 <input type="hidden" name="redirect_q" value="<?= htmlspecialchars($q) ?>">
                 <input type="hidden" name="redirect_status" value="<?= htmlspecialchars($statusFilter) ?>">
-                <div class="field-label">Status Pengerjaan</div>
+                <div class="field-label">UBAH STATUS</div>
                 <div class="status-form">
                     <?php foreach (['Belum Dikerjakan', 'Sedang Dikerjakan', 'Selesai'] as $s): ?>
                         <button type="submit" name="status" value="<?= $s ?>"
@@ -281,38 +330,50 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
                 </div>
             </form>
 
+            <!-- Lampiran -->
             <div>
-                <div class="field-label">Lampiran (<?= count($detail['lampiran']) ?>)</div>
+                <div class="field-label"><?= icon('paperclip', 13, '#9ca3af') ?> LAMPIRAN (<?= count($detail['lampiran']) ?>)</div>
                 <?php if (empty($detail['lampiran'])): ?>
-                    <div style="font-size:12px;color:var(--sub);font-style:italic;">Tidak ada lampiran.</div>
+                    <div style="font-size:12px;color:#9ca3af;font-style:italic;">Tidak ada lampiran.</div>
                 <?php else: ?>
-                    <?php foreach ($detail['lampiran'] as $f): ?>
-                        <span class="lampiran-chip"><?= icon('paperclip', 11) ?> <?= htmlspecialchars($f) ?></span>
-                    <?php endforeach; ?>
+                    <div class="lampiran-container">
+                        <?php foreach ($detail['lampiran'] as $f): ?>
+                            <span class="lampiran-chip"><?= icon('paperclip', 12, '#6b7280') ?> <?= htmlspecialchars($f) ?></span>
+                        <?php endforeach; ?>
+                    </div>
                 <?php endif; ?>
             </div>
 
+            <!-- Komentar Admin -->
             <div>
-                <div class="field-label">Komentar Admin (<?= count($detail['komentar']) ?>)</div>
-                <?php foreach ($detail['komentar'] as $k): ?>
-                    <div class="komentar-item">
-                        <div class="komentar-admin"><?= htmlspecialchars($k['admin']) ?>
-                            <span class="komentar-time">&middot; <?= $k['tanggal'] ?></span>
+                <div class="field-label"><?= icon('message', 13, '#9ca3af') ?> KOMENTAR ADMIN (<?= count($detail['komentar']) ?>)</div>
+                
+                <!-- Daftar Komentar -->
+                <div class="komentar-list">
+                    <?php foreach ($detail['komentar'] as $k): ?>
+                        <div class="komentar-item">
+                            <div class="komentar-header">
+                                <span class="komentar-admin"><?= htmlspecialchars($k['admin']) ?></span>
+                                <span class="komentar-time"><?= $k['tanggal'] ?></span>
+                            </div>
+                            <div class="komentar-text"><?= htmlspecialchars($k['isi']) ?></div>
                         </div>
-                        <div class="komentar-text"><?= htmlspecialchars($k['isi']) ?></div>
-                    </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </div>
 
-                <form method="post" action="tambah_komentar.php" class="komentar-form" style="margin-top:10px;">
+                <!-- Input Komentar (Mengirim Form ke Halaman Ini) -->
+                <form method="post" action="data_aduan.php" class="komentar-form">
+                    <input type="hidden" name="action" value="tambah_komentar">
                     <input type="hidden" name="id_aduan" value="<?= $detail['id'] ?>">
                     <input type="hidden" name="redirect_q" value="<?= htmlspecialchars($q) ?>">
                     <input type="hidden" name="redirect_status" value="<?= htmlspecialchars($statusFilter) ?>">
-                    <textarea name="komentar" rows="2" placeholder="Tulis catatan/respon admin..." required></textarea>
-                    <div style="display:flex; justify-content:flex-end; margin-top:6px;">
-                        <button type="submit" class="btn btn-primary">Kirim Komentar</button>
+                    <textarea name="komentar" rows="2" placeholder="Tulis komentar untuk pelapor..." required></textarea>
+                    <div style="display:flex; justify-content:flex-end; margin-top:8px;">
+                        <button type="submit" class="btn-submit">Kirim komentar</button>
                     </div>
                 </form>
             </div>
+
         </div>
     </div>
 </div>
