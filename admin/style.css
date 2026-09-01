@@ -767,18 +767,47 @@ tbody tr.clickable:hover {
     color: var(--primary); 
     font-weight: 600; 
 }
-.lampiran-chip {
-    display: inline-flex; 
-    align-items: center; 
-    gap: 4px; 
-    padding: 4px 8px; 
-    border: 1px solid var(--line); 
-    border-radius: 4px; 
-    font-size: 11px; 
-    font-family: 'IBM Plex Mono', monospace; 
-    background: var(--paper); 
-    margin: 0 4px 4px 0; 
+.lampiran-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: 8px;
 }
+
+.lampiran-thumb {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+}
+
+.lampiran-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.15s ease;
+}
+
+.lampiran-thumb:hover img {
+    transform: scale(1.05);
+}
+
+.lampiran-thumb-file {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: #9ca3af;
+    font-size: 10px;
+    font-weight: 600;
+}
+
 .komentar-item {
     border-left: 2px solid var(--primary); 
     padding-left: 8px; 

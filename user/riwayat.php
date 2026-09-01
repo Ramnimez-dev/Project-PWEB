@@ -1,8 +1,15 @@
 <?php
-/**
- * RIWAYAT ADUAN — panel user, versi preview UI (data dummy, belum terhubung database)
- * Jalankan: php -S localhost:8000  lalu buka http://localhost:8000/user_riwayat.php
- */
+
+session_start();
+require '../config/koneksi.php';
+
+if (!isset($_SESSION['nama']) || ($_SESSION['role'] ?? '') !== 'user') {
+    header('Location: ../auth/login.php');
+    exit;
+}
+
+$userName = $_SESSION['nama'];
+$userId   = $_SESSION['id_user'];
 
 function icon(string $name, int $size = 17, string $color = 'currentColor'): string
 {
@@ -38,93 +45,138 @@ function statusPill(string $status): string
     return '<span class="pill ' . $class . '"><span class="pill-dot"></span>' . htmlspecialchars($status) . '</span>';
 }
 
-// ---------- DATA DUMMY (nanti diganti session user login + query PDO WHERE user_id = ...) ----------
-$userName = 'Rangga Prasetyo';
+// ---------- PROSES KIRIM BALASAN USER (INSERT KE komentar_aduan) ----------
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action    = $_POST['action'] ?? '';
+    $idAduan   = (int)($_POST['id_aduan'] ?? 0);
+    $qRedirect = $_POST['redirect_q'] ?? '';
+    $statusRedirect = $_POST['redirect_status'] ?? 'Semua';
 
-$aduanData = [
-    1042 => [
-        'id' => 1042, 'barang' => 'AC Ruang Kelas 3B mati total', 'kategori' => 'Elektronik',
-        'jumlah' => 1, 'lokasi' => 'Gedung B, Lt. 2, R.3B',
-        'isi' => 'AC sudah tidak menyala sejak Senin pagi, sudah dicoba remote baru tetap tidak merespon.',
-        'status' => 'Belum Dikerjakan', 'tanggal' => '01/08/2026',
-        'lampiran' => ['foto_ac_1.jpg', 'foto_ac_2.jpg'],
-        'riwayat' => [
-            ['label' => 'Aduan diajukan', 'tanggal' => '01/08/2026 08:12', 'done' => true],
-            ['label' => 'Ditinjau admin', 'tanggal' => null, 'done' => false],
-            ['label' => 'Dikerjakan', 'tanggal' => null, 'done' => false],
-            ['label' => 'Selesai', 'tanggal' => null, 'done' => false],
-        ],
-        'komentar' => [
-            ['dari' => 'Budi Santoso', 'peran' => 'admin', 'isi' => 'Sudah dijadwalkan teknisi hari Kamis.', 'tanggal' => '01/08/2026 10:20'],
-        ],
-    ],
-    1038 => [
-        'id' => 1038, 'barang' => 'Plafon ruang rapat retak', 'kategori' => 'Bangunan',
-        'jumlah' => 1, 'lokasi' => 'Gedung A, Lt. 3, R. Rapat',
-        'isi' => 'Terdapat retakan cukup panjang di plafon, dikhawatirkan bisa runtuh.',
-        'status' => 'Belum Dikerjakan', 'tanggal' => '02/08/2026',
-        'lampiran' => ['plafon_retak.jpg'],
-        'riwayat' => [
-            ['label' => 'Aduan diajukan', 'tanggal' => '02/08/2026 16:20', 'done' => true],
-            ['label' => 'Ditinjau admin', 'tanggal' => null, 'done' => false],
-            ['label' => 'Dikerjakan', 'tanggal' => null, 'done' => false],
-            ['label' => 'Selesai', 'tanggal' => null, 'done' => false],
-        ],
-        'komentar' => [],
-    ],
-    1030 => [
-        'id' => 1030, 'barang' => 'Kran taman belakang macet', 'kategori' => 'Sanitasi',
-        'jumlah' => 1, 'lokasi' => 'Taman Belakang, dekat gazebo',
-        'isi' => 'Kran air taman belakang macet, tidak bisa dibuka/ditutup sama sekali.',
-        'status' => 'Sedang Dikerjakan', 'tanggal' => '18/07/2026',
-        'lampiran' => ['kran_macet.jpg'],
-        'riwayat' => [
-            ['label' => 'Aduan diajukan', 'tanggal' => '18/07/2026 09:00', 'done' => true],
-            ['label' => 'Ditinjau admin', 'tanggal' => '19/07/2026 08:40', 'done' => true],
-            ['label' => 'Dikerjakan', 'tanggal' => '20/07/2026 13:15', 'done' => true],
-            ['label' => 'Selesai', 'tanggal' => null, 'done' => false],
-        ],
-        'komentar' => [
-            ['dari' => 'Budi Santoso', 'peran' => 'admin', 'isi' => 'Sedang menunggu suku cadang keran baru.', 'tanggal' => '20/07/2026 13:15'],
-            ['dari' => 'Rangga Prasetyo', 'peran' => 'user', 'isi' => 'Baik, terima kasih infonya.', 'tanggal' => '20/07/2026 14:02'],
-        ],
-    ],
-    1021 => [
-        'id' => 1021, 'barang' => 'Lampu koridor lantai 1 mati', 'kategori' => 'Elektronik',
-        'jumlah' => 2, 'lokasi' => 'Gedung A, Koridor Lt. 1',
-        'isi' => '2 lampu di koridor utama mati, area jadi gelap saat malam hari.',
-        'status' => 'Selesai', 'tanggal' => '30/06/2026',
-        'lampiran' => [],
-        'riwayat' => [
-            ['label' => 'Aduan diajukan', 'tanggal' => '30/06/2026 07:45', 'done' => true],
-            ['label' => 'Ditinjau admin', 'tanggal' => '30/06/2026 09:10', 'done' => true],
-            ['label' => 'Dikerjakan', 'tanggal' => '01/07/2026 10:00', 'done' => true],
-            ['label' => 'Selesai', 'tanggal' => '01/07/2026 15:30', 'done' => true],
-        ],
-        'komentar' => [
-            ['dari' => 'Budi Santoso', 'peran' => 'admin', 'isi' => 'Lampu sudah diganti dengan yang baru.', 'tanggal' => '01/07/2026 15:30'],
-        ],
-    ],
-];
+    $balasanBerhasil = false;
+
+    if ($action === 'tambah_balasan' && $idAduan > 0) {
+        $isiBalasan = trim($_POST['balasan'] ?? '');
+        if ($isiBalasan !== '') {
+            // Pastikan aduan ini benar milik user yang sedang login
+            $cek = mysqli_prepare($koneksi, "SELECT id_aduan FROM aduan WHERE id_aduan = ? AND user_id = ?");
+            mysqli_stmt_bind_param($cek, 'ii', $idAduan, $userId);
+            mysqli_stmt_execute($cek);
+            $milikSaya = mysqli_stmt_get_result($cek)->fetch_assoc();
+
+            if ($milikSaya) {
+                $stmt = mysqli_prepare($koneksi, "INSERT INTO komentar_aduan (aduan_id, admin_id, komentar, tanggal) VALUES (?, ?, ?, NOW())");
+                mysqli_stmt_bind_param($stmt, 'iis', $idAduan, $userId, $isiBalasan);
+                if (mysqli_stmt_execute($stmt)) {
+                    $balasanBerhasil = true;
+                }
+            }
+        }
+    }
+
+    $queryParams = ['q' => $qRedirect, 'status' => $statusRedirect, 'id' => $idAduan];
+    if ($balasanBerhasil) {
+        $queryParams['balasan_sukses'] = 1;
+    }
+    header('Location: riwayat.php?' . http_build_query($queryParams));
+    exit;
+}
 
 // ---------- FILTER & PENCARIAN ----------
-$q            = trim($_GET['q'] ?? '');
-$statusFilter = $_GET['status'] ?? 'Semua';
+$q             = trim($_GET['q'] ?? '');
+$statusFilter  = $_GET['status'] ?? 'Semua';
 $statusOptions = ['Semua', 'Belum Dikerjakan', 'Sedang Dikerjakan', 'Selesai'];
+$balasanSukses = isset($_GET['balasan_sukses']);
 
-$filtered = array_filter($aduanData, function ($a) use ($q, $statusFilter) {
-    $matchQ = $q === '' || stripos($a['barang'], $q) !== false || (string)$a['id'] === $q;
-    $matchS = $statusFilter === 'Semua' || $a['status'] === $statusFilter;
-    return $matchQ && $matchS;
-});
-uasort($filtered, fn($a, $b) => strcmp($b['tanggal'], $a['tanggal']));
+$sql = "
+    SELECT a.id_aduan AS id, a.barang_aduan AS barang, a.lokasi, a.status, a.tanggal,
+           k.nama_kategori AS kategori,
+           (SELECT COUNT(*) FROM lampiran l WHERE l.aduan_id = a.id_aduan) AS jml_lampiran,
+           (SELECT COUNT(*) FROM komentar_aduan c WHERE c.aduan_id = a.id_aduan) AS jml_komentar
+    FROM aduan a
+    LEFT JOIN kategori_barang k ON k.id_kategori = a.kategori_id
+    WHERE a.user_id = ?
+";
+$types  = 'i';
+$params = [$userId];
 
+if ($q !== '') {
+    $sql .= " AND (a.barang_aduan LIKE ? OR a.id_aduan = ?)";
+    $types .= 'si';
+    $params[] = "%$q%";
+    $params[] = is_numeric($q) ? (int)$q : 0;
+}
+if ($statusFilter !== 'Semua' && in_array($statusFilter, $statusOptions, true)) {
+    $sql .= " AND a.status = ?";
+    $types .= 's';
+    $params[] = $statusFilter;
+}
+$sql .= " ORDER BY a.tanggal DESC";
+
+$stmt = mysqli_prepare($koneksi, $sql);
+mysqli_stmt_bind_param($stmt, $types, ...$params);
+mysqli_stmt_execute($stmt);
+$filtered = mysqli_fetch_all(mysqli_stmt_get_result($stmt), MYSQLI_ASSOC);
+
+// ---------- HITUNG STATUS (dari seluruh aduan milik user ini) ----------
 $counts = ['Belum Dikerjakan' => 0, 'Sedang Dikerjakan' => 0, 'Selesai' => 0];
-foreach ($aduanData as $a) { $counts[$a['status']]++; }
+$stmtC  = mysqli_prepare($koneksi, "SELECT status, COUNT(*) AS jumlah FROM aduan WHERE user_id = ? GROUP BY status");
+mysqli_stmt_bind_param($stmtC, 'i', $userId);
+mysqli_stmt_execute($stmtC);
+$hasilHitung = mysqli_stmt_get_result($stmtC);
+while ($row = mysqli_fetch_assoc($hasilHitung)) {
+    if (isset($counts[$row['status']])) {
+        $counts[$row['status']] = (int)$row['jumlah'];
+    }
+}
+$totalSaya = array_sum($counts);
 
 // ---------- DETAIL UNTUK MODAL ----------
-$detailId = isset($_GET['id']) ? (int)$_GET['id'] : null;
-$detail   = $detailId && isset($aduanData[$detailId]) ? $aduanData[$detailId] : null;
+$detail = null;
+if (!empty($_GET['id'])) {
+    $detailId = (int)$_GET['id'];
+
+    $stmtD = mysqli_prepare($koneksi, "
+        SELECT a.id_aduan AS id, a.barang_aduan AS barang, a.jumlah_barang AS jumlah,
+               a.lokasi, a.isi_keluhan AS isi, a.status, a.tanggal,
+               k.nama_kategori AS kategori
+        FROM aduan a
+        LEFT JOIN kategori_barang k ON k.id_kategori = a.kategori_id
+        WHERE a.id_aduan = ? AND a.user_id = ?
+    ");
+    mysqli_stmt_bind_param($stmtD, 'ii', $detailId, $userId);
+    mysqli_stmt_execute($stmtD);
+    $detail = mysqli_fetch_assoc(mysqli_stmt_get_result($stmtD));
+
+    if ($detail) {
+        // Lampiran
+        $stmtL = mysqli_prepare($koneksi, "SELECT nama_file FROM lampiran WHERE aduan_id = ? ORDER BY tanggal");
+        mysqli_stmt_bind_param($stmtL, 'i', $detailId);
+        mysqli_stmt_execute($stmtL);
+        $detail['lampiran'] = array_column(mysqli_fetch_all(mysqli_stmt_get_result($stmtL), MYSQLI_ASSOC), 'nama_file');
+
+        // Komentar (admin_id bisa berasal dari admin ATAU user, dibedakan lewat users.role)
+        $stmtK = mysqli_prepare($koneksi, "
+            SELECT u.nama AS dari, u.role AS peran, c.komentar AS isi, c.tanggal
+            FROM komentar_aduan c
+            LEFT JOIN users u ON u.id_user = c.admin_id
+            WHERE c.aduan_id = ?
+            ORDER BY c.tanggal
+        ");
+        mysqli_stmt_bind_param($stmtK, 'i', $detailId);
+        mysqli_stmt_execute($stmtK);
+        $detail['komentar'] = mysqli_fetch_all(mysqli_stmt_get_result($stmtK), MYSQLI_ASSOC);
+
+        // Progres penanganan diturunkan dari kolom status (skema DB belum menyimpan tanggal per-tahap)
+        $urutan = ['Belum Dikerjakan' => 0, 'Sedang Dikerjakan' => 1, 'Selesai' => 2];
+        $idx    = $urutan[$detail['status']] ?? 0;
+        $detail['riwayat'] = [
+            ['label' => 'Aduan diajukan', 'tanggal' => date('d/m/Y H:i', strtotime($detail['tanggal'])), 'done' => true],
+            ['label' => 'Ditinjau admin', 'tanggal' => null, 'done' => $idx >= 1],
+            ['label' => 'Dikerjakan',     'tanggal' => null, 'done' => $idx >= 1],
+            ['label' => 'Selesai',        'tanggal' => null, 'done' => $idx >= 2],
+        ];
+    }
+}
 $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
 ?>
 <!DOCTYPE html>
@@ -133,137 +185,62 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Riwayat Aduan — Sarpras</title>
+<link rel="stylesheet" href="style.css">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
-
-:root {
-  --paper: #F2F3ED; --surface: #FFFFFF; --ink: #1B231F; --sub: #6B756C; --line: #DCE0D6;
-  --primary: #2C4A38; --primary-dark: #1D3226; --primary-faint: #E4EAE3;
-  --amber: #B4711A; --amber-faint: #F6E7D2; --red: #A63A2E; --red-faint: #F3DED9;
-  --green: #3D7A55; --green-faint: #DEEAE1; --gold: #C9A15A;
+.lampiran-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 72px));
+    gap: 8px;
 }
-* { box-sizing: border-box; }
-body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Inter', sans-serif; font-size: 14px; }
-a { color: inherit; text-decoration: none; }
-button { font-family: 'Inter', sans-serif; }
-.layout { display: flex; min-height: 100vh; }
-
-.sidebar { width: 232px; flex-shrink: 0; background: var(--primary-dark); display: flex; flex-direction: column; padding: 22px 12px; }
-.brand { display: flex; align-items: center; gap: 10px; padding: 0 12px; margin-bottom: 30px; }
-.brand-mark { width: 30px; height: 30px; border-radius: 6px; background: var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 15px; color: var(--primary-dark); }
-.brand-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 17px; color: #fff; line-height: 1.1; }
-.brand-sub { font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: .04em; }
-.nav-label { font-size: 10.5px; color: rgba(255,255,255,0.4); padding: 0 14px; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .06em; }
-.nav-item { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 14px; margin-bottom: 4px; border: none; border-left: 3px solid transparent; cursor: pointer; text-align: left; color: rgba(255,255,255,0.62); font-size: 13.5px; font-weight: 500; }
-.nav-item span.label { flex: 1; }
-.nav-item.active { background: rgba(255,255,255,0.12); border-left-color: var(--gold); color: #fff; }
-.sidebar-footer { border-top: 1px solid rgba(255,255,255,0.12); padding-top: 14px; margin-top: auto; }
-
-.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-.topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 28px; border-bottom: 1px solid var(--line); background: var(--surface); }
-.topbar-date { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--sub); }
-.topbar-right { display: flex; align-items: center; gap: 16px; }
-.avatar-circle { width: 30px; height: 30px; border-radius: 50%; background: var(--primary-faint); color: var(--primary); display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; }
-.admin-name { font-size: 12.5px; font-weight: 600; }
-.admin-role { font-size: 10.5px; color: var(--sub); }
-.bell-btn { background: none; border: none; cursor: pointer; color: var(--sub); position: relative; }
-.content { padding: 26px 28px; flex: 1; }
-
-.section-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
-.eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--primary); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 4px; }
-.section-title { font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 700; margin: 0; }
-.section-desc { font-size: 13px; color: var(--sub); margin-top: 4px; }
-
-.btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
-.btn-primary { background: var(--primary); color: #fff; border-color: var(--primary); }
-
-.stat-strip { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
-.stat-pill { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--line); padding: 8px 14px; border-radius: 20px; font-size: 12.5px; color: var(--sub); }
-.stat-pill .dot { width: 7px; height: 7px; border-radius: 50%; }
-.stat-pill strong { color: var(--ink); font-family: 'IBM Plex Mono', monospace; font-weight: 600; }
-.stat-pill.dot-red .dot { background: var(--red); }
-.stat-pill.dot-amber .dot { background: var(--amber); }
-.stat-pill.dot-green .dot { background: var(--green); }
-.stat-pill.dot-all .dot { background: var(--primary); }
-
-.pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: .02em; text-transform: uppercase; border: 1px solid transparent; }
-.pill-dot { width: 7px; height: 7px; border-radius: 50%; }
-.pill.status-belum { background: var(--red-faint); color: var(--red); border-color: rgba(166,58,46,.2); }
-.pill.status-belum .pill-dot { background: var(--red); }
-.pill.status-proses { background: var(--amber-faint); color: var(--amber); border-color: rgba(180,113,26,.2); }
-.pill.status-proses .pill-dot { background: var(--amber); }
-.pill.status-selesai { background: var(--green-faint); color: var(--green); border-color: rgba(61,122,85,.2); transform: rotate(-1.5deg); }
-.pill.status-selesai .pill-dot { background: var(--green); }
-
-.toolbar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
-.search-box { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 6px; padding: 8px 12px; background: var(--surface); flex: 1; min-width: 220px; }
-.search-box input { border: none; outline: none; font-family: 'Inter', sans-serif; font-size: 13px; flex: 1; background: transparent; }
-.filter-group { display: flex; gap: 6px; flex-wrap: wrap; }
-.filter-chip { padding: 8px 13px; border-radius: 6px; cursor: pointer; font-size: 12.5px; font-weight: 500; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
-.filter-chip.active { border-color: var(--primary); background: var(--primary); color: #fff; }
-
-.timeline-card { display: flex; gap: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; margin-bottom: 10px; cursor: pointer; }
-.timeline-card:hover { border-color: var(--primary); }
-.timeline-mark { width: 10px; height: 10px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
-.timeline-mark.belum { background: var(--red); }
-.timeline-mark.proses { background: var(--amber); }
-.timeline-mark.selesai { background: var(--green); }
-.timeline-body { flex: 1; min-width: 0; }
-.timeline-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
-.timeline-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 17px; }
-.timeline-meta { font-size: 12px; color: var(--sub); margin-top: 4px; display: flex; gap: 12px; flex-wrap: wrap; }
-.timeline-meta span { display: flex; align-items: center; gap: 4px; }
-.timeline-id { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--sub); }
-
-.empty-state { text-align: center; padding: 60px 20px; color: var(--sub); }
-.empty-state svg { opacity: .35; margin-bottom: 10px; }
-
-/* ---------- modal ---------- */
-.modal-backdrop { position: fixed; inset: 0; background: rgba(27,35,31,.45); display: flex; align-items: center; justify-content: center; z-index: 50; padding: 20px; }
-.modal-box { background: var(--surface); width: 600px; max-width: 100%; max-height: 88vh; overflow-y: auto; border-radius: 10px; border: 1px solid var(--line); }
-.modal-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--surface); }
-.modal-eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--sub); }
-.modal-title { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 700; }
-.modal-close { background: none; border: none; cursor: pointer; color: var(--sub); padding: 6px; }
-.modal-body { padding: 20px 22px; display: flex; flex-direction: column; gap: 20px; }
-.meta-line { display: flex; gap: 22px; flex-wrap: wrap; font-size: 13px; }
-.meta-line .item { display: flex; align-items: center; gap: 6px; color: var(--sub); }
-.field-label { font-size: 11px; font-weight: 600; color: var(--sub); text-transform: uppercase; letter-spacing: .03em; margin-bottom: 8px; }
-.keluhan-box { font-size: 14px; line-height: 1.6; margin: 0; background: var(--paper); padding: 12px 14px; border-radius: 6px; }
-
-/* progress tracker */
-.progress-track { display: flex; }
-.progress-step { flex: 1; text-align: center; position: relative; }
-.progress-step::before {
-  content: ''; position: absolute; top: 11px; left: -50%; width: 100%; height: 2px; background: var(--line); z-index: 0;
+.lampiran-thumb {
+    display: block;
+    width: 72px;
+    height: 72px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
 }
-.progress-step:first-child::before { display: none; }
-.progress-step.done::before { background: var(--primary); }
-.progress-circle {
-  width: 24px; height: 24px; border-radius: 50%; background: var(--surface); border: 2px solid var(--line);
-  display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; position: relative; z-index: 1; color: var(--sub);
+.lampiran-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.15s ease;
 }
-.progress-step.done .progress-circle { background: var(--primary); border-color: var(--primary); color: #fff; }
-.progress-label { font-size: 11px; font-weight: 600; color: var(--sub); }
-.progress-step.done .progress-label { color: var(--ink); }
-.progress-time { font-size: 10px; color: var(--sub); font-family: 'IBM Plex Mono', monospace; margin-top: 2px; }
-
-.lampiran-chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; font-size: 12px; font-family: 'IBM Plex Mono', monospace; background: var(--paper); margin: 0 8px 8px 0; }
-
-.komentar-item { display: flex; gap: 10px; margin-bottom: 12px; }
-.komentar-avatar { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 11.5px; }
-.komentar-avatar.admin { background: var(--primary-faint); color: var(--primary); }
-.komentar-avatar.user { background: var(--amber-faint); color: var(--amber); }
-.komentar-bubble { flex: 1; background: var(--paper); border-radius: 8px; padding: 8px 12px; }
-.komentar-head { display: flex; align-items: center; gap: 8px; }
-.komentar-nama { font-size: 12px; font-weight: 600; }
-.komentar-tag { font-family: 'IBM Plex Mono', monospace; font-size: 9px; text-transform: uppercase; padding: 1px 5px; border-radius: 3px; background: var(--primary-faint); color: var(--primary); }
-.komentar-time { font-weight: 400; color: var(--sub); font-family: 'IBM Plex Mono', monospace; font-size: 10px; margin-left: auto; }
-.komentar-text { font-size: 13px; margin-top: 3px; }
-.komentar-form textarea { width: 100%; border: 1px solid var(--line); border-radius: 6px; padding: 10px; font-family: 'Inter', sans-serif; font-size: 13px; resize: vertical; box-sizing: border-box; }
-.komentar-submit-row { display: flex; justify-content: flex-end; margin-top: 8px; }
-
-@media (max-width: 860px) { .sidebar { display: none; } .content { padding: 18px; } }
+.lampiran-thumb:hover img {
+    transform: scale(1.05);
+}
+.lampiran-thumb-file {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: #9ca3af;
+    font-size: 10px;
+    font-weight: 600;
+}
+.toast-notif {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    border: 1px solid #bbf7d0;
+    color: #16a34a;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 12px 18px;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    z-index: 9999;
+    transition: opacity 0.3s ease;
+}
 </style>
 </head>
 <body>
@@ -298,7 +275,10 @@ button { font-family: 'Inter', sans-serif; }
             <div class="topbar-right">
                 <button class="bell-btn" aria-label="Notifikasi"><?= icon('bell', 18) ?></button>
                 <div style="display:flex;align-items:center;gap:8px;">
-                    <div class="avatar-circle">RP</div>
+                    <div class="avatar-circle"><?php
+                        $potongNama = explode(' ', trim($userName));
+                        echo strtoupper(substr($potongNama[0], 0, 1) . substr(end($potongNama), 0, 1));
+                    ?></div>
                     <div>
                         <div class="admin-name"><?= htmlspecialchars($userName) ?></div>
                         <div class="admin-role">Pelapor</div>
@@ -315,11 +295,11 @@ button { font-family: 'Inter', sans-serif; }
                     <h1 class="section-title">Riwayat Aduan</h1>
                     <div class="section-desc">Semua aduan yang pernah kamu ajukan, beserta status terkininya.</div>
                 </div>
-                <a href="user_dashboard.php" class="btn btn-primary"><?= icon('plus', 15) ?> Ajukan aduan baru</a>
+                <a href="dashboard.php" class="btn btn-primary"><?= icon('plus', 15) ?> Ajukan aduan baru</a>
             </div>
 
             <div class="stat-strip">
-                <div class="stat-pill dot-all"><span class="dot"></span> Total <strong><?= count($aduanData) ?></strong></div>
+                <div class="stat-pill dot-all"><span class="dot"></span> Total <strong><?= $totalSaya ?></strong></div>
                 <div class="stat-pill dot-red"><span class="dot"></span> Belum dikerjakan <strong><?= $counts['Belum Dikerjakan'] ?></strong></div>
                 <div class="stat-pill dot-amber"><span class="dot"></span> Sedang dikerjakan <strong><?= $counts['Sedang Dikerjakan'] ?></strong></div>
                 <div class="stat-pill dot-green"><span class="dot"></span> Selesai <strong><?= $counts['Selesai'] ?></strong></div>
@@ -348,7 +328,7 @@ button { font-family: 'Inter', sans-serif; }
             <?php else: ?>
                 <?php foreach ($filtered as $a): ?>
                     <?php $markClass = match ($a['status']) { 'Belum Dikerjakan' => 'belum', 'Sedang Dikerjakan' => 'proses', default => 'selesai' }; ?>
-                    <a class="timeline-card" href="user_riwayat.php?<?= http_build_query(['q' => $q, 'status' => $statusFilter, 'id' => $a['id']]) ?>">
+                    <a class="timeline-card" href="riwayat.php?<?= http_build_query(['q' => $q, 'status' => $statusFilter, 'id' => $a['id']]) ?>">
                         <div class="timeline-mark <?= $markClass ?>"></div>
                         <div class="timeline-body">
                             <div class="timeline-top">
@@ -359,11 +339,11 @@ button { font-family: 'Inter', sans-serif; }
                                 <?= statusPill($a['status']) ?>
                             </div>
                             <div class="timeline-meta">
-                                <span><?= icon('package', 12) ?> <?= htmlspecialchars($a['kategori']) ?></span>
+                                <span><?= icon('package', 12) ?> <?= htmlspecialchars($a['kategori'] ?? '-') ?></span>
                                 <span><?= icon('pin', 12) ?> <?= htmlspecialchars($a['lokasi']) ?></span>
-                                <span><?= icon('paperclip', 12) ?> <?= count($a['lampiran']) ?></span>
-                                <span><?= icon('message', 12) ?> <?= count($a['komentar']) ?></span>
-                                <span style="margin-left:auto;font-family:'IBM Plex Mono',monospace;"><?= $a['tanggal'] ?></span>
+                                <span><?= icon('paperclip', 12) ?> <?= (int)$a['jml_lampiran'] ?></span>
+                                <span><?= icon('message', 12) ?> <?= (int)$a['jml_komentar'] ?></span>
+                                <span style="margin-left:auto;font-family:'IBM Plex Mono',monospace;"><?= date('d/m/Y', strtotime($a['tanggal'])) ?></span>
                             </div>
                         </div>
                     </a>
@@ -373,19 +353,34 @@ button { font-family: 'Inter', sans-serif; }
     </main>
 </div>
 
+<?php if ($balasanSukses): ?>
+<div class="toast-notif" id="toastNotif">
+    <?= icon('check', 16, '#16a34a') ?>
+    <span>Balasan berhasil dikirim!</span>
+</div>
+<?php endif; ?>
+
 <?php if ($detail): ?>
-<div class="modal-backdrop" onclick="if(event.target===this) window.location='user_riwayat.php?<?= $backQuery ?>'">
+<div class="modal-backdrop" onclick="if(event.target===this) window.location='riwayat.php?<?= $backQuery ?>'">
     <div class="modal-box">
         <div class="modal-head">
             <div>
                 <div class="modal-eyebrow">ADUAN #<?= $detail['id'] ?></div>
                 <div class="modal-title"><?= htmlspecialchars($detail['barang']) ?></div>
             </div>
-            <a class="modal-close" href="user_riwayat.php?<?= $backQuery ?>"><?= icon('x', 20) ?></a>
+            <a class="modal-close" href="riwayat.php?<?= $backQuery ?>"><?= icon('x', 20) ?></a>
         </div>
         <div class="modal-body">
+
+            <?php if ($balasanSukses): ?>
+            <div class="alert-success">
+                <?= icon('check', 14, '#16a34a') ?>
+                <span>Balasan berhasil dikirim!</span>
+            </div>
+            <?php endif; ?>
+
             <div class="meta-line">
-                <div class="item"><?= icon('package', 14) ?> <?= htmlspecialchars($detail['kategori']) ?> &middot; <?= $detail['jumlah'] ?> unit</div>
+                <div class="item"><?= icon('package', 14) ?> <?= htmlspecialchars($detail['kategori'] ?? '-') ?> &middot; <?= (int)$detail['jumlah'] ?> unit</div>
                 <div class="item"><?= icon('pin', 14) ?> <?= htmlspecialchars($detail['lokasi']) ?></div>
                 <div class="item"><?= statusPill($detail['status']) ?></div>
             </div>
@@ -413,9 +408,24 @@ button { font-family: 'Inter', sans-serif; }
                 <?php if (empty($detail['lampiran'])): ?>
                     <div style="font-size:13px;color:var(--sub);font-style:italic;">Tidak ada lampiran.</div>
                 <?php else: ?>
-                    <?php foreach ($detail['lampiran'] as $f): ?>
-                        <span class="lampiran-chip"><?= icon('paperclip', 12) ?> <?= htmlspecialchars($f) ?></span>
-                    <?php endforeach; ?>
+                    <div class="lampiran-grid">
+                        <?php foreach ($detail['lampiran'] as $f):
+                            $ext      = strtolower(pathinfo($f, PATHINFO_EXTENSION));
+                            $isGambar = in_array($ext, ['jpg', 'jpeg', 'png'], true);
+                            $urlFile  = '../uploads/lampiran/' . rawurlencode($f);
+                        ?>
+                            <a href="<?= $urlFile ?>" target="_blank" rel="noopener" class="lampiran-thumb">
+                                <?php if ($isGambar): ?>
+                                    <img src="<?= $urlFile ?>" alt="<?= htmlspecialchars($f) ?>" loading="lazy">
+                                <?php else: ?>
+                                    <div class="lampiran-thumb-file">
+                                        <?= icon('paperclip', 22, '#9ca3af') ?>
+                                        <span>PDF</span>
+                                    </div>
+                                <?php endif; ?>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
                 <?php endif; ?>
             </div>
 
@@ -425,22 +435,28 @@ button { font-family: 'Inter', sans-serif; }
                     <div style="font-size:13px;color:var(--sub);font-style:italic;margin-bottom:10px;">Belum ada balasan dari admin.</div>
                 <?php endif; ?>
                 <?php foreach ($detail['komentar'] as $k): ?>
-                    <?php $initial = strtoupper(substr($k['dari'], 0, 1)); ?>
+                    <?php
+                        $initial = strtoupper(substr($k['dari'] ?? 'A', 0, 1));
+                        $peran   = $k['peran'] ?? 'admin';
+                    ?>
                     <div class="komentar-item">
-                        <div class="komentar-avatar <?= $k['peran'] ?>"><?= $initial ?></div>
+                        <div class="komentar-avatar <?= $peran ?>"><?= $initial ?></div>
                         <div class="komentar-bubble">
                             <div class="komentar-head">
-                                <span class="komentar-nama"><?= htmlspecialchars($k['dari']) ?></span>
-                                <?php if ($k['peran'] === 'admin'): ?><span class="komentar-tag">Admin</span><?php endif; ?>
-                                <span class="komentar-time"><?= $k['tanggal'] ?></span>
+                                <span class="komentar-nama"><?= htmlspecialchars($k['dari'] ?? 'Admin') ?></span>
+                                <?php if ($peran === 'admin'): ?><span class="komentar-tag">Admin</span><?php endif; ?>
+                                <span class="komentar-time"><?= date('d/m/Y H:i', strtotime($k['tanggal'])) ?></span>
                             </div>
                             <div class="komentar-text"><?= htmlspecialchars($k['isi']) ?></div>
                         </div>
                     </div>
                 <?php endforeach; ?>
 
-                <form method="post" action="tambah_balasan.php" class="komentar-form">
+                <form method="post" action="riwayat.php" class="komentar-form">
+                    <input type="hidden" name="action" value="tambah_balasan">
                     <input type="hidden" name="id_aduan" value="<?= $detail['id'] ?>">
+                    <input type="hidden" name="redirect_q" value="<?= htmlspecialchars($q) ?>">
+                    <input type="hidden" name="redirect_status" value="<?= htmlspecialchars($statusFilter) ?>">
                     <textarea name="balasan" rows="2" placeholder="Tulis balasan atau pertanyaan tambahan..." required></textarea>
                     <div class="komentar-submit-row">
                         <button type="submit" class="btn btn-primary"><?= icon('send', 14) ?> Kirim</button>
@@ -450,6 +466,23 @@ button { font-family: 'Inter', sans-serif; }
         </div>
     </div>
 </div>
+<?php endif; ?>
+
+<?php if ($balasanSukses): ?>
+<script>
+    (function () {
+        var toast = document.getElementById('toastNotif');
+        setTimeout(function () {
+            if (toast) {
+                toast.style.opacity = '0';
+                setTimeout(function () { toast.remove(); }, 300);
+            }
+        }, 3000);
+        var url = new URL(window.location);
+        url.searchParams.delete('balasan_sukses');
+        window.history.replaceState({}, '', url);
+    })();
+</script>
 <?php endif; ?>
 </body>
 </html>

@@ -12,27 +12,6 @@ $adminName = $_SESSION['nama'];
 $potongNama = explode(' ', trim($adminName));
 $inisial = strtoupper(substr($potongNama[0], 0, 1) . substr(end($potongNama), 0, 1));
 
-function icon(string $name, int $size = 17, string $color = 'currentColor'): string
-{
-    $stroke = "stroke=\"$color\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"";
-    $paths = [
-        'grid'      => '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>',
-        'clipboard' => '<path d="M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1Z"/><rect x="5" y="6" width="14" height="15" rx="2"/><path d="M9 12h6M9 16h6"/>',
-        'tags'      => '<path d="M12 2 3 11v0a2 2 0 0 0 0 2.8l6.2 6.2a2 2 0 0 0 2.8 0L21 11V4a2 2 0 0 0-2-2h-7Z"/><circle cx="8.5" cy="8.5" r="1.2"/>',
-        'users'     => '<circle cx="9" cy="8" r="3.2"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16.5 7a3 3 0 1 1 0 6"/><path d="M17.5 14a5.5 5.5 0 0 1 4 5.3"/>',
-        'search'    => '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/>',
-        'bell'      => '<path d="M6 8a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
-        'chevron'   => '<path d="m6 9 6 6 6-6"/>',
-        'logout'    => '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-        'plus'      => '<path d="M12 5v14M5 12h14"/>',
-        'pencil'    => '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
-        'trash'     => '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-        'x'         => '<path d="M18 6 6 18M6 6l12 12"/>',
-    ];
-    $body = $paths[$name] ?? '';
-    return "<svg width=\"$size\" height=\"$size\" viewBox=\"0 0 24 24\" $stroke>$body</svg>";
-}
-
 // ---------- DATA DUMMY (nanti diganti query PDO ke tabel kategori_barang, join COUNT(*) dari aduan) ----------
 $kategoriData = [
     ['id' => 1, 'nama' => 'Elektronik',    'jumlah' => 12],
@@ -82,16 +61,16 @@ $belumCount = 2; // dummy badge sidebar, nanti diganti query COUNT status 'Belum
         </div>
 
         <div class="nav-label">Menu</div>
-        <a href="dashboard.php" class="nav-item"><?= icon('grid') ?><span class="label">Dashboard</span></a>
-        <a href="data_aduan.php" class="nav-item"><?= icon('clipboard') ?><span class="label">Data Aduan</span>
+        <a href="dashboard.php" class="nav-item"><span class="label">Dashboard</span></a>
+        <a href="data_aduan.php" class="nav-item"><span class="label">Data Aduan</span>
             <?php if ($belumCount > 0): ?><span class="badge"><?= $belumCount ?></span><?php endif; ?>
         </a>
-        <a href="kategori_barang.php" class="nav-item active"><?= icon('tags') ?><span class="label">Kategori Barang</span></a>
-        <a href="data_pengguna.php" class="nav-item"><?= icon('users') ?><span class="label">Data Pengguna</span></a>
+        <a href="kategori_barang.php" class="nav-item active"><span class="label">Kategori Barang</span></a>
+        <a href="data_pengguna.php" class="nav-item"><span class="label">Data Pengguna</span></a>
 
         <div style="flex:1"></div>
         <div class="sidebar-footer">
-            <a href="../auth/logout.php" onclick="return confirm('Yakin Ingin Logout?')" class="nav-item"><?= icon('logout') ?><span class="label">Keluar</span></a>
+            <a href="../auth/logout.php" onclick="return confirm('Yakin Ingin Logout?')" class="nav-item"><span class="label">Keluar</span></a>
         </div>
     </aside>
 
@@ -104,7 +83,6 @@ $belumCount = 2; // dummy badge sidebar, nanti diganti query COUNT status 'Belum
             ?></div>
             <div class="topbar-right">
                 <button class="bell-btn" aria-label="Notifikasi">
-                    <?= icon('bell', 18) ?>
                     <?php if ($belumCount > 0): ?><span class="bell-dot"></span><?php endif; ?>
                 </button>
                 <div style="display:flex;align-items:center;gap:8px;">
@@ -113,7 +91,6 @@ $belumCount = 2; // dummy badge sidebar, nanti diganti query COUNT status 'Belum
                         <div class="admin-name"><?= $adminName ?></div>
                         <div class="admin-role">Administrator</div>
                     </div>
-                    <?= icon('chevron', 14, '#6B756C') ?>
                 </div>
             </div>
         </header>
@@ -124,12 +101,11 @@ $belumCount = 2; // dummy badge sidebar, nanti diganti query COUNT status 'Belum
                     <div class="eyebrow"><?= count($filtered) ?> kategori</div>
                     <h1 class="section-title">Kategori Barang</h1>
                 </div>
-                <a href="kategori.php?mode=tambah" class="btn btn-primary"><?= icon('plus', 15) ?> Tambah kategori</a>
+                <a href="kategori.php?mode=tambah" class="btn btn-primary">Tambah kategori</a>
             </div>
 
             <form method="get" class="toolbar">
                 <div class="search-box">
-                    <?= icon('search', 15, '#6B756C') ?>
                     <input type="text" name="q" value="<?= htmlspecialchars($q) ?>" placeholder="Cari nama kategori...">
                 </div>
             </form>
@@ -144,14 +120,14 @@ $belumCount = 2; // dummy badge sidebar, nanti diganti query COUNT status 'Belum
                     <?php foreach ($filtered as $i => $k): ?>
                         <div class="kategori-card">
                             <div class="kategori-rank">#<?= str_pad($k['id'], 2, '0', STR_PAD_LEFT) ?></div>
-                            <div class="kategori-icon"><?= icon('tags', 16) ?></div>
+                            <div class="kategori-icon"></div>
                             <div class="kategori-name"><?= htmlspecialchars($k['nama']) ?></div>
                             <div class="kategori-count"><?= $k['jumlah'] ?> laporan tercatat</div>
                             <div class="kategori-actions">
-                                <a href="kategori.php?mode=edit&id=<?= $k['id'] ?>" class="btn-ghost"><?= icon('pencil', 13) ?></a>
+                                <a href="kategori.php?mode=edit&id=<?= $k['id'] ?>" class="btn-ghost"></a>
                                 <form method="post" action="kategori_hapus.php" onsubmit="return confirm('Hapus kategori &quot;<?= htmlspecialchars($k['nama']) ?>&quot;?');" style="display:inline;">
                                     <input type="hidden" name="id_kategori" value="<?= $k['id'] ?>">
-                                    <button type="submit" class="btn-danger-ghost"><?= icon('trash', 13) ?></button>
+                                    <button type="submit" class="btn-danger-ghost"></button>
                                 </form>
                             </div>
                         </div>

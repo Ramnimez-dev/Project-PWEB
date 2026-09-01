@@ -40,20 +40,7 @@ while ($row = mysqli_fetch_assoc($queryRecent)) {
     ];
 }
 
-// Function Icon & Helper (Shorthand)
-function icon(string $name, int $size = 17, string $color = 'currentColor'): string {
-    $s = "width=\"$size\" height=\"$size\" viewBox=\"0 0 24 24\" stroke=\"$color\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"";
-    $p = [
-        'grid' => '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>',
-        'clipboard' => '<path d="M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1Z"/><rect x="5" y="6" width="14" height="15" rx="2"/><path d="M9 12h6M9 16h6"/>',
-        'tags' => '<path d="M12 2 3 11v0a2 2 0 0 0 0 2.8l6.2 6.2a2 2 0 0 0 2.8 0L21 11V4a2 2 0 0 0-2-2h-7Z"/><circle cx="8.5" cy="8.5" r="1.2"/>',
-        'users' => '<circle cx="9" cy="8" r="3.2"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16.5 7a3 3 0 1 1 0 6"/><path d="M17.5 14a5.5 5.5 0 0 1 4 5.3"/>',
-        'bell' => '<path d="M6 8a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
-        'chevron' => '<path d="m6 9 6 6 6-6"/>',
-        'logout' => '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    ];
-    return "<svg $s>" . ($p[$name] ?? '') . "</svg>";
-}
+
 
 function statusPill(string $status): string {
     $map = ['Belum Dikerjakan' => 'status-belum', 'Sedang Dikerjakan' => 'status-proses', 'Selesai' => 'status-selesai'];
@@ -82,16 +69,16 @@ $tanggalText = "$hari, " . date('j') . " $bulan " . date('Y');
             <div><div class="brand-name">SARPRAS</div><div class="brand-sub">PANEL ADMIN</div></div>
         </div>
         <div class="nav-label">Menu</div>
-        <a href="dashboard.php" class="nav-item active"><?= icon('grid') ?> <span>Dashboard</span></a>
-        <a href="data_aduan.php" class="nav-item"><?= icon('clipboard') ?> <span>Data Aduan</span>
+        <a href="dashboard.php" class="nav-item active"><span>Dashboard</span></a>
+        <a href="data_aduan.php" class="nav-item"><span>Data Aduan</span>
             <?php if ($belumCount > 0): ?><span class="badge"><?= $belumCount ?></span><?php endif; ?>
         </a>
-        <a href="kategori_barang.php" class="nav-item"><?= icon('tags') ?> <span>Kategori Barang</span></a>
-        <a href="data_pengguna.php" class="nav-item"><?= icon('users') ?> <span>Data Pengguna</span></a>
+        <a href="kategori_barang.php" class="nav-item"><span>Kategori Barang</span></a>
+        <a href="data_pengguna.php" class="nav-item"><span>Data Pengguna</span></a>
         
         <div style="flex:1"></div>
         <div class="sidebar-footer">
-            <a href="../auth/logout.php" onclick="return confirm('Yakin Ingin Logout?')" class="nav-item"><?= icon('logout') ?><span class="label">Keluar</span></a>
+            <a href="../auth/logout.php" onclick="return confirm('Yakin Ingin Logout?')" class="nav-item"><span class="label">Keluar</span></a>
         </div>
     </aside>
 
@@ -100,7 +87,6 @@ $tanggalText = "$hari, " . date('j') . " $bulan " . date('Y');
             <div class="topbar-date"><?= $tanggalText ?></div>
             <div class="topbar-right">
                 <button class="bell-btn" aria-label="Notifikasi">
-                    <?= icon('bell', 18) ?>
                     <?php if ($counts['Belum Dikerjakan']): ?><span class="bell-dot"></span><?php endif; ?>
                 </button>
                 <div style="display:flex;align-items:center;gap:8px;">
@@ -109,14 +95,13 @@ $tanggalText = "$hari, " . date('j') . " $bulan " . date('Y');
                         <div style="font-size:12.5px;font-weight:600;"><?= htmlspecialchars($adminName) ?></div>
                         <div style="font-size:10.5px;color:var(--sub);">Administrator</div>
                     </div>
-                    <?= icon('chevron', 14, '#6B756C') ?>
                 </div>
             </div>
         </header>
 
         <div class="content">
             <div class="eyebrow">Ringkasan hari ini</div>
-            <h1 class="section-title">Dasbor Sarpras</h1>
+            <h1 class="section-title">Dashboard SarPras</h1>
 
             <div class="stat-grid">
                 <div class="stat-card">
