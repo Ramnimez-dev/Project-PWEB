@@ -82,7 +82,7 @@ $belumCount = 2; // dummy badge sidebar, nanti diganti query COUNT status 'Belum
 
         <div style="flex:1"></div>
         <div class="sidebar-footer">
-            <a href="#" class="nav-item"><?= icon('logout') ?><span class="label">Keluar</span></a>
+             <a href="../auth/logout.php" onclick="return confirm('Yakin Ingin Logout?')" class="nav-item"><?= icon('logout') ?><span class="label">Keluar</span></a>
         </div>
     </aside>
 

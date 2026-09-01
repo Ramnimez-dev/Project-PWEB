@@ -1,4 +1,43 @@
 <?php
+session_start();
+require '../config/koneksi.php';
+
+// Guard — cuma admin yang login boleh buka halaman ini
+if (empty($_SESSION['id_user']) || ($_SESSION['role'] ?? '') !== 'admin') {
+    header('Location: ../auth/login.php');
+    exit;
+}
+
+$adminName = $_SESSION['nama'];
+
+// Hitung jumlah aduan per status
+$counts = ['Belum Dikerjakan' => 0, 'Sedang Dikerjakan' => 0, 'Selesai' => 0];
+$hasil = mysqli_query($koneksi, "SELECT status, COUNT(*) AS jumlah FROM aduan GROUP BY status");
+while ($row = mysqli_fetch_assoc($hasil)) {
+    $counts[$row['status']] = (int)$row['jumlah'];
+}
+$total      = array_sum($counts);
+$belumCount = $counts['Belum Dikerjakan'];
+
+// 5 aduan terbaru, dipetakan ke key yang sama seperti yang dipakai di foreach bawah (id, barang, kategori, lokasi, status)
+$aduanTerbaru = [];
+$queryRecent = mysqli_query($koneksi, "
+    SELECT a.id_aduan, a.barang_aduan, a.lokasi, a.status, k.nama_kategori
+    FROM aduan a
+    LEFT JOIN kategori_barang k ON k.id_kategori = a.kategori_id
+    ORDER BY a.tanggal DESC
+    LIMIT 5
+");
+while ($row = mysqli_fetch_assoc($queryRecent)) {
+    $aduanTerbaru[] = [
+        'id'       => $row['id_aduan'],
+        'barang'   => $row['barang_aduan'],
+        'kategori' => $row['nama_kategori'] ?? '-',
+        'lokasi'   => $row['lokasi'],
+        'status'   => $row['status'],
+    ];
+}
+
 // Function Icon & Helper (Shorthand)
 function icon(string $name, int $size = 17, string $color = 'currentColor'): string {
     $s = "width=\"$size\" height=\"$size\" viewBox=\"0 0 24 24\" stroke=\"$color\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"";
@@ -42,7 +81,7 @@ $tanggalText = "$hari, " . date('j') . " $bulan " . date('Y');
         <div class="nav-label">Menu</div>
         <a href="dashboard.php" class="nav-item active"><?= icon('grid') ?> <span>Dashboard</span></a>
         <a href="data_aduan.php" class="nav-item"><?= icon('clipboard') ?> <span>Data Aduan</span>
-            <?php if ($counts['Belum Dikerjakan']): ?><span class="badge"><?= $counts['Belum Dikerjakan'] ?></span><?php endif; ?>
+            <?php if ($belumCount > 0): ?><span class="badge"><?= $belumCount ?></span><?php endif; ?>
         </a>
         <a href="kategori_barang.php" class="nav-item"><?= icon('tags') ?> <span>Kategori Barang</span></a>
         <a href="data_pengguna.php" class="nav-item"><?= icon('users') ?> <span>Data Pengguna</span></a>
@@ -100,8 +139,11 @@ $tanggalText = "$hari, " . date('j') . " $bulan " . date('Y');
             </div>
 
             <div class="list-label">Aduan masuk terbaru</div>
-            <?php foreach ($aduanDummy as $a): ?>
-                <a class="recent-row" href="#">
+            <?php if (empty($aduanTerbaru)): ?>
+                <p style="color:var(--sub)">Belum ada aduan yang masuk.</p>
+            <?php endif; ?>
+            <?php foreach ($aduanTerbaru as $a): ?>
+                <a class="recent-row" href="data_aduan.php?id=<?= (int)$a['id'] ?>">
                     <div style="flex:1;min-width:0;">
                         <div class="recent-title"><?= htmlspecialchars($a['barang']) ?></div>
                         <div class="recent-meta">
