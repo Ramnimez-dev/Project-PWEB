@@ -70,14 +70,15 @@ $tanggalText = "$hari, " . date('j') . " $bulan " . date('Y');
 <html lang="id">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard — Sarpras</title>
+<title>Dashboard — SarPras</title>
+<link rel="shortcut icon" href="../img/logo sapras.png">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="layout">
     <aside class="sidebar">
         <div class="brand">
-            <div class="brand-mark">SP</div>
+            <div class="brand-mark"><img src="../img/logo sapras.png" alt="logo sarpras"></div>
             <div><div class="brand-name">SARPRAS</div><div class="brand-sub">PANEL ADMIN</div></div>
         </div>
         <div class="nav-label">Menu</div>

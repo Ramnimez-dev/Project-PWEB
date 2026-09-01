@@ -1,10 +1,16 @@
 <?php
-/**
- * HALAMAN DATA ADUAN — Full Functionality (Single File)
- * Semua proses (Update Status & Tambah Komentar) diproses di file ini.
- */
 
 session_start();
+require '../config/koneksi.php';
+
+if(!isset($_SESSION['nama'])) {
+    header("Location: ../auth/login.php");
+    exit();
+}
+
+$adminName = $_SESSION['nama'];
+$potongNama = explode(' ', trim($adminName));
+$inisial = strtoupper(substr($potongNama[0], 0, 1) . substr(end($potongNama), 0, 1));
 
 // ---------- DATA DUMMY (Disimpan dalam SESSION agar perubahan tetap persis/interaktif) ----------
 if (!isset($_SESSION['aduanData'])) {
@@ -169,7 +175,8 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Data Aduan — Sarpras Panel</title>
+<title>Data Aduan — SarPras</title>
+<link rel="shortcut icon" href="../img/logo sapras.png">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -177,7 +184,7 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
 
     <aside class="sidebar">
         <div class="brand">
-            <div class="brand-mark">SP</div>
+            <div class="brand-mark"><img src="../img/logo sapras.png" alt="logo sarpras"></div>
             <div>
                 <div class="brand-name">SARPRAS</div>
                 <div class="brand-sub">PANEL ADMIN</div>
@@ -211,9 +218,9 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
                     <?php if ($belumCount > 0): ?><span class="bell-dot"></span><?php endif; ?>
                 </button>
                 <div style="display:flex;align-items:center;gap:8px;">
-                    <div class="avatar-circle">BS</div>
+                    <div class="avatar-circle"><?= $inisial ?></div>
                     <div>
-                        <div class="admin-name">Budi Santoso</div>
+                        <div class="admin-name"><?= $adminName ?></div>
                         <div class="admin-role">Administrator</div>
                     </div>
                 </div>

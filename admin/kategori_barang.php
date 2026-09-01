@@ -1,8 +1,16 @@
 <?php
-/**
- * HALAMAN KATEGORI BARANG — versi preview UI (data dummy, belum terhubung database)
- * Jalankan: php -S localhost:8000  lalu buka http://localhost:8000/kategori.php
- */
+
+session_start();
+require '../config/koneksi.php';
+
+if(!isset($_SESSION['nama'])) {
+    header("Location: ../config/koneksi.php");
+    exit();
+}
+
+$adminName = $_SESSION['nama'];
+$potongNama = explode(' ', trim($adminName));
+$inisial = strtoupper(substr($potongNama[0], 0, 1) . substr(end($potongNama), 0, 1));
 
 function icon(string $name, int $size = 17, string $color = 'currentColor'): string
 {
@@ -57,7 +65,8 @@ $belumCount = 2; // dummy badge sidebar, nanti diganti query COUNT status 'Belum
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kategori Barang — Sarpras</title>
+<title>Kategori Barang — SarPras</title>
+<link rel="shortcut icon" href="../img/logo sapras.png">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -65,7 +74,7 @@ $belumCount = 2; // dummy badge sidebar, nanti diganti query COUNT status 'Belum
 
     <aside class="sidebar">
         <div class="brand">
-            <div class="brand-mark">SP</div>
+            <div class="brand-mark"><img src="../img/logo sapras.png" alt="logo sarpras"></div>
             <div>
                 <div class="brand-name">SARPRAS</div>
                 <div class="brand-sub">PANEL ADMIN</div>
@@ -82,7 +91,7 @@ $belumCount = 2; // dummy badge sidebar, nanti diganti query COUNT status 'Belum
 
         <div style="flex:1"></div>
         <div class="sidebar-footer">
-             <a href="../auth/logout.php" onclick="return confirm('Yakin Ingin Logout?')" class="nav-item"><?= icon('logout') ?><span class="label">Keluar</span></a>
+            <a href="../auth/logout.php" onclick="return confirm('Yakin Ingin Logout?')" class="nav-item"><?= icon('logout') ?><span class="label">Keluar</span></a>
         </div>
     </aside>
 
@@ -99,9 +108,9 @@ $belumCount = 2; // dummy badge sidebar, nanti diganti query COUNT status 'Belum
                     <?php if ($belumCount > 0): ?><span class="bell-dot"></span><?php endif; ?>
                 </button>
                 <div style="display:flex;align-items:center;gap:8px;">
-                    <div class="avatar-circle">BS</div>
+                    <div class="avatar-circle"><?= $inisial ?></div>
                     <div>
-                        <div class="admin-name">Budi Santoso</div>
+                        <div class="admin-name"><?= $adminName ?></div>
                         <div class="admin-role">Administrator</div>
                     </div>
                     <?= icon('chevron', 14, '#6B756C') ?>

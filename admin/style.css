@@ -3,11 +3,23 @@
    ========================================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap');
 :root {
-  --paper:#F2F3ED; --surface:#FFF; --ink:#1B231F; --sub:#6B756C; --line:#DCE0D6;
-  --primary:#2C4A38; --primary-dark:#1D3226; --primary-faint:#E4EAE3;
-  --amber:#B4711A; --amber-faint:#F6E7D2; --red:#A63A2E; --red-faint:#F3DED9;
-  --green:#3D7A55; --green-faint:#DEEAE1; --gold:#C9A15A;
+  --paper:#F2F3ED; 
+  --surface:#FFF; 
+  --ink:#1B231F; 
+  --sub:#6B756C; 
+  --line:#DCE0D6;
+  --primary:#2C4A38; 
+  --primary-dark:#1D3226; 
+  --primary-faint:#E4EAE3;
+  --amber:#B4711A; 
+  --amber-faint:#F6E7D2; 
+  --red:#A63A2E; 
+  --red-faint:#F3DED9;
+  --green:#3D7A55; 
+  --green-faint:#DEEAE1; 
+  --gold:#C9A15A;
 }
+
 * { 
     box-sizing: border-box; 
     margin:0; 
@@ -38,16 +50,15 @@ a {
     gap: 10px; 
     padding: 0 12px 30px; 
 }
-.brand-mark { 
+.brand-mark img { 
     width: 30px; 
     height: 30px; 
     border-radius: 6px;
-    background: var(--gold); 
+
     display: flex; 
     align-items: center; 
     justify-content: center; 
-    font: bold 15px 'Barlow Condensed'; 
-    color: var(--primary-dark); 
+
 }
 .brand-name { 
     font: bold 17px 'Barlow Condensed'; 
@@ -308,18 +319,18 @@ button {
     padding: 0 10px; 
     margin-bottom: 24px; 
 }
-.brand-mark { 
+.brand-mark img{ 
     width: 28px; 
     height: 28px; 
     border-radius: 5px; 
-    background: var(--gold); 
+
     display: flex; 
     align-items: center; 
     justify-content: center; 
     font-family: 'Barlow Condensed', sans-serif; 
     font-weight: 700; 
     font-size: 14px; 
-    color: var(--primary-dark); 
+
 }
 .brand-name { 
     font-family: 'Barlow Condensed', sans-serif; 
@@ -1130,11 +1141,11 @@ button {
   margin-bottom: 30px;
 }
 
-.brand-mark {
+.brand-mark img{
   width: 30px;
   height: 30px;
   border-radius: 6px;
-  background-color: var(--gold);
+
   color: var(--primary-dark);
   display: flex;
   align-items: center;
@@ -1577,12 +1588,11 @@ button {
   margin-bottom: 30px;
 }
 
-.brand-mark {
+.brand-mark img{
   width: 30px;
   height: 30px;
   border-radius: 6px;
-  background-color: var(--gold);
-  color: var(--primary-dark);
+
   display: flex;
   align-items: center;
   justify-content: center;
