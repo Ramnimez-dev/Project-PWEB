@@ -2,6 +2,13 @@
 session_start();
 require '../config/koneksi.php';
 
+if (!isset($_SESSION['nama']) || ($_SESSION['role'] ?? '') !== 'user') {
+    header('Location: ../auth/login.php');
+    exit;
+}
+
+$userName = $_SESSION['nama'];
+$userId   = $_SESSION['id_user'];
 
 function icon(string $name, int $size = 17, string $color = 'currentColor'): string
 {
@@ -33,32 +40,86 @@ function statusPill(string $status): string
     return '<span class="pill ' . $class . '"><span class="pill-dot"></span>' . htmlspecialchars($status) . '</span>';
 }
 
-// ---------- DATA DUMMY (nanti diganti session user login + query PDO) ----------
-$userName = 'Rangga Prasetyo';
+// ---------- AMBIL DAFTAR KATEGORI DARI DATABASE (untuk dropdown, pakai id asli bukan teks) ----------
+$kategoriOptions = mysqli_query($koneksi, "SELECT id_kategori, nama_kategori FROM kategori_barang ORDER BY nama_kategori")
+    ->fetch_all(MYSQLI_ASSOC);
 
-$kategoriOptions = ['Elektronik', 'Furnitur', 'Sanitasi', 'Jaringan & IT', 'Bangunan'];
+// ---------- PROSES SUBMIT FORM ADUAN BARU ----------
+$formError = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $barangAduan  = trim($_POST['barang_aduan'] ?? '');
+    $kategoriId   = (int)($_POST['kategori_id'] ?? 0);
+    $jumlahBarang = (int)($_POST['jumlah_barang'] ?? 1);
+    $lokasi       = trim($_POST['lokasi'] ?? '');
+    $isiKeluhan   = trim($_POST['isi_keluhan'] ?? '');
 
-$aduanSaya = [
-    ['id' => 1042, 'barang' => 'AC Ruang Kelas 3B mati total', 'status' => 'Belum Dikerjakan', 'tanggal' => '2026-08-01'],
-    ['id' => 1038, 'barang' => 'Plafon ruang rapat retak', 'status' => 'Belum Dikerjakan', 'tanggal' => '2026-08-02'],
-    ['id' => 1030, 'barang' => 'Kran taman belakang macet', 'status' => 'Sedang Dikerjakan', 'tanggal' => '2026-07-18'],
-    ['id' => 1021, 'barang' => 'Lampu koridor lantai 1 mati', 'status' => 'Selesai', 'tanggal' => '2026-06-30'],
-];
+    if ($barangAduan === '' || $kategoriId <= 0 || $lokasi === '' || $isiKeluhan === '') {
+        $formError = 'Semua field wajib diisi dengan benar.';
+    } else {
+        // Simpan aduan
+        $stmt = mysqli_prepare($koneksi, "
+            INSERT INTO aduan (user_id, kategori_id, barang_aduan, jumlah_barang, lokasi, isi_keluhan, status, tanggal)
+            VALUES (?, ?, ?, ?, ?, ?, 'Belum Dikerjakan', NOW())
+        ");
+        mysqli_stmt_bind_param($stmt, 'iisiss', $userId, $kategoriId, $barangAduan, $jumlahBarang, $lokasi, $isiKeluhan);
+
+        if (mysqli_stmt_execute($stmt)) {
+            $idAduanBaru = mysqli_insert_id($koneksi);
+
+            // Simpan lampiran (kalau ada file yang diunggah)
+            if (!empty($_FILES['lampiran']['name'][0])) {
+                $uploadDir = __DIR__ . '/../uploads/lampiran/';
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+
+                $allowedExt = ['jpg', 'jpeg', 'png', 'pdf'];
+                $maxSize    = 5 * 1024 * 1024; // 5MB
+
+                foreach ($_FILES['lampiran']['name'] as $i => $namaAsli) {
+                    if ($_FILES['lampiran']['error'][$i] !== UPLOAD_ERR_OK) continue;
+
+                    $ext = strtolower(pathinfo($namaAsli, PATHINFO_EXTENSION));
+                    if (!in_array($ext, $allowedExt, true)) continue;
+                    if ($_FILES['lampiran']['size'][$i] > $maxSize) continue;
+
+                    $namaUnik   = uniqid('lampiran_') . '.' . $ext;
+                    $tujuanFile = $uploadDir . $namaUnik;
+
+                    if (move_uploaded_file($_FILES['lampiran']['tmp_name'][$i], $tujuanFile)) {
+                        $stmtL = mysqli_prepare($koneksi, "INSERT INTO lampiran (aduan_id, nama_file, tanggal) VALUES (?, ?, NOW())");
+                        mysqli_stmt_bind_param($stmtL, 'is', $idAduanBaru, $namaUnik);
+                        mysqli_stmt_execute($stmtL);
+                    }
+                }
+            }
+
+            header('Location: dashboard.php?sukses=1');
+            exit;
+        } else {
+            $formError = 'Gagal menyimpan aduan, silakan coba lagi.';
+        }
+    }
+}
+
+$berhasilKirim = isset($_GET['sukses']);
+
+// ---------- AMBIL SEMUA ADUAN MILIK USER YANG LOGIN ----------
+$stmtA = mysqli_prepare($koneksi, "
+    SELECT id_aduan AS id, barang_aduan AS barang, status, tanggal
+    FROM aduan
+    WHERE user_id = ?
+    ORDER BY tanggal DESC
+");
+mysqli_stmt_bind_param($stmtA, 'i', $userId);
+mysqli_stmt_execute($stmtA);
+$aduanSaya = mysqli_fetch_all(mysqli_stmt_get_result($stmtA), MYSQLI_ASSOC);
 
 $counts = ['Belum Dikerjakan' => 0, 'Sedang Dikerjakan' => 0, 'Selesai' => 0];
 foreach ($aduanSaya as $a) {
     $counts[$a['status']]++;
 }
 $totalSaya = count($aduanSaya);
-
-// ---------- HANDLE SUBMIT FORM (dummy, nanti diganti INSERT INTO aduan) ----------
-$berhasilKirim = isset($_GET['sukses']);
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // nanti di sini: validasi + INSERT INTO aduan (user_id, kategori_id, barang_aduan, jumlah_barang, lokasi, isi_keluhan, status, tanggal)
-    // lalu simpan file lampiran ke tabel lampiran
-    header('Location: user_dashboard.php?sukses=1');
-    exit;
-}
 ?>
 
 <!DOCTYPE html>
@@ -102,7 +163,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="topbar-right">
                 <button class="bell-btn" aria-label="Notifikasi"><?= icon('bell', 18) ?></button>
                 <div style="display:flex;align-items:center;gap:8px;">
-                    <div class="avatar-circle">RP</div>
+                    <div class="avatar-circle">
+                        <?php
+                            $potongNama = explode(' ', trim($userName));
+                            echo strtoupper(substr($potongNama[0], 0, 1) . substr(end($potongNama), 0, 1));
+                        ?>
+                    </div>
                     <div>
                         <div class="admin-name"><?= htmlspecialchars($userName) ?></div>
                         <div class="admin-role">Pelapor</div>
@@ -122,7 +188,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <?php if ($berhasilKirim): ?>
-                <div class="alert alert-success"><?= icon('send', 15) ?> Aduan berhasil dikirim! Admin akan segera meninjau laporanmu.</div>
+                <div class="alert alert-success"><?= icon('send', 15) ?> Aduan telah dikirim</div>
+            <?php endif; ?>
+            <?php if ($formError): ?>
+                <div class="alert alert-error"><?= htmlspecialchars($formError) ?></div>
             <?php endif; ?>
 
             <div class="stat-grid">
@@ -166,7 +235,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <select name="kategori_id" class="field-select" required>
                                         <option value="" disabled selected>Pilih kategori</option>
                                         <?php foreach ($kategoriOptions as $k): ?>
-                                            <option value="<?= htmlspecialchars($k) ?>"><?= htmlspecialchars($k) ?></option>
+                                            <option value="<?= (int)$k['id_kategori'] ?>"><?= htmlspecialchars($k['nama_kategori']) ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -204,12 +273,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="col-side">
                     <div class="card">
                         <div class="list-label" style="margin-bottom:14px;">Aduan terbaru kamu</div>
+                        <?php if (empty($aduanSaya)): ?>
+                            <p style="color:var(--sub);font-size:13px;">Kamu belum pernah mengajukan aduan.</p>
+                        <?php endif; ?>
                         <?php foreach (array_slice($aduanSaya, 0, 4) as $a): ?>
                             <div class="recent-row">
                                 <div class="pin"></div>
                                 <div style="flex:1;min-width:0;">
                                     <div class="recent-title"><?= htmlspecialchars($a['barang']) ?></div>
-                                    <div class="recent-meta"><span>#<?= $a['id'] ?></span><span><?= $a['tanggal'] ?></span></div>
+                                    <div class="recent-meta"><span>#<?= $a['id'] ?></span><span><?= date('Y-m-d', strtotime($a['tanggal'])) ?></span></div>
                                 </div>
                                 <?= statusPill($a['status']) ?>
                             </div>
@@ -221,5 +293,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </main>
 </div>
+
+<script>
+// Tampilkan nama file yang dipilih di kotak upload
+document.getElementById('lampiran').addEventListener('change', function () {
+    const box = document.querySelector('.upload-box div:nth-child(2)');
+    if (this.files.length > 0) {
+        box.innerHTML = '<strong>' + this.files.length + ' file dipilih</strong>';
+    }
+});
+</script>
 </body>
 </html>

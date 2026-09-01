@@ -3,52 +3,61 @@
 session_start();
 require '../config/koneksi.php';
 
-if(!isset($_SESSION['nama'])) {
+if (!isset($_SESSION['nama']) || ($_SESSION['role'] ?? '') !== 'admin') {
     header("Location: ../auth/login.php");
     exit();
 }
 
-$adminName = $_SESSION['nama'];
+$adminName  = $_SESSION['nama'];
+$adminId    = $_SESSION['id_user'];
 $potongNama = explode(' ', trim($adminName));
-$inisial = strtoupper(substr($potongNama[0], 0, 1) . substr(end($potongNama), 0, 1));
-
-// ---------- DATA DUMMY (Disimpan dalam SESSION agar perubahan tetap persis/interaktif) ----------
-if (!isset($_SESSION['aduanData'])) {
-    // $_SESSION['aduanData'] = 
-}
-$aduanData = &$_SESSION['aduanData'];
+$inisial    = strtoupper(substr($potongNama[0], 0, 1) . substr(end($potongNama), 0, 1));
 
 // ---------- PROSES AKSI FORM (UPDATE STATUS & TAMBAH KOMENTAR) ----------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'] ?? '';
-    $idAduan = (int)($_POST['id_aduan'] ?? 0);
-    $qRedirect = $_POST['redirect_q'] ?? '';
+    $action         = $_POST['action'] ?? '';
+    $idAduan        = (int)($_POST['id_aduan'] ?? 0);
+    $qRedirect      = $_POST['redirect_q'] ?? '';
     $statusRedirect = $_POST['redirect_status'] ?? 'Semua';
 
-    if (isset($aduanData[$idAduan])) {
+    $statusBerhasil   = false;
+    $komentarBerhasil = false;
+
+    if ($idAduan > 0) {
         // Aksi 1: Update Status
         if ($action === 'update_status') {
             $newStatus = $_POST['status'] ?? '';
-            if (in_array($newStatus, ['Belum Dikerjakan', 'Sedang Dikerjakan', 'Selesai'])) {
-                $aduanData[$idAduan]['status'] = $newStatus;
+            if (in_array($newStatus, ['Belum Dikerjakan', 'Sedang Dikerjakan', 'Selesai'], true)) {
+                $stmt = mysqli_prepare($koneksi, "UPDATE aduan SET status = ? WHERE id_aduan = ?");
+                mysqli_stmt_bind_param($stmt, 'si', $newStatus, $idAduan);
+                if (mysqli_stmt_execute($stmt)) {
+                    $statusBerhasil = true;
+                }
             }
         }
-        
+
         // Aksi 2: Tambah Komentar
         if ($action === 'tambah_komentar') {
             $isiKomentar = trim($_POST['komentar'] ?? '');
-            if (!empty($isiKomentar)) {
-                $aduanData[$idAduan]['komentar'][] = [
-                    'admin' => '',
-                    'isi' => $isiKomentar,
-                    'tanggal' => date('Y-m-d H:i')
-                ];
+            if ($isiKomentar !== '') {
+                $stmt = mysqli_prepare($koneksi, "INSERT INTO komentar_aduan (aduan_id, admin_id, komentar, tanggal) VALUES (?, ?, ?, NOW())");
+                mysqli_stmt_bind_param($stmt, 'iis', $idAduan, $adminId, $isiKomentar);
+                if (mysqli_stmt_execute($stmt)) {
+                    $komentarBerhasil = true;
+                }
             }
         }
     }
 
     // Redirect kembali ke halaman ini agar pop-up tetap terbuka & data diperbarui
-    $queryStr = http_build_query(['q' => $qRedirect, 'status' => $statusRedirect, 'id' => $idAduan]);
+    $queryParams = ['q' => $qRedirect, 'status' => $statusRedirect, 'id' => $idAduan];
+    if ($komentarBerhasil) {
+        $queryParams['komentar_sukses'] = 1;
+    }
+    if ($statusBerhasil) {
+        $queryParams['status_sukses'] = 1;
+    }
+    $queryStr = http_build_query($queryParams);
     header("Location: data_aduan.php?$queryStr");
     exit;
 }
@@ -71,6 +80,7 @@ function icon(string $name, int $size = 16, string $color = 'currentColor'): str
         'x'         => '<path d="M18 6 6 18M6 6l12 12"/>',
         'pin'       => '<path d="M12 21s7-6.5 7-11.5A7 7 0 0 0 5 9.5C5 14.5 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.2"/>',
         'package'   => '<path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/><path d="m20.7 7-8.7-5-8.7 5 8.7 5 8.7-5Z"/>',
+        'check'     => '<path d="M20 6 9 17l-5-5"/>',
     ];
     $body = $paths[$name] ?? '';
     return "<svg width=\"$size\" height=\"$size\" viewBox=\"0 0 24 24\" $stroke>$body</svg>";
@@ -87,25 +97,97 @@ function statusPill(string $status): string
     return '<span class="pill ' . $class . '"><span class="pill-dot"></span>' . htmlspecialchars($status) . '</span>';
 }
 
-// ---------- FILTER & PENCARIAN ----------
-$q            = trim($_GET['q'] ?? '');
-$statusFilter = $_GET['status'] ?? 'Semua';
+// ---------- FILTER & PENCARIAN (dibangun langsung sebagai query SQL) ----------
+$q             = trim($_GET['q'] ?? '');
+$statusFilter  = $_GET['status'] ?? 'Semua';
 $statusOptions = ['Semua', 'Belum Dikerjakan', 'Sedang Dikerjakan', 'Selesai'];
 
-$filtered = array_filter($aduanData, function ($a) use ($q, $statusFilter) {
-    $matchQ = $q === '' || stripos($a['barang'], $q) !== false || stripos($a['pelapor'], $q) !== false || (string)$a['id'] === $q;
-    $matchS = $statusFilter === 'Semua' || $a['status'] === $statusFilter;
-    return $matchQ && $matchS;
-});
-usort($filtered, fn($a, $b) => strcmp($b['tanggal'], $a['tanggal']));
+// Flag notifikasi dari redirect setelah aksi form
+$komentarSukses = isset($_GET['komentar_sukses']);
+$statusSukses   = isset($_GET['status_sukses']);
 
-$belumCount   = count(array_filter($aduanData, fn($a) => $a['status'] === 'Belum Dikerjakan'));
-$prosesCount  = count(array_filter($aduanData, fn($a) => $a['status'] === 'Sedang Dikerjakan'));
-$selesaiCount = count(array_filter($aduanData, fn($a) => $a['status'] === 'Selesai'));
+$sql = "
+    SELECT a.id_aduan AS id, a.barang_aduan AS barang, a.lokasi, a.status, a.tanggal,
+           k.nama_kategori AS kategori, u.nama AS pelapor,
+           (SELECT COUNT(*) FROM lampiran l WHERE l.aduan_id = a.id_aduan) AS jml_lampiran,
+           (SELECT COUNT(*) FROM komentar_aduan c WHERE c.aduan_id = a.id_aduan) AS jml_komentar
+    FROM aduan a
+    LEFT JOIN kategori_barang k ON k.id_kategori = a.kategori_id
+    LEFT JOIN users u ON u.id_user = a.user_id
+    WHERE 1=1
+";
+$types  = '';
+$params = [];
+
+if ($q !== '') {
+    $sql .= " AND (a.barang_aduan LIKE ? OR u.nama LIKE ? OR a.id_aduan = ?)";
+    $like = "%$q%";
+    $types .= 'ssi';
+    $params[] = $like;
+    $params[] = $like;
+    $params[] = is_numeric($q) ? (int)$q : 0;
+}
+if ($statusFilter !== 'Semua' && in_array($statusFilter, $statusOptions, true)) {
+    $sql .= " AND a.status = ?";
+    $types .= 's';
+    $params[] = $statusFilter;
+}
+$sql .= " ORDER BY a.tanggal DESC";
+
+$stmt = mysqli_prepare($koneksi, $sql);
+if ($types !== '') {
+    mysqli_stmt_bind_param($stmt, $types, ...$params);
+}
+mysqli_stmt_execute($stmt);
+$filtered = mysqli_fetch_all(mysqli_stmt_get_result($stmt), MYSQLI_ASSOC);
+
+// ---------- HITUNG STATUS (dari seluruh data, bukan hasil filter) ----------
+$belumCount = $prosesCount = $selesaiCount = 0;
+$hasilHitung = mysqli_query($koneksi, "SELECT status, COUNT(*) AS jumlah FROM aduan GROUP BY status");
+while ($row = mysqli_fetch_assoc($hasilHitung)) {
+    if ($row['status'] === 'Belum Dikerjakan') $belumCount = (int)$row['jumlah'];
+    if ($row['status'] === 'Sedang Dikerjakan') $prosesCount = (int)$row['jumlah'];
+    if ($row['status'] === 'Selesai') $selesaiCount = (int)$row['jumlah'];
+}
 
 // ---------- DETAIL UNTUK MODAL ----------
-$detailId = isset($_GET['id']) ? (int)$_GET['id'] : null;
-$detail   = $detailId && isset($aduanData[$detailId]) ? $aduanData[$detailId] : null;
+$detail = null;
+if (!empty($_GET['id'])) {
+    $detailId = (int)$_GET['id'];
+
+    $stmtD = mysqli_prepare($koneksi, "
+        SELECT a.id_aduan AS id, a.barang_aduan AS barang, a.jumlah_barang AS jumlah,
+               a.lokasi, a.isi_keluhan AS isi, a.status, a.tanggal,
+               k.nama_kategori AS kategori, u.nama AS pelapor
+        FROM aduan a
+        LEFT JOIN kategori_barang k ON k.id_kategori = a.kategori_id
+        LEFT JOIN users u ON u.id_user = a.user_id
+        WHERE a.id_aduan = ?
+    ");
+    mysqli_stmt_bind_param($stmtD, 'i', $detailId);
+    mysqli_stmt_execute($stmtD);
+    $detail = mysqli_fetch_assoc(mysqli_stmt_get_result($stmtD));
+
+    if ($detail) {
+        // Lampiran -> array nama file saja (biar cocok dipakai foreach seperti sebelumnya)
+        $stmtL = mysqli_prepare($koneksi, "SELECT nama_file FROM lampiran WHERE aduan_id = ? ORDER BY tanggal");
+        mysqli_stmt_bind_param($stmtL, 'i', $detailId);
+        mysqli_stmt_execute($stmtL);
+        $detail['lampiran'] = array_column(mysqli_fetch_all(mysqli_stmt_get_result($stmtL), MYSQLI_ASSOC), 'nama_file');
+
+        // Komentar -> alias kolom biar cocok dengan key yang dipakai template ('admin', 'isi', 'tanggal')
+        $stmtK = mysqli_prepare($koneksi, "
+            SELECT u.nama AS admin, c.komentar AS isi, c.tanggal
+            FROM komentar_aduan c
+            LEFT JOIN users u ON u.id_user = c.admin_id
+            WHERE c.aduan_id = ?
+            ORDER BY c.tanggal
+        ");
+        mysqli_stmt_bind_param($stmtK, 'i', $detailId);
+        mysqli_stmt_execute($stmtK);
+        $detail['komentar'] = mysqli_fetch_all(mysqli_stmt_get_result($stmtK), MYSQLI_ASSOC);
+    }
+}
 
 $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
 ?>
@@ -159,7 +241,7 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
                 <div style="display:flex;align-items:center;gap:8px;">
                     <div class="avatar-circle"><?= $inisial ?></div>
                     <div>
-                        <div class="admin-name"><?= $adminName ?></div>
+                        <div class="admin-name"><?= htmlspecialchars($adminName) ?></div>
                         <div class="admin-role">Administrator</div>
                     </div>
                 </div>
@@ -214,13 +296,13 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
                                 <div class="row-title"><?= htmlspecialchars($a['barang']) ?></div>
                                 <div class="row-sub"><?= htmlspecialchars($a['lokasi']) ?></div>
                             </td>
-                            <td><?= htmlspecialchars($a['kategori']) ?></td>
-                            <td><?= htmlspecialchars($a['pelapor']) ?></td>
+                            <td><?= htmlspecialchars($a['kategori'] ?? '-') ?></td>
+                            <td><?= htmlspecialchars($a['pelapor'] ?? '-') ?></td>
                             <td><?= statusPill($a['status']) ?></td>
                             <td>
                                 <div class="meta-icons">
-                                    <span title="Lampiran"><?= icon('paperclip', 11) ?> <?= count($a['lampiran']) ?></span>
-                                    <span title="Komentar"><?= icon('message', 11) ?> <?= count($a['komentar']) ?></span>
+                                    <span title="Lampiran"><?= icon('paperclip', 11) ?> <?= (int)$a['jml_lampiran'] ?></span>
+                                    <span title="Komentar"><?= icon('message', 11) ?> <?= (int)$a['jml_komentar'] ?></span>
                                 </div>
                             </td>
                         </tr>
@@ -231,6 +313,14 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
         </div>
     </main>
 </div>
+
+<!-- ================= TOAST NOTIFIKASI GLOBAL ================= -->
+<?php if ($komentarSukses || $statusSukses): ?>
+<div class="toast-notif" id="toastNotif">
+    <?= icon('check', 16, '#16a34a') ?>
+    <span><?= $komentarSukses ? 'Komentar berhasil dikirim!' : 'Status berhasil diperbarui!' ?></span>
+</div>
+<?php endif; ?>
 
 <!-- ================= POP UP MODAL DETAIL ADUAN ================= -->
 <?php if ($detail): ?>
@@ -243,7 +333,7 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
                 <div class="modal-eyebrow">ADUAN #<?= $detail['id'] ?></div>
                 <h2 class="modal-title"><?= htmlspecialchars($detail['barang']) ?></h2>
                 <div class="modal-meta">
-                    <span><?= icon('package', 13, '#9ca3af') ?> <?= htmlspecialchars($detail['kategori']) ?> &middot; <?= $detail['jumlah'] ?> unit</span>
+                    <span><?= icon('package', 13, '#9ca3af') ?> <?= htmlspecialchars($detail['kategori'] ?? '-') ?> &middot; <?= (int)$detail['jumlah'] ?> unit</span>
                     <span><?= icon('pin', 13, '#9ca3af') ?> <?= htmlspecialchars($detail['lokasi']) ?></span>
                 </div>
             </div>
@@ -252,7 +342,21 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
 
         <!-- Body Pop Up -->
         <div class="modal-body">
-            
+
+            <?php if ($komentarSukses): ?>
+            <div class="alert-success">
+                <?= icon('check', 14, '#16a34a') ?>
+                <span>Komentar berhasil dikirim!</span>
+            </div>
+            <?php endif; ?>
+
+            <?php if ($statusSukses): ?>
+            <div class="alert-success">
+                <?= icon('check', 14, '#16a34a') ?>
+                <span>Status berhasil diperbarui!</span>
+            </div>
+            <?php endif; ?>
+
             <!-- Isi Keluhan -->
             <div>
                 <div class="field-label">ISI KELUHAN</div>
@@ -299,8 +403,8 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
                     <?php foreach ($detail['komentar'] as $k): ?>
                         <div class="komentar-item">
                             <div class="komentar-header">
-                                <span class="komentar-admin"><?= htmlspecialchars($k['admin']) ?></span>
-                                <span class="komentar-time"><?= $k['tanggal'] ?></span>
+                                <span class="komentar-admin"><?= htmlspecialchars($k['admin'] ?? 'Admin') ?></span>
+                                <span class="komentar-time"><?= date('Y-m-d H:i', strtotime($k['tanggal'])) ?></span>
                             </div>
                             <div class="komentar-text"><?= htmlspecialchars($k['isi']) ?></div>
                         </div>
@@ -324,5 +428,27 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
     </div>
 </div>
 <?php endif; ?>
+
+<?php if ($komentarSukses || $statusSukses): ?>
+<script>
+    (function () {
+        // Sembunyikan toast otomatis setelah 3 detik
+        var toast = document.getElementById('toastNotif');
+        setTimeout(function () {
+            if (toast) {
+                toast.style.opacity = '0';
+                setTimeout(function () { toast.remove(); }, 300);
+            }
+        }, 3000);
+
+        // Bersihkan query string flag sukses biar tidak muncul lagi saat refresh
+        var url = new URL(window.location);
+        url.searchParams.delete('komentar_sukses');
+        url.searchParams.delete('status_sukses');
+        window.history.replaceState({}, '', url);
+    })();
+</script>
+<?php endif; ?>
+
 </body>
 </html>
