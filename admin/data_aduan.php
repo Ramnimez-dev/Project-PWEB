@@ -14,69 +14,8 @@ $inisial = strtoupper(substr($potongNama[0], 0, 1) . substr(end($potongNama), 0,
 
 // ---------- DATA DUMMY (Disimpan dalam SESSION agar perubahan tetap persis/interaktif) ----------
 if (!isset($_SESSION['aduanData'])) {
-    $_SESSION['aduanData'] = [
-        1042 => [
-            'id' => 1042, 'barang' => 'AC Ruang Kelas 3B mati total', 'kategori' => 'Elektronik',
-            'pelapor' => 'Rangga Prasetyo', 'jumlah' => 1, 'lokasi' => 'Gedung B, Lt. 2, R.3B',
-            'isi' => 'AC sudah tidak menyala sejak Senin pagi, sudah dicoba remote baru tetap tidak merespon.',
-            'status' => 'Belum Dikerjakan', 'tanggal' => '2026-08-01 08:12',
-            'lampiran' => ['foto_ac_1.jpg', 'foto_ac_2.jpg'],
-            'komentar' => [
-                ['admin' => 'Budi Santoso', 'isi' => 'Sudah dijadwalkan teknisi hari Kamis.', 'tanggal' => '2026-08-01 10:20'],
-            ],
-        ],
-        1041 => [
-            'id' => 1041, 'barang' => 'Kursi kuliah patah bagian sandaran', 'kategori' => 'Furnitur',
-            'pelapor' => 'Sinta Wulandari', 'jumlah' => 3, 'lokasi' => 'Gedung A, Lt. 1, R.1A',
-            'isi' => '3 kursi di baris belakang sandarannya lepas dan berbahaya untuk diduduki.',
-            'status' => 'Sedang Dikerjakan', 'tanggal' => '2026-07-30 13:45',
-            'lampiran' => ['kursi_rusak.jpg'],
-            'komentar' => [
-                ['admin' => 'Budi Santoso', 'isi' => 'Sudah dicek, menunggu suku cadang.', 'tanggal' => '31/07/2026 09:00'],
-                ['admin' => 'Budi Santoso', 'isi' => 'Perbaikan dimulai besok pagi.', 'tanggal' => '02/08/2026 08:00'],
-            ],
-        ],
-        1040 => [
-            'id' => 1040, 'barang' => 'Wastafel toilet lantai 2 bocor', 'kategori' => 'Sanitasi',
-            'pelapor' => 'Fajar Nugroho', 'jumlah' => 1, 'lokasi' => 'Gedung C, Lt. 2, Toilet Pria',
-            'isi' => 'Pipa di bawah wastafel bocor, air menggenang di lantai.',
-            'status' => 'Selesai', 'tanggal' => '2026-07-26 07:30',
-            'lampiran' => ['wastafel_1.jpg', 'wastafel_2.jpg', 'nota_perbaikan.pdf'],
-            'komentar' => [
-                ['admin' => 'Budi Santoso', 'isi' => 'Sudah diperbaiki dan dicek ulang, aman.', 'tanggal' => '27/07/2026 11:15'],
-            ],
-        ],
-        1039 => [
-            'id' => 1039, 'barang' => 'Wifi lab komputer tidak stabil', 'kategori' => 'Jaringan & IT',
-            'pelapor' => 'Aulia Rahma', 'jumlah' => 1, 'lokasi' => 'Gedung D, Lab Komputer 1',
-            'isi' => 'Koneksi wifi putus-putus terutama saat jam praktikum siang.',
-            'status' => 'Sedang Dikerjakan', 'tanggal' => '2026-07-29 11:05',
-            'lampiran' => [],
-            'komentar' => [
-                ['admin' => 'Budi Santoso', 'isi' => 'Sedang koordinasi dengan tim IT pusat.', 'tanggal' => '30/07/2026 14:40'],
-            ],
-        ],
-        1038 => [
-            'id' => 1038, 'barang' => 'Plafon ruang rapat retak', 'kategori' => 'Bangunan',
-            'pelapor' => 'Rangga Prasetyo', 'jumlah' => 1, 'lokasi' => 'Gedung A, Lt. 3, R. Rapat',
-            'isi' => 'Terdapat retakan cukup panjang di plafon, dikhawatirkan bisa runtuh.',
-            'status' => 'Belum Dikerjakan', 'tanggal' => '2026-08-02 16:20',
-            'lampiran' => ['plafon_retak.jpg'],
-            'komentar' => [],
-        ],
-        1037 => [
-            'id' => 1037, 'barang' => 'Proyektor R.2C gambar buram', 'kategori' => 'Elektronik',
-            'pelapor' => 'Sinta Wulandari', 'jumlah' => 1, 'lokasi' => 'Gedung B, Lt. 2, R.2C',
-            'isi' => 'Gambar proyektor buram walau sudah diatur fokusnya.',
-            'status' => 'Selesai', 'tanggal' => '2026-07-20 09:00',
-            'lampiran' => ['proyektor.jpg'],
-            'komentar' => [
-                ['admin' => 'Budi Santoso', 'isi' => 'Lensa dibersihkan, sudah normal kembali.', 'tanggal' => '21/07/2026 10:00'],
-            ],
-        ],
-    ];
+    // $_SESSION['aduanData'] = 
 }
-
 $aduanData = &$_SESSION['aduanData'];
 
 // ---------- PROSES AKSI FORM (UPDATE STATUS & TAMBAH KOMENTAR) ----------
@@ -100,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $isiKomentar = trim($_POST['komentar'] ?? '');
             if (!empty($isiKomentar)) {
                 $aduanData[$idAduan]['komentar'][] = [
-                    'admin' => 'Budi Santoso',
+                    'admin' => '',
                     'isi' => $isiKomentar,
                     'tanggal' => date('Y-m-d H:i')
                 ];
