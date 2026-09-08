@@ -266,9 +266,88 @@ a {
 .recent-meta { 
     font-size: 12px; color: var(--sub); margin-top: 2px; display: flex; gap: 10px; 
 }
-@media (max-width: 860px) { 
-    .sidebar { display: none; } 
-    .content { padding: 18px; } 
+
+/* ============================================================
+   RESPONSIVE — HP & TABLET
+   Butuh tombol hamburger di HTML: lihat catatan di bawah.
+   ============================================================ */
+.hamburger-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink);
+    padding: 4px;
+    margin-right: 4px;
+}
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1999;
+}
+.sidebar-overlay.show {
+    display: block;
+}
+
+@media (max-width: 860px) {
+    .hamburger-btn {
+        display: inline-flex;
+        align-items: center;
+    }
+    .sidebar {
+        display: flex !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 232px;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        z-index: 2000;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.25);
+    }
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    .content {
+        padding: 18px;
+    }
+    .topbar {
+        padding: 12px 16px;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 640px) {
+    .content {
+        padding: 14px;
+    }
+    .section-title {
+        font-size: 22px;
+    }
+    .stat-grid {
+        gap: 10px;
+    }
+    .stat-card {
+        min-width: calc(50% - 5px);
+        flex: 1 1 calc(50% - 5px);
+        padding: 14px;
+    }
+    .stat-value {
+        font-size: 26px;
+    }
+    .topbar-right {
+        gap: 10px;
+    }
+}
+
+@media (max-width: 380px) {
+    .stat-card {
+        min-width: 100%;
+        flex-basis: 100%;
+    }
 }
 
 
@@ -656,59 +735,6 @@ tbody tr.clickable:hover {
 }
 
 /* Modal */
-.modal-backdrop { 
-    position: fixed; 
-    inset: 0; 
-    background: rgba(20,25,22,.4); 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    z-index: 50; padding: 16px;
- }
-.modal-box { 
-    background: var(--surface); 
-    width: 560px; 
-    max-width: 100%; 
-    max-height: 85vh; 
-    overflow-y: auto; 
-    border-radius: 8px; 
-    border: 1px solid var(--line); 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
-}
-.modal-head { 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-    padding: 14px 18px; 
-    border-bottom: 1px solid var(--line); 
-    position: sticky; top: 0; 
-    background: var(--surface); z-index: 2; 
-}
-.modal-eyebrow { 
-    font-family: 'IBM Plex Mono', monospace; 
-    font-size: 10.5px; 
-    color: var(--sub); 
-}
-.modal-title { 
-    font-family: 'Barlow Condensed', sans-serif; 
-    font-size: 20px; 
-    font-weight: 700; 
-    line-height: 1.2; 
-}
-.modal-close { 
-    background: none; 
-    border: none; 
-    cursor: pointer; 
-    color: var(--sub); 
-    padding: 4px; 
-    display: flex; 
-}
-.modal-body { 
-    padding: 16px 18px; 
-    display: flex; 
-    flex-direction: column; 
-    gap: 14px; 
-}
 .meta-grid { 
     display: grid; 
     grid-template-columns: 1fr 1fr; 
@@ -727,45 +753,6 @@ tbody tr.clickable:hover {
 .meta-item strong { 
     color: var(--ink); 
     font-weight: 500; 
-}
-.field-label { 
-    font-size: 10.5px; 
-    font-weight: 600; 
-    color: var(--sub); 
-    text-transform: uppercase; 
-    letter-spacing: .03em; 
-    margin-bottom: 4px; 
-}
-.keluhan-box { 
-    font-size: 13px; 
-    line-height: 1.5; 
-    margin: 0; color: var(--ink); 
-    background: #FAFBF8; 
-    padding: 10px; 
-    border-radius: 5px; 
-    border: 1px solid var(--line); 
-}
-.status-form { 
-    display: flex; 
-    gap: 6px; 
-}
-.status-option { 
-    flex: 1; 
-    padding: 6px 8px;
-    border-radius: 5px; 
-    cursor: pointer; 
-    font-size: 11.5px; 
-    font-weight: 500; 
-    border: 1px solid var(--line); 
-    background: #fff; 
-    color: var(--sub); 
-    text-align: center; 
-}
-.status-option.selected { 
-    border-color: var(--primary); 
-    background: var(--primary-faint); 
-    color: var(--primary); 
-    font-weight: 600; 
 }
 .lampiran-grid {
     display: grid;
@@ -808,36 +795,6 @@ tbody tr.clickable:hover {
     font-weight: 600;
 }
 
-.komentar-item {
-    border-left: 2px solid var(--primary); 
-    padding-left: 8px; 
-    margin-bottom: 8px; 
-}
-.komentar-admin {
-    font-size: 11.5px; 
-    font-weight: 600; 
-}
-.komentar-time {
-    font-weight: 400; 
-    color: var(--sub); 
-    font-family: 'IBM Plex Mono', monospace; 
-    font-size: 10px; 
-}
-.komentar-text {
-    font-size: 12.5px; 
-    margin-top: 1px; 
-    color: var(--ink); 
-}
-.komentar-form textarea {
-    width: 100%; 
-    border: 1px solid var(--line); 
-    border-radius: 5px;
-    padding: 8px; 
-    font-family: 'Inter', sans-serif; 
-    font-size: 12.5px; 
-    resize: vertical; 
-    box-sizing: border-box; 
-}
 .btn {
     display: inline-flex; 
     align-items: center; 
@@ -1080,10 +1037,111 @@ tbody tr.clickable:hover {
     background-color: #1e2d28;
 }
 
-@media (max-width: 768px) {
-      .sidebar { display: none; } 
-      .content { padding: 14px; } 
-      .meta-grid { grid-template-columns: 1fr; } 
+/* ============================================================
+   RESPONSIVE — HP & TABLET
+   Butuh tombol hamburger di HTML: lihat catatan di bawah.
+   ============================================================ */
+.hamburger-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink);
+    padding: 4px;
+    margin-right: 4px;
+}
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1999;
+}
+.sidebar-overlay.show {
+    display: block;
+}
+
+@media (max-width: 860px) {
+    .hamburger-btn {
+        display: inline-flex;
+        align-items: center;
+    }
+    .sidebar {
+        display: flex !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 220px;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        z-index: 2000;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.25);
+    }
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    .content {
+        padding: 16px;
+    }
+    .topbar {
+        padding: 10px 16px;
+        height: auto;
+    }
+}
+
+@media (max-width: 640px) {
+    .content {
+        padding: 14px;
+    }
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .search-box {
+        width: 100%;
+    }
+    .filter-group {
+        flex-wrap: wrap;
+    }
+    .table-card {
+        overflow-x: auto;
+    }
+    table {
+        min-width: 640px;
+    }
+    .meta-grid {
+        grid-template-columns: 1fr;
+    }
+    .modal-backdrop {
+        align-items: flex-end;
+        padding: 0;
+    }
+    .modal-box {
+        width: 100%;
+        max-width: 100%;
+        max-height: 92vh;
+        border-radius: 16px 16px 0 0;
+        overflow-y: auto;
+    }
+    .status-form {
+        flex-direction: column;
+    }
+    .status-option {
+        width: 100%;
+        text-align: center;
+    }
+    .lampiran-grid {
+        grid-template-columns: repeat(auto-fill, minmax(64px, 64px));
+    }
+    .modal-meta {
+        flex-direction: column;
+        gap: 6px;
+    }
 }
 
 
@@ -1534,14 +1592,87 @@ tbody tr:hover {
   gap: 8px;
 }
 
-@media (max-width: 860px) {
-  .sidebar {
+/* ============================================================
+   RESPONSIVE — HP & TABLET
+   Butuh tombol hamburger di HTML: lihat catatan di bawah.
+   ============================================================ */
+.hamburger-btn {
     display: none;
-  }
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink);
+    padding: 4px;
+    margin-right: 4px;
+}
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1999;
+}
+.sidebar-overlay.show {
+    display: block;
+}
 
-  .content {
-    padding: 18px;
-  }
+@media (max-width: 860px) {
+    .hamburger-btn {
+        display: inline-flex;
+        align-items: center;
+    }
+    .sidebar {
+        display: flex !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 232px;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        z-index: 2000;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.25);
+    }
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    .content {
+        padding: 18px;
+    }
+    .topbar {
+        padding: 12px 16px;
+    }
+}
+
+@media (max-width: 640px) {
+    .content {
+        padding: 14px;
+    }
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .search-box {
+        min-width: 0;
+    }
+    .filter-group {
+        flex-wrap: wrap;
+    }
+
+    /* Tabel discroll ke samping, jangan sampai memaksa layar melebar */
+    .table-card {
+        overflow-x: auto;
+    }
+    table {
+        min-width: 560px;
+    }
+    .row-actions {
+        flex-wrap: wrap;
+    }
 }
 
 /* ==========================================================================
@@ -2008,9 +2139,96 @@ button {
   justify-content: flex-end;
 }
 
+/* ============================================================
+   RESPONSIVE — HP & TABLET
+   Butuh tombol hamburger di HTML: lihat catatan di bawah.
+   ============================================================ */
+.hamburger-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink);
+    padding: 4px;
+    margin-right: 4px;
+}
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1999;
+}
+.sidebar-overlay.show {
+    display: block;
+}
+
 @media (max-width: 860px) {
-  .sidebar { display: none; }
-  .content { padding: 18px; }
+    .hamburger-btn {
+        display: inline-flex;
+        align-items: center;
+    }
+    .sidebar {
+        display: flex !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 232px;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        z-index: 2000;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.25);
+    }
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    .content {
+        padding: 18px;
+    }
+    .topbar {
+        padding: 12px 16px;
+    }
+}
+
+@media (max-width: 640px) {
+    .content {
+        padding: 14px;
+    }
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .search-box {
+        min-width: 0;
+    }
+
+    /* Grid kategori jadi 2 kolom, lalu 1 kolom di layar sangat kecil */
+    .kategori-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    .modal-box {
+        width: 100%;
+        max-width: 100%;
+    }
+    .modal-footer {
+        flex-direction: column-reverse;
+    }
+    .modal-footer .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 400px) {
+    .kategori-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* halaman cetak_laporan.php */
@@ -2148,4 +2366,19 @@ button {
 }
   .hidden { 
     display: none; 
+}
+
+/* ============================================================
+   RESPONSIVE — HP & TABLET
+   ============================================================ */
+@media (max-width: 600px) {
+    .filter-card {
+        max-width: 100%;
+        width: 100%;
+        padding: 18px;
+        border-radius: 10px;
+    }
+    .btn-print {
+        width: 100%;
+    }
 }

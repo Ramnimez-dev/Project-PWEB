@@ -67,7 +67,8 @@ $totally = array_sum($row);
 <body>
 <div class="layout">
 
-    <aside class="sidebar">
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+    <aside class="sidebar" id="mainSidebar">
         <div class="brand">
             <div class="brand-mark"><img src="../img/logo sapras.png" alt="logo sarpras"></div>
             <div>
@@ -94,6 +95,11 @@ $totally = array_sum($row);
 
     <main class="main">
         <header class="topbar">
+            <button class="hamburger-btn" onclick="toggleSidebar()" aria-label="Menu">
+                <svg width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/>
+                </svg>
+            </button>
             <div class="topbar-date"><?php
                 $hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
                 $bulan = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
@@ -191,5 +197,15 @@ $totally = array_sum($row);
         </div>
     </main>
 </div>
+<script>
+function toggleSidebar() {
+    document.getElementById('mainSidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('show');
+}
+function closeSidebar() {
+    document.getElementById('mainSidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('show');
+}
+</script>
 </body>
 </html>
