@@ -119,7 +119,7 @@ $totally = array_sum($row);
                     <div class="eyebrow"><?= count($filtered) ?> akun</div>  
                     <h1 class="section-title">Data Pengguna</h1>
                 </div>
-                <a href="#" class="btn btn-primary">Tambah pengguna</a>
+                <a href="javascript:void(0)" class="btn btn-primary" onclick="openTambahModal()">Tambah pengguna</a>
             </div>
 
             <form method="get" class="toolbar">
@@ -179,8 +179,8 @@ $totally = array_sum($row);
                             <td class="mono"><?= htmlspecialchars($u['dibuat']) ?></td>
                             <td>
                                 <div class="row-actions">
-                                    <a href="#" class="btn-ghost">Edit</a>
-                                    <a href="#" class="btn-delte">Hapus</a>
+                                    <a href="javascript:void(0)" class="btn-ghost" onclick="openEditModal('<?= htmlspecialchars($u['induk'], ENT_QUOTES) ?>', '<?= htmlspecialchars($u['nama'], ENT_QUOTES) ?>', '<?= htmlspecialchars($u['username'], ENT_QUOTES) ?>', '<?= htmlspecialchars($u['telp'], ENT_QUOTES) ?>', '<?= $u['role'] ?>')">Edit</a>
+                                    <a href="javascript:void(0)" class="btn-delte" onclick="openDeleteModal('<?= htmlspecialchars($u['induk'], ENT_QUOTES) ?>', '<?= htmlspecialchars($u['nama'], ENT_QUOTES) ?>')">Hapus</a>
                                 </div>
                             </td>
                         </tr>
@@ -191,5 +191,133 @@ $totally = array_sum($row);
         </div>
     </main>
 </div>
+
+<!-- MODAL TAMBAH -->
+<div class="modal-overlay" id="modalTambah">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3>Tambah Pengguna</h3>
+            <button class="modal-close" onclick="closeModal('modalTambah')">&times;</button>
+        </div>
+        <form action="proses_pengguna.php?aksi=tambah" method="post" class="modal-form">
+            <div class="form-group">
+                <label>No. Induk</label>
+                <input type="text" name="nomor_induk" required>
+            </div>
+            <div class="form-group">
+                <label>Nama Lengkap</label>
+                <input type="text" name="nama" required>
+            </div>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="text" name="password" required>
+            </div>
+            <div class="form-group">
+                <label>No. Telp</label>
+                <input type="text" name="no_telp">
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                <select name="role">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeModal('modalTambah')">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL EDIT -->
+<div class="modal-overlay" id="modalEdit">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3>Edit Pengguna</h3>
+            <button class="modal-close" onclick="closeModal('modalEdit')">&times;</button>
+        </div>
+        <form action="proses_pengguna.php?aksi=edit" method="post" class="modal-form">
+            <input type="hidden" name="nomor_induk" id="edit_induk">
+            <div class="form-group">
+                <label>Nama Lengkap</label>
+                <input type="text" name="nama" id="edit_nama" required>
+            </div>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" id="edit_username" required>
+            </div>
+            <div class="form-group">
+                <label>Password Baru <small style="color:#888;">(Kosongkan jika tidak diubah)</small></label>
+                <input type="text" name="password" placeholder="••••••••">
+            </div>
+            <div class="form-group">
+                <label>No. Telp</label>
+                <input type="text" name="no_telp" id="edit_telp">
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                <select name="role" id="edit_role">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeModal('modalEdit')">Batal</button>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL HAPUS -->
+<div class="modal-overlay" id="modalHapus">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3>Konfirmasi Hapus</h3>
+            <button class="modal-close" onclick="closeModal('modalHapus')">&times;</button>
+        </div>
+        <p style="font-size:0.9rem; color:#444; margin:10px 0;">
+            Apakah Anda yakin ingin menghapus akun <strong id="delete_nama"></strong>?
+        </p>
+        <div class="modal-footer">
+            <button type="button" class="btn-secondary" onclick="closeModal('modalHapus')">Batal</button>
+            <a href="#" id="delete_confirm_btn" class="btn-danger-confirm">Hapus</a>
+        </div>
+    </div>
+</div>
+
+<script>
+function openTambahModal() {
+    document.getElementById('modalTambah').classList.add('active');
+}
+
+function openEditModal(induk, nama, username, telp, role) {
+    document.getElementById('edit_induk').value = induk;
+    document.getElementById('edit_nama').value = nama;
+    document.getElementById('edit_username').value = username;
+    document.getElementById('edit_telp').value = telp;
+    document.getElementById('edit_role').value = role;
+    
+    document.getElementById('modalEdit').classList.add('active');
+}
+
+function openDeleteModal(induk, nama) {
+    document.getElementById('delete_nama').innerText = nama;
+    document.getElementById('delete_confirm_btn').href = 'proses_pengguna.php?aksi=delete&nomor_induk=' + encodeURIComponent(induk);
+    
+    document.getElementById('modalHapus').classList.add('active');
+}
+
+function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+}
+</script>
+
 </body>
 </html>

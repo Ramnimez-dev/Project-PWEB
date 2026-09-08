@@ -2149,3 +2149,86 @@ button {
   .hidden { 
     display: none; 
 }
+
+/* pop up halaman data pengguna */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    align-items: center; justify-content: center;
+}
+.modal-overlay.active { 
+  display: flex; 
+}
+.modal-card {
+    background: #ffffff;
+    width: 100%; max-width: 440px;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+.modal-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 16px; 
+}
+.modal-header h3 { 
+  margin: 0; 
+  font-size: 1.1rem; 
+  font-weight: 600; 
+  color: #111; 
+}
+.modal-close { 
+  background: none; 
+  border: none; 
+  font-size: 1.3rem; 
+  cursor: pointer; 
+  color: #888; 
+}
+.modal-form .form-group { 
+  margin-bottom: 14px; 
+  text-align: left; 
+}
+.modal-form label { 
+  display: block; 
+  font-size: 0.82rem; 
+  font-weight: 600; 
+  margin-bottom: 4px; 
+  color: #444; 
+}
+.modal-form input, .modal-form select {
+    width: 100%; 
+    padding: 8px 12px; 
+    border: 1px solid #ccc; 
+    border-radius: 6px; 
+    box-sizing: border-box; 
+    font-size: 0.9rem;
+}
+.modal-footer { 
+  display: flex; 
+  justify-content: flex-end; 
+  gap: 8px; 
+  margin-top: 20px; 
+}
+.btn-secondary { 
+  background: #e2e8f0; 
+  color: #334155; 
+  padding: 8px 16px; 
+  border-radius: 6px; 
+  border: none; 
+  cursor: pointer; 
+  font-size: 0.85rem; 
+}
+.btn-danger-confirm { 
+  background: #b91c1c; 
+  color: #fff; 
+  padding: 8px 16px; 
+  border-radius: 6px; 
+  border: none; 
+  text-decoration: none; 
+  font-size: 0.85rem; 
+  display: inline-block; 
+}
