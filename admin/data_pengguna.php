@@ -113,8 +113,7 @@ $filtered = array_filter($usersData, function ($u) use ($q, $roleFilter) {
                     <input type="text" name="q" value="<?= htmlspecialchars($q) ?>" placeholder="Cari nama, username, atau no. induk...">
 
                     <?php if (!empty($q) || $roleFilter !== 'Semua'): ?>
-                    <a href="data_pengguna.php" class="btn-reset" title="Reset Pencarian">
-                    <?= icon('x', 14) ?> Reset
+                    <a href="data_pengguna.php" class="btn-reset" title="Reset Pencarian">Reset
                     </a>
                     <?php endif; ?>
                 </div>
@@ -167,7 +166,7 @@ $filtered = array_filter($usersData, function ($u) use ($q, $roleFilter) {
                             <td>
                                 <div class="row-actions">
                                     <a href="#" class="btn-ghost">Edit</a>
-                                    <a href="#" class="btn-ghost">Hapus</a>
+                                    <a href="#" class="btn-delte">Hapus</a>
                                 </div>
                             </td>
                         </tr>
