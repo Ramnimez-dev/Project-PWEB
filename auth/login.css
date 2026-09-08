@@ -17,6 +17,7 @@ body {
 }
 
 .sidebar {
+    position: relative; /* penting: agar .btn-kembali (absolute) nempel ke sidebar, bukan ke halaman */
     width: 31.7%;
     max-width: 330px;
     min-height: 100vh;
@@ -221,6 +222,41 @@ body {
     text-decoration: underline;
 }
 
+/* ============================================================
+   TABLET BESAR / LANDSCAPE (769px – 1024px)
+   iPad, Android tablet dipegang landscape — masih cukup lebar,
+   tapi sidebar 31.7% mulai kelihatan longgar. Dikunci lebih rapat.
+   ============================================================ */
+@media (max-width: 1024px) {
+
+    .sidebar {
+        width: 280px;
+        max-width: 280px;
+        padding: 28px 26px;
+    }
+
+    .logo {
+        width: 115px;
+        height: 135px;
+    }
+
+    .brand-text h1 {
+        font-size: 36px;
+    }
+
+    .description {
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .content {
+        padding: 24px;
+    }
+}
+
+/* ============================================================
+   TABLET (≤ 768px)
+   ============================================================ */
 @media (max-width: 768px) {
 
     .sidebar {
@@ -237,6 +273,14 @@ body {
         font-size: 34px;
     }
 
+    .btn-kembali {
+        left: 25px;
+        bottom: 25px;
+        width: 130px;
+        height: 42px;
+        font-size: 14px;
+    }
+
     .content {
         padding: 20px;
     }
@@ -246,6 +290,9 @@ body {
     }
 }
 
+/* ============================================================
+   MOBILE (≤ 600px) — sidebar ditumpuk di atas, konten di bawah
+   ============================================================ */
 @media (max-width: 600px) {
 
     .container {
@@ -256,7 +303,7 @@ body {
         width: 100%;
         max-width: none;
         min-height: auto;
-        padding: 25px;
+        padding: 30px 25px 90px; /* jarak bawah ekstra biar tidak ketimpa tombol kembali */
         text-align: center;
     }
 
@@ -280,6 +327,25 @@ body {
         margin: auto;
     }
 
+    /* Tombol kembali tetap absolute (nempel ke sidebar berkat
+       position:relative di atas), diposisikan ke tengah bawah */
+    .btn-kembali {
+        left: 50%;
+        bottom: 22px;
+        transform: translateX(-50%);
+        width: 150px;
+        height: 44px;
+        font-size: 15px;
+    }
+
+    .btn-kembali:hover {
+        transform: translateX(-50%) translateY(-2px);
+    }
+
+    .btn-kembali:active {
+        transform: translateX(-50%) translateY(0);
+    }
+
     .content {
         width: 100%;
         min-height: auto;
@@ -297,5 +363,42 @@ body {
     .card-login {
         width: 100%;
         max-width: 300px;
+    }
+}
+
+/* ============================================================
+   MOBILE KECIL (≤ 380px) — layar HP paling sempit
+   ============================================================ */
+@media (max-width: 380px) {
+
+    .sidebar {
+        padding: 25px 18px 85px;
+    }
+
+    .brand-text h1 {
+        font-size: 26px;
+    }
+
+    .description {
+        font-size: 12px;
+    }
+
+    .header-login h1 {
+        font-size: 26px;
+    }
+
+    .card-login {
+        padding: 30px 22px 20px;
+    }
+
+    .card-login button {
+        width: 100%;
+        max-width: 196px;
+    }
+
+    .btn-kembali {
+        width: 130px;
+        height: 40px;
+        font-size: 13px;
     }
 }
