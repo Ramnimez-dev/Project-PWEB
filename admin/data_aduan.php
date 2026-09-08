@@ -275,8 +275,8 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
                             <td><?= statusPill($a['status']) ?></td>
                             <td>
                                 <div class="meta-icons">
-                                    <span title="Lampiran"><?= icon('paperclip', 11) ?> <?= (int)$a['jml_lampiran'] ?></span>
-                                    <span title="Komentar"><?= icon('message', 11) ?> <?= (int)$a['jml_komentar'] ?></span>
+                                    <span title="Lampiran"> <?= (int)$a['jml_lampiran'] ?></span>
+                                    <span title="Komentar"> <?= (int)$a['jml_komentar'] ?></span>
                                 </div>
                             </td>
                         </tr>

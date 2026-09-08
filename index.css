@@ -1,8 +1,18 @@
+/* =========================
+   RESET
+========================= */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
 }
 
 body {
@@ -12,7 +22,11 @@ body {
     background-color: #ffffff;
 }
 
-/* Header / Navbar */
+
+/* =========================
+   HEADER / NAVBAR
+========================= */
+
 .navbar {
     background-color: #2e8b22;
     display: flex;
@@ -58,11 +72,16 @@ body {
     background-color: #bfa83b;
 }
 
-/* Content Area */
+
+/* =========================
+   CONTENT
+========================= */
+
 .content-container {
     display: flex;
     flex: 1;
     width: 100%;
+    min-height: 0;
 }
 
 .banner-section {
@@ -77,7 +96,11 @@ body {
     display: block;
 }
 
-/* Styling Bagian Tentang Kami */
+
+/* =========================
+   TENTANG KAMI
+========================= */
+
 .about-section {
     width: 50%;
     padding: 40px 45px;
@@ -87,14 +110,14 @@ body {
 .about-section h1 {
     font-size: 2.2rem;
     font-weight: 800;
-    color: #1f5c1f; /* Hijau SarPras */
+    color: #1f5c1f;
     margin-bottom: 20px;
     position: relative;
     display: inline-block;
     letter-spacing: -0.5px;
 }
 
-/* Garis dekorasi di bawah Judul */
+/* Garis dekorasi di bawah judul */
 .about-section h1::after {
     content: '';
     position: absolute;
@@ -102,7 +125,7 @@ body {
     bottom: -6px;
     width: 60px;
     height: 4px;
-    background-color: #fbd65c; /* Kuning SarPras */
+    background-color: #fbd65c;
     border-radius: 2px;
 }
 
@@ -118,7 +141,11 @@ body {
     color: #1f5c1f;
 }
 
-/* Highlight Box untuk Jargon / Slogan */
+
+/* =========================
+   SLOGAN
+========================= */
+
 .slogan-box {
     margin-top: 25px;
     padding: 15px 20px;
@@ -131,7 +158,11 @@ body {
     font-size: 0.98rem;
 }
 
-/* Footer */
+
+/* =========================
+   FOOTER
+========================= */
+
 .footer {
     background-color: #79c753;
     text-align: center;
@@ -142,4 +173,197 @@ body {
 .footer p {
     color: #000000;
     font-size: 1.1rem;
+}
+
+
+/* ==================================================
+   TABLET
+   Ukuran layar <= 992px
+================================================== */
+
+@media (max-width: 992px) {
+
+    .navbar {
+        padding: 15px 25px;
+    }
+
+    .logo-img {
+        height: 75px;
+    }
+
+    .brand-title {
+        font-size: 1.8rem;
+    }
+
+    .auth-buttons {
+        gap: 12px;
+    }
+
+    .btn {
+        padding: 10px 28px;
+        font-size: 1rem;
+    }
+
+    .about-section {
+        padding: 30px;
+    }
+
+    .about-section h1 {
+        font-size: 1.9rem;
+    }
+
+    .about-section p {
+        font-size: 1rem;
+    }
+}
+
+
+/* ==================================================
+   HP
+   Ukuran layar <= 768px
+================================================== */
+
+@media (max-width: 768px) {
+
+    /* =========================
+       NAVBAR HP
+    ========================= */
+
+    .navbar {
+        flex-direction: column;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .logo-container {
+        flex-direction: column;
+        gap: 5px;
+        text-align: center;
+    }
+
+    .logo-img {
+        height: 75px;
+    }
+
+    .brand-title {
+        font-size: 1.8rem;
+    }
+
+    .auth-buttons {
+        width: 100%;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .btn {
+        padding: 10px 25px;
+        font-size: 1rem;
+    }
+
+
+    /* =========================
+       CONTENT HP
+    ========================= */
+
+    .content-container {
+        flex-direction: column;
+    }
+
+    .banner-section {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #000;
+    }
+
+    .banner-img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
+
+
+    /* =========================
+       TENTANG KAMI HP
+    ========================= */
+
+    .about-section {
+        width: 100%;
+        padding: 30px 25px;
+    }
+
+    .about-section h1 {
+        font-size: 1.8rem;
+        margin-bottom: 18px;
+    }
+
+    .about-section p {
+        font-size: 1rem;
+        line-height: 1.6;
+        text-align: left;
+    }
+
+    .slogan-box {
+        margin-top: 20px;
+        padding: 14px 16px;
+        font-size: 0.95rem;
+    }
+
+
+    /* =========================
+       FOOTER HP
+    ========================= */
+
+    .footer {
+        padding: 15px;
+    }
+
+    .footer p {
+        font-size: 0.9rem;
+    }
+}
+
+
+/* ==================================================
+   HP KECIL
+   Ukuran layar <= 480px
+================================================== */
+
+@media (max-width: 480px) {
+
+    .navbar {
+        padding: 15px;
+    }
+
+    .logo-img {
+        height: 65px;
+    }
+
+    .brand-title {
+        font-size: 1.5rem;
+    }
+
+    .auth-buttons {
+        gap: 8px;
+    }
+
+    .btn {
+        padding: 9px 20px;
+        font-size: 0.9rem;
+    }
+
+    .about-section {
+        padding: 25px 20px;
+    }
+
+    .about-section h1 {
+        font-size: 1.6rem;
+    }
+
+    .about-section p {
+        font-size: 0.95rem;
+    }
+
+    .slogan-box {
+        font-size: 0.9rem;
+    }
 }

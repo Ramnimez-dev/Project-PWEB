@@ -248,7 +248,7 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
 
     <aside class="sidebar">
         <div class="brand">
-            <div class="brand-mark">SP</div>
+            <div class="brand-mark"><img src="../img/logo sapras.png" alt="logo sarpras"></div>
             <div>
                 <div class="brand-name">SARPRAS</div>
                 <div class="brand-sub">PANEL PELAPOR</div>
@@ -256,7 +256,7 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
         </div>
 
         <div class="nav-label">Menu</div>
-        <a href="dashboard.php" class="nav-item"><span class="label">Dashboard</span></a>
+        <a href="dashboard.php" class="nav-item"><span class="label">Beranda</span></a>
         <a href="riwayat.php" class="nav-item active"><span class="label">Riwayat Aduan</span></a>
 
         <div style="flex:1"></div>

@@ -47,35 +47,26 @@ button, input, select, textarea {
     display: flex; 
     align-items: center; 
     gap: 10px; 
-    padding: 0 12px; 
-    margin-bottom: 30px; 
+    padding: 0 12px 30px; 
 }
-
-.brand-mark { 
+.brand-mark img { 
     width: 30px; 
     height: 30px; 
-    border-radius: 6px; 
-    background: var(--gold); 
+    border-radius: 6px;
+
     display: flex; 
     align-items: center; 
     justify-content: center; 
-    font-family: 'Barlow Condensed', sans-serif; 
-    font-weight: 700; 
-    font-size: 15px; 
-    color: var(--primary-dark); 
-}
 
+}
 .brand-name { 
-    font-family: 'Barlow Condensed', sans-serif; 
-    font-weight: 700; 
-    font-size: 17px; 
+    font: bold 17px 'Barlow Condensed'; 
     color: #fff; 
     line-height: 1.1; 
 }
-
 .brand-sub { 
     font-size: 10px; 
-    color: rgba(255,255,255,0.5); 
+    color: rgba(255,255,255,.5); 
     letter-spacing: .04em; 
 }
 
@@ -624,18 +615,15 @@ button {
     margin-bottom: 30px;
 }
 
-.brand-mark {
-    width: 30px;
-    height: 30px;
+.brand-mark img { 
+    width: 30px; 
+    height: 30px; 
     border-radius: 6px;
-    background: var(--gold);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 15px;
-    color: var(--primary-dark);
+
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+
 }
 
 .brand-name {

@@ -136,7 +136,7 @@ $totalSaya = count($aduanSaya);
 
     <aside class="sidebar">
         <div class="brand">
-            <div class="brand-mark">SP</div>
+            <div class="brand-mark"><img src="../img/logo sapras.png" alt="logo sarpras"></div>
             <div>
                 <div class="brand-name">SARPRAS</div>
                 <div class="brand-sub">PANEL PELAPOR</div>
@@ -144,12 +144,12 @@ $totalSaya = count($aduanSaya);
         </div>
 
         <div class="nav-label">Menu</div>
-        <a href="dashboard.php" class="nav-item active"><span class="label">Dashboard</span></a>
-        <a href="riwayat.php" class="nav-item"><span class="label">Riwayat Aduan</span></a>
+        <a href="dashboard.php" class="nav-item active"><?= icon('grid') ?><span class="label">Beranda</span></a>
+        <a href="riwayat.php" class="nav-item"><?= icon('history') ?><span class="label">Riwayat Aduan</span></a>
 
         <div style="flex:1"></div>
         <div class="sidebar-footer">
-            <a href="../auth/logout.php" onclick="return confirm('Yakin Ingin Logout?')" class="nav-item"><span class="label">Keluar</span></a>
+            <a href="../auth/logout.php" onclick="return confirm('Yakin Ingin Logout?')" class="nav-item"><?= icon('logout') ?><span class="label">Keluar</span></a>
         </div>
     </aside>
 
@@ -161,7 +161,7 @@ $totalSaya = count($aduanSaya);
                 echo $hari[date('w')] . ', ' . date('j') . ' ' . $bulan[(int)date('n')] . ' ' . date('Y');
             ?></div>
             <div class="topbar-right">
-                <button class="bell-btn" aria-label="Notifikasi"></button>
+                <button class="bell-btn" aria-label="Notifikasi"><?= icon('bell', 18) ?></button>
                 <div style="display:flex;align-items:center;gap:8px;">
                     <div class="avatar-circle">
                         <?php
@@ -173,6 +173,7 @@ $totalSaya = count($aduanSaya);
                         <div class="admin-name"><?= htmlspecialchars($userName) ?></div>
                         <div class="admin-role">Pelapor</div>
                     </div>
+                    <?= icon('chevron', 14, '#6B756C') ?>
                 </div>
             </div>
         </header>
@@ -194,22 +195,22 @@ $totalSaya = count($aduanSaya);
             <?php endif; ?>
 
             <div class="stat-grid">
-                <div class="stat-card">
+                <div class="stat-card" style="cursor:pointer;" onclick="openStatModal('Semua')">
                     <div class="dot"></div>
                     <div class="stat-label">Total diajukan</div>
                     <div class="stat-value"><?= $totalSaya ?></div>
                 </div>
-                <div class="stat-card tone-red">
+                <div class="stat-card tone-red" style="cursor:pointer;" onclick="openStatModal('Belum Dikerjakan')">
                     <div class="dot"></div>
                     <div class="stat-label">Belum dikerjakan</div>
                     <div class="stat-value"><?= $counts['Belum Dikerjakan'] ?></div>
                 </div>
-                <div class="stat-card tone-amber">
+                <div class="stat-card tone-amber" style="cursor:pointer;" onclick="openStatModal('Sedang Dikerjakan')">
                     <div class="dot"></div>
                     <div class="stat-label">Sedang dikerjakan</div>
                     <div class="stat-value"><?= $counts['Sedang Dikerjakan'] ?></div>
                 </div>
-                <div class="stat-card tone-green">
+                <div class="stat-card tone-green" style="cursor:pointer;" onclick="openStatModal('Selesai')">
                     <div class="dot"></div>
                     <div class="stat-label">Selesai</div>
                     <div class="stat-value"><?= $counts['Selesai'] ?></div>
@@ -293,6 +294,22 @@ $totalSaya = count($aduanSaya);
     </main>
 </div>
 
+<!-- ================= MODAL STATISTIK (DAFTAR ADUAN PER KATEGORI) ================= -->
+<div class="modal-backdrop" id="statModal" style="display:none;" onclick="if(event.target===this) closeStatModal()">
+    <div class="modal-box">
+        <div class="modal-head">
+            <div>
+                <div class="modal-eyebrow" id="statModalEyebrow">ADUAN</div>
+                <div class="modal-title" id="statModalTitle">Semua Aduan</div>
+            </div>
+            <a class="modal-close" href="javascript:void(0)" onclick="closeStatModal()"><?= icon('x', 20) ?></a>
+        </div>
+        <div class="modal-body">
+            <div id="statModalList"></div>
+        </div>
+    </div>
+</div>
+
 <script>
 // Tampilkan nama file yang dipilih di kotak upload
 document.getElementById('lampiran').addEventListener('change', function () {
@@ -301,6 +318,55 @@ document.getElementById('lampiran').addEventListener('change', function () {
         box.innerHTML = '<strong>' + this.files.length + ' file dipilih</strong>';
     }
 });
+
+// Data aduan milik user ini (dipakai untuk isi modal statistik tanpa query ulang ke server)
+const aduanDataJs = <?= json_encode($aduanSaya, JSON_UNESCAPED_UNICODE) ?>;
+
+function statusClass(status) {
+    if (status === 'Belum Dikerjakan') return 'status-belum';
+    if (status === 'Sedang Dikerjakan') return 'status-proses';
+    if (status === 'Selesai') return 'status-selesai';
+    return 'status-belum';
+}
+
+function openStatModal(statusFilter) {
+    const modal = document.getElementById('statModal');
+    const title = document.getElementById('statModalTitle');
+    const list  = document.getElementById('statModalList');
+
+    const data = statusFilter === 'Semua'
+        ? aduanDataJs
+        : aduanDataJs.filter(a => a.status === statusFilter);
+
+    title.textContent = statusFilter === 'Semua' ? 'Semua Aduan' : statusFilter;
+
+    if (data.length === 0) {
+        list.innerHTML = '<p style="color:var(--sub);font-size:13px;font-style:italic;">Tidak ada aduan pada kategori ini.</p>';
+    } else {
+        list.innerHTML = data.map(a => `
+            <a href="riwayat.php?id=${a.id}" class="recent-row" style="text-decoration:none;color:inherit;border-bottom:1px solid var(--border,#eee);padding:10px 0;">
+                <div class="pin"></div>
+                <div style="flex:1;min-width:0;">
+                    <div class="recent-title">${escapeHtml(a.barang)}</div>
+                    <div class="recent-meta"><span>#${a.id}</span><span>${a.tanggal.split(' ')[0]}</span></div>
+                </div>
+                <span class="pill ${statusClass(a.status)}"><span class="pill-dot"></span>${escapeHtml(a.status)}</span>
+            </a>
+        `).join('');
+    }
+
+    modal.style.display = 'flex';
+}
+
+function closeStatModal() {
+    document.getElementById('statModal').style.display = 'none';
+}
+
+function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
 </script>
 </body>
 </html>
