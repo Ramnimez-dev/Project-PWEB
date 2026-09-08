@@ -553,14 +553,189 @@ button, input, select, textarea {
     margin-top: 10px; 
 }
 
-@media (max-width: 860px) { 
-    .sidebar { 
-        display: none; 
-        } 
-    .content { 
-        padding: 18px; 
-        } 
+/* ============================================================
+   RESPONSIVE.CSS — versi hamburger menu (drawer)
+   Taruh <link rel="stylesheet" href="responsive.css">
+   di <head> SETELAH style.css (dan modal-tambahan.css kalau ada).
+   ============================================================ */
+
+/* Tombol hamburger disembunyikan di desktop, muncul di mobile */
+.hamburger-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink);
+    padding: 4px;
+    margin-right: 4px;
+}
+
+/* Lapisan gelap di belakang drawer saat terbuka */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1999;
+}
+
+.sidebar-overlay.show {
+    display: block;
+}
+
+/* ---------- TABLET & MOBILE (≤ 860px) ---------- */
+@media (max-width: 860px) {
+
+    .hamburger-btn {
+        display: inline-flex;
+        align-items: center;
     }
+
+    /* Sidebar jadi drawer: tersembunyi di luar layar, geser masuk saat .open */
+    .sidebar {
+        display: flex !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 232px;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        z-index: 2000;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .content {
+        padding: 18px;
+    }
+
+    .topbar {
+        padding: 12px 16px;
+        gap: 10px;
+    }
+}
+
+/* ---------- MOBILE (≤ 640px) ---------- */
+@media (max-width: 640px) {
+
+    .content {
+        padding: 14px;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .section-header a.btn,
+    .section-header button.btn {
+        width: 100%;
+    }
+
+    .section-title {
+        font-size: 22px;
+    }
+
+    .stat-grid {
+        gap: 10px;
+    }
+
+    .stat-card {
+        min-width: calc(50% - 5px);
+        flex: 1 1 calc(50% - 5px);
+        padding: 14px;
+    }
+
+    .stat-value {
+        font-size: 24px;
+    }
+
+    .layout-2col {
+        gap: 16px;
+    }
+
+    .col-form,
+    .col-side {
+        min-width: 100%;
+        flex-basis: 100%;
+    }
+
+    .field-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .card {
+        padding: 16px;
+    }
+
+    .topbar-right {
+        gap: 10px;
+    }
+
+    .admin-name,
+    .admin-role {
+        font-size: 11px;
+    }
+
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-box {
+        min-width: 0;
+    }
+
+    .filter-group {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 4px;
+    }
+
+    .filter-chip {
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .table-card {
+        overflow-x: auto;
+    }
+
+    .table-card table {
+        min-width: 640px;
+    }
+
+    .modal-box {
+        max-height: 90vh;
+    }
+
+    .modal-meta,
+    .meta-line {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .progress-track {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+}
+
+/* ---------- MOBILE KECIL (≤ 380px) ---------- */
+@media (max-width: 380px) {
+
+    .stat-card {
+        min-width: 100%;
+        flex-basis: 100%;
+    }
+}
 
 
 /* ==========================================================================
@@ -1292,12 +1467,304 @@ button {
     margin-top: 8px;
 }
 
+/* ============================================================
+   RESPONSIVE.CSS — versi hamburger menu (drawer)
+   Taruh <link rel="stylesheet" href="responsive.css">
+   di <head> SETELAH style.css (dan modal-tambahan.css kalau ada).
+   ============================================================ */
+
+/* Pengaman: cegah halaman bisa digeser ke samping kalau ada
+   elemen yang kelebaran dari viewport */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Tombol hamburger disembunyikan di desktop, muncul di mobile */
+.hamburger-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink);
+    padding: 4px;
+    margin-right: 4px;
+}
+
+/* Lapisan gelap di belakang drawer saat terbuka */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1999;
+}
+
+.sidebar-overlay.show {
+    display: block;
+}
+
+/* ---------- TABLET & MOBILE (≤ 860px) ---------- */
+/* Semua elemen yang wajib berubah begitu sidebar berubah jadi
+   drawer/hamburger ditaruh di breakpoint yang sama (860px),
+   termasuk modal, supaya konsisten di semua ukuran HP/tablet. */
 @media (max-width: 860px) {
+
+    .hamburger-btn {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    /* Sidebar jadi drawer: tersembunyi di luar layar, geser masuk saat .open */
     .sidebar {
-        display: none;
+        display: flex !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 232px;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        z-index: 2000;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
     }
 
     .content {
         padding: 18px;
+    }
+
+    .topbar {
+        padding: 12px 16px;
+        gap: 10px;
+    }
+
+    /* ---------- Modal / Pop-up jadi bottom sheet, full width ---------- */
+    .modal-backdrop {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .modal-box {
+        width: 100%;
+        max-width: 100%;
+        max-height: 92vh;
+        border-radius: 16px 16px 0 0;
+    }
+
+    .modal-head {
+        padding: 16px;
+    }
+
+    .modal-body {
+        padding: 16px;
+        gap: 14px;
+    }
+
+    .modal-title {
+        font-size: 17px;
+    }
+
+    .modal-eyebrow {
+        font-size: 10px;
+    }
+
+    .modal-meta,
+    .meta-line {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    /* Progress track jadi vertikal */
+    .progress-track {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .progress-step {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-align: left;
+        width: 100%;
+    }
+
+    .progress-circle {
+        margin: 0;
+        flex-shrink: 0;
+    }
+
+    /* Hapus garis penghubung antar step (didesain untuk layout
+       horizontal), karena di HP/tablet step-nya ditumpuk vertikal */
+    .progress-step::before,
+    .progress-step::after {
+        display: none !important;
+    }
+
+    /* Tombol pilihan status (admin) jadi 1 kolom */
+    .status-form {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .status-option {
+        width: 100%;
+    }
+
+    /* Lampiran: thumbnail sedikit lebih kecil biar muat banyak */
+    .lampiran-grid {
+        grid-template-columns: repeat(auto-fill, minmax(64px, 64px));
+        gap: 6px;
+    }
+
+    .lampiran-thumb {
+        width: 64px;
+        height: 64px;
+    }
+
+    /* Daftar komentar & form balasan */
+    .komentar-item {
+        gap: 8px;
+    }
+
+    .komentar-bubble,
+    .keluhan-box {
+        font-size: 12.5px;
+    }
+
+    .komentar-form textarea {
+        font-size: 13px;
+    }
+
+    .komentar-submit-row .btn,
+    .btn-submit {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Toast notifikasi supaya tidak kepotong di layar sempit */
+    .toast-notif {
+        left: 16px;
+        right: 16px;
+        top: 16px;
+        width: auto;
+    }
+}
+
+/* ---------- MOBILE (≤ 640px) ---------- */
+@media (max-width: 640px) {
+
+    .content {
+        padding: 14px;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .section-header a.btn,
+    .section-header button.btn {
+        width: 100%;
+    }
+
+    .section-title {
+        font-size: 22px;
+    }
+
+    .stat-grid {
+        gap: 10px;
+    }
+
+    .stat-card {
+        min-width: calc(50% - 5px);
+        flex: 1 1 calc(50% - 5px);
+        padding: 14px;
+    }
+
+    .stat-value {
+        font-size: 24px;
+    }
+
+    .layout-2col {
+        gap: 16px;
+    }
+
+    .col-form,
+    .col-side {
+        min-width: 100%;
+        flex-basis: 100%;
+    }
+
+    .field-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .card {
+        padding: 16px;
+    }
+
+    .topbar-right {
+        gap: 10px;
+    }
+
+    .admin-name,
+    .admin-role {
+        font-size: 11px;
+    }
+
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-box {
+        min-width: 0;
+    }
+
+    /* Filter chip TURUN KE BARIS BARU kalau tidak muat,
+       bukan bikin geser ke samping */
+    .filter-group {
+        flex-wrap: wrap;
+    }
+
+    .filter-chip {
+        white-space: nowrap;
+    }
+
+    .table-card {
+        overflow-x: auto;
+    }
+
+    .table-card table {
+        min-width: 640px;
+    }
+}
+
+/* ---------- MOBILE KECIL (≤ 380px) ---------- */
+@media (max-width: 380px) {
+
+    .stat-card {
+        min-width: 100%;
+        flex-basis: 100%;
+    }
+
+    .modal-title {
+        font-size: 15px;
+    }
+
+    .lampiran-grid {
+        grid-template-columns: repeat(auto-fill, minmax(56px, 56px));
+    }
+
+    .lampiran-thumb {
+        width: 56px;
+        height: 56px;
     }
 }
