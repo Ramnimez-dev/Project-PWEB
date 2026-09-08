@@ -52,9 +52,13 @@ body {
     font-weight: bold;
 }
 
+/* Wadah tombol login/register: dibuat jadi satu pill utuh */
 .auth-buttons {
     display: flex;
-    gap: 20px;
+    gap: 0;
+    border-radius: 25px;
+    overflow: hidden; /* memotong sudut dalam tombol supaya cuma sudut luar yang membulat */
+    border: 1px solid #bfa83b;
 }
 
 .btn {
@@ -62,10 +66,15 @@ body {
     background-color: #d1bc4d;
     color: #222222;
     padding: 12px 40px;
-    border-radius: 25px;
+    border-radius: 0; /* radius dipindah ke wadah .auth-buttons */
     font-size: 1.1rem;
     font-weight: 500;
     transition: background-color 0.2s ease;
+}
+
+/* Garis pemisah tipis di antara tombol login & register */
+.auth-buttons .btn:not(:last-child) {
+    border-right: 1px solid rgba(0, 0, 0, 0.18);
 }
 
 .btn:hover {
@@ -196,7 +205,7 @@ body {
     }
 
     .auth-buttons {
-        gap: 12px;
+        gap: 0;
     }
 
     .btn {
@@ -250,9 +259,9 @@ body {
     }
 
     .auth-buttons {
-        width: 100%;
+        width: auto;
         justify-content: center;
-        gap: 12px;
+        gap: 0;
     }
 
     .btn {
@@ -343,7 +352,7 @@ body {
     }
 
     .auth-buttons {
-        gap: 8px;
+        gap: 0;
     }
 
     .btn {
