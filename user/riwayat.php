@@ -256,12 +256,12 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
         </div>
 
         <div class="nav-label">Menu</div>
-        <a href="dashboard.php" class="nav-item"><?= icon('grid') ?><span class="label">Dashboard</span></a>
-        <a href="riwayat.php" class="nav-item active"><?= icon('history') ?><span class="label">Riwayat Aduan</span></a>
+        <a href="dashboard.php" class="nav-item"><span class="label">Dashboard</span></a>
+        <a href="riwayat.php" class="nav-item active"><span class="label">Riwayat Aduan</span></a>
 
         <div style="flex:1"></div>
         <div class="sidebar-footer">
-            <a href="../auth/logout.php" onclick="return confirm('Yakin Ingin Logout?')" class="nav-item"><?= icon('logout') ?><span class="label">Keluar</span></a>
+            <a href="../auth/logout.php" onclick="return confirm('Yakin Ingin Logout?')" class="nav-item"><span class="label">Keluar</span></a>
         </div>
     </aside>
 
@@ -273,7 +273,7 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
                 echo $hari[date('w')] . ', ' . date('j') . ' ' . $bulan[(int)date('n')] . ' ' . date('Y');
             ?></div>
             <div class="topbar-right">
-                <button class="bell-btn" aria-label="Notifikasi"><?= icon('bell', 18) ?></button>
+                <button class="bell-btn" aria-label="Notifikasi"></button>
                 <div style="display:flex;align-items:center;gap:8px;">
                     <div class="avatar-circle"><?php
                         $potongNama = explode(' ', trim($userName));
@@ -283,7 +283,6 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
                         <div class="admin-name"><?= htmlspecialchars($userName) ?></div>
                         <div class="admin-role">Pelapor</div>
                     </div>
-                    <?= icon('chevron', 14, '#6B756C') ?>
                 </div>
             </div>
         </header>

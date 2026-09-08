@@ -307,11 +307,11 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
                 <div class="modal-eyebrow">ADUAN #<?= $detail['id'] ?></div>
                 <h2 class="modal-title"><?= htmlspecialchars($detail['barang']) ?></h2>
                 <div class="modal-meta">
-                    <span><?= icon('package', 13, '#9ca3af') ?> <?= htmlspecialchars($detail['kategori'] ?? '-') ?> &middot; <?= (int)$detail['jumlah'] ?> unit</span>
-                    <span><?= icon('pin', 13, '#9ca3af') ?> <?= htmlspecialchars($detail['lokasi']) ?></span>
+                    <span><?= htmlspecialchars($detail['kategori'] ?? '-') ?> &middot; <?= (int)$detail['jumlah'] ?> unit</span>
+                    <span><?= htmlspecialchars($detail['lokasi']) ?></span>
                 </div>
             </div>
-            <a class="modal-close" href="data_aduan.php?<?= $backQuery ?>" aria-label="Tutup"><?= icon('x', 18, '#9ca3af') ?></a>
+            <a class="modal-close" href="data_aduan.php?<?= $backQuery ?>" aria-label="Tutup"></a>
         </div>
 
         <!-- Body Pop Up -->
@@ -356,7 +356,7 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
 
             <!-- Lampiran -->
             <div>
-                <div class="field-label"><?= icon('paperclip', 13, '#9ca3af') ?> LAMPIRAN (<?= count($detail['lampiran']) ?>)</div>
+                <div class="field-label"> LAMPIRAN (<?= count($detail['lampiran']) ?>)</div>
                 <?php if (empty($detail['lampiran'])): ?>
                     <div style="font-size:12px;color:#9ca3af;font-style:italic;">Tidak ada lampiran.</div>
                 <?php else: ?>
@@ -383,7 +383,7 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
 
             <!-- Komentar Admin -->
             <div>
-                <div class="field-label"><?= icon('message', 13, '#9ca3af') ?> KOMENTAR ADMIN (<?= count($detail['komentar']) ?>)</div>
+                <div class="field-label"> KOMENTAR ADMIN (<?= count($detail['komentar']) ?>)</div>
                 
                 <!-- Daftar Komentar -->
                 <div class="komentar-list">
