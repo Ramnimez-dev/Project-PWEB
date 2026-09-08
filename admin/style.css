@@ -2081,6 +2081,7 @@ button {
         .th-laporan, .td-laporan { 
             padding: 8px; 
             text-align: left; 
+            border: 1px solid black;
         }
         .th-laporan { 
             background-color: #f2f2f2; 

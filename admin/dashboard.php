@@ -21,6 +21,10 @@ while ($row = mysqli_fetch_assoc($hasil)) {
 $total      = array_sum($counts);
 $belumCount = $counts['Belum Dikerjakan'];
 
+$result = mysqli_query($koneksi, "SELECT COUNT(*) AS jumlah FROM users");
+$row = mysqli_fetch_assoc($result);
+$totally = array_sum($row);
+
 // 5 aduan terbaru, dipetakan ke key yang sama seperti yang dipakai di foreach bawah (id, barang, kategori, lokasi, status)
 $aduanTerbaru = [];
 $queryRecent = mysqli_query($koneksi, "
@@ -76,10 +80,12 @@ $tanggalText = "$hari, " . date('j') . " $bulan " . date('Y');
         <div class="nav-label">Menu</div>
         <a href="dashboard.php" class="nav-item active"><span>Beranda</span></a>
         <a href="data_aduan.php" class="nav-item"><span>Data Aduan</span>
-            <?php if ($belumCount > 0): ?><span class="badge"><?= $belumCount ?></span><?php endif; ?>
+            <?php if ($total > 0): ?><span class="badge"><?= $total ?></span><?php endif; ?>
         </a>
         <a href="kategori_barang.php" class="nav-item"><span>Kategori Barang</span></a>
-        <a href="data_pengguna.php" class="nav-item"><span>Data Pengguna</span></a>
+        <a href="data_pengguna.php" class="nav-item"><span>Data Pengguna</span>
+        <?php if ($totally > 0): ?><span class="badge"><?= $totally ?></span><?php endif; ?>
+        </a>
         <a href="laporan.php" class="nav-item"><span>Laporan</span></a>
 
         <div style="flex:1"></div>
@@ -92,9 +98,6 @@ $tanggalText = "$hari, " . date('j') . " $bulan " . date('Y');
         <header class="topbar">
             <div class="topbar-date"><?= $tanggalText ?></div>
             <div class="topbar-right">
-                <button class="bell-btn" aria-label="Notifikasi">
-                    <?php if ($counts['Belum Dikerjakan']): ?><span class="bell-dot"></span><?php endif; ?>
-                </button>
                 <div style="display:flex;align-items:center;gap:8px;">
                     <div class="avatar-circle"><?= $inisial ?></div>
                     <div>

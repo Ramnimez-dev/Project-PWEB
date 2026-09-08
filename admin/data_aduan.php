@@ -117,6 +117,14 @@ if ($types !== '') {
 mysqli_stmt_execute($stmt);
 $filtered = mysqli_fetch_all(mysqli_stmt_get_result($stmt), MYSQLI_ASSOC);
 
+$counts = ['Belum Dikerjakan' => 0, 'Sedang Dikerjakan' => 0, 'Selesai' => 0];
+$hasil = mysqli_query($koneksi, "SELECT status, COUNT(*) AS jumlah FROM aduan GROUP BY status");
+while ($row = mysqli_fetch_assoc($hasil)) {
+    $counts[$row['status']] = (int)$row['jumlah'];
+}
+$total      = array_sum($counts);
+$sudahCount = $counts['Belum Dikerjakan'];
+
 // ---------- HITUNG STATUS (dari seluruh data, bukan hasil filter) ----------
 $belumCount = $prosesCount = $selesaiCount = 0;
 $hasilHitung = mysqli_query($koneksi, "SELECT status, COUNT(*) AS jumlah FROM aduan GROUP BY status");
@@ -165,6 +173,10 @@ if (!empty($_GET['id'])) {
     }
 }
 
+$result = mysqli_query($koneksi, "SELECT COUNT(*) AS jumlah FROM users");
+$row = mysqli_fetch_assoc($result);
+$totally = array_sum($row);
+
 $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
 
 ?>
@@ -194,10 +206,12 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
         <div class="nav-label">Menu Utama</div>
         <a href="dashboard.php" class="nav-item"><span class="label">Beranda</span></a>
         <a href="data_aduan.php" class="nav-item active"><span class="label">Data Aduan</span>
-            <?php if ($belumCount > 0): ?><span class="badge"><?= $belumCount ?></span><?php endif; ?>
+            <?php if ($total > 0): ?><span class="badge"><?= $total ?></span><?php endif; ?>
         </a>
         <a href="kategori_barang.php" class="nav-item"><span class="label">Kategori barang</span></a>
-        <a href="data_pengguna.php" class="nav-item"><span class="label">Data Pengguna</span></a>
+        <a href="data_pengguna.php" class="nav-item"><span class="label">Data Pengguna</span>
+        <?php if ($totally > 0): ?><span class="badge"><?= $totally ?></span><?php endif; ?>
+        </a>
         <a href="laporan.php" class="nav-item"><span class="label">Laporan</span></a>
         
         <div style="flex:1"></div>
@@ -214,9 +228,6 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
                 echo $hari[date('w')] . ', ' . date('j') . ' ' . $bulan[(int)date('n')] . ' ' . date('Y');
             ?></div>
             <div class="topbar-right">
-                <button class="bell-btn" aria-label="Notifikasi">
-                    <?php if ($belumCount > 0): ?><span class="bell-dot"></span><?php endif; ?>
-                </button>
                 <div style="display:flex;align-items:center;gap:8px;">
                     <div class="avatar-circle"><?= $inisial ?></div>
                     <div>

@@ -67,8 +67,8 @@ $result = mysqli_fetch_all(mysqli_stmt_get_result($stmt), MYSQLI_ASSOC);
             <div class="kop-teks">
                 <h1><b>Halo SarPras</b></h1>
                 <h3>Aplikasi Aduan Sarana Prasarana SMK Taruna Bangsa</h3>
-                <p>Jl. Kaliabang Tengah, Perwira, Bekasi Utara, Kota Bekasi<br>
-                Telp: (021) 1234567 | Email: info@smktb.sch.id</p>
+                <p>Jl. Lingkar Utara Kaliabang Tengah Bekasi Utara Kota bekasi<br>
+                Telp: (021) 88981166 | Email: admin@smktarunabangsa.sch.id</p>
             </div>
         </div>
 
@@ -97,15 +97,15 @@ $result = mysqli_fetch_all(mysqli_stmt_get_result($stmt), MYSQLI_ASSOC);
                 <?php else: ?>
                     <?php $no = 1; foreach ($result as $row): ?>
                     <tr>
-                        <td style="text-align:center;"><?= $no++ ?></td>
-                        <td><?= date('d/m/Y', strtotime($row['tanggal'])) ?></td>
-                        <td>
+                        <td style="text-align:center;" class="td-laporan"><?= $no++ ?></td>
+                        <td class="td-laporan"><?= date('d/m/Y', strtotime($row['tanggal'])) ?></td>
+                        <td class="td-laporan">
                             <strong><?= htmlspecialchars($row['barang_aduan']) ?></strong><br>
                             <span style="font-size: 12px;"><?= htmlspecialchars($row['lokasi']) ?></span>
                         </td>
-                        <td><?= htmlspecialchars($row['nama_kategori'] ?? '-') ?></td>
-                        <td><?= htmlspecialchars($row['pelapor'] ?? '-') ?></td>
-                        <td style="text-align:center;"><?= htmlspecialchars($row['status']) ?></td>
+                        <td class="td-laporan"><?= htmlspecialchars($row['nama_kategori'] ?? '-') ?></td>
+                        <td class="td-laporan"><?= htmlspecialchars($row['pelapor'] ?? '-') ?></td>
+                        <td style="text-align:center;" class="td-laporan"><?= htmlspecialchars($row['status']) ?></td>
                     </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>
