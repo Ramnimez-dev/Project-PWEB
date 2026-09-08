@@ -1,3 +1,7 @@
+/* =========================
+   RESET
+========================= */
+
 * {
     margin: 0;
     padding: 0;
@@ -12,49 +16,74 @@ body {
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background-color: #e3e3e3;
-}
-
-.container {
-    width: 100%;
-    min-height: calc(100vh - 8px);
-    display: flex;
-    background-color: #e3e3e3;
-}
-
-.container {
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
     background-color: #e5e5e5;
 }
 
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container {
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+
+    background-color: #e5e5e5;
+}
+
+
+/* =========================
+   SIDEBAR
+========================= */
+
 .sidebar {
+    position: relative;
+
     width: 31.7%;
     max-width: 330px;
     min-height: 100vh;
+
     background-color: #2d8b2d;
+
     padding: 30px 32px;
+
     color: white;
 }
+
+
+/* =========================
+   LOGO
+========================= */
 
 .logo {
     width: 125px;
     height: 145px;
+
     margin-bottom: 15px;
 }
 
 .logo img {
     width: 100%;
     height: 100%;
+
     object-fit: contain;
+
     display: block;
 }
+
+
+/* =========================
+   BRAND
+========================= */
 
 .brand-text h1 {
     font-size: 40px;
     line-height: 1.05;
+
     font-weight: 700;
+
     color: white;
 }
 
@@ -62,49 +91,83 @@ body {
     color: #ffd84d;
 }
 
+
+/* =========================
+   GARIS
+========================= */
+
 .line {
     width: 120px;
+
     margin-top: 25px;
     margin-bottom: 15px;
 }
 
 .line hr {
     border: none;
-    height: 2px;
-    background-color: #ffd84d;
+
     width: 100%;
+    height: 2px;
+
+    background-color: #ffd84d;
 }
+
+
+/* =========================
+   DESKRIPSI
+========================= */
 
 .description {
     width: 180px;
+
     font-size: 13px;
     line-height: 1.45;
+
     font-weight: 500;
+
     color: white;
 }
 
+
+/* =========================
+   TOMBOL KEMBALI
+========================= */
+
 .btn-kembali {
+    display: flex;
+
     position: absolute;
+
     left: 38px;
     bottom: 55px;
-    display: inline-flex;
+
     align-items: center;
     justify-content: center;
+
     width: 150px;
     height: 45px;
+
     border: 2px solid #ffd84d;
     border-radius: 25px;
+
     color: #ffffff;
     background-color: transparent;
+
     text-decoration: none;
+
     font-size: 16px;
     font-weight: 700;
+
     transition: all 0.25s ease;
+
+    flex-shrink: 0;
 }
 
 .btn-kembali:hover {
     background-color: #ffd84d;
+
     color: #2d8b2d;
+
     transform: translateY(-2px);
 }
 
@@ -112,134 +175,221 @@ body {
     transform: translateY(0);
 }
 
+
+/* =========================
+   CONTENT
+========================= */
+
 .content {
     flex: 1;
-    min-height: calc(100vh - 8px);
+
+    min-height: 100vh;
+
     display: flex;
+
     justify-content: center;
     align-items: center;
+
     padding: 20px 30px;
 }
+
+
+/* =========================
+   REGISTER WRAPPER
+========================= */
 
 .register-wrapper {
     width: 100%;
     max-width: 500px;
+
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
 }
 
+
+/* =========================
+   HEADER REGISTER
+========================= */
+
 .header-register {
     width: 100%;
+
     text-align: center;
+
     margin-bottom: 10px;
 }
 
 .header-register h1 {
     color: #2d8b2d;
+
     font-size: 36px;
     line-height: 1;
+
     font-weight: 700;
+
     text-transform: uppercase;
+
     margin-bottom: 5px;
 }
 
 .header-register p {
     color: #111;
+
     font-size: 12px;
     line-height: 1.35;
-    width: 160px;
+
+    max-width: 200px;
+
     margin: 0 auto;
 }
 
+
+/* =========================
+   CARD REGISTER
+========================= */
+
 .card-register {
-    width: 300px;
+    width: 100%;
+    max-width: 300px;
+
     background-color: #ffffff;
+
     border-radius: 14px;
+
     padding: 12px 32px 15px;
-    box-shadow: none;
 }
+
+
+/* =========================
+   FORM
+========================= */
 
 .form-group {
     width: 100%;
+
     margin-bottom: 6px;
 }
 
 .form-group label {
     display: block;
+
     color: #161616;
+
     font-size: 11px;
     font-weight: 700;
+
     margin-bottom: 4px;
 }
 
 .form-group input {
     width: 100%;
     height: 30px;
+
     padding: 0 14px;
+
     border: 1px solid #555;
     border-radius: 8px;
+
     outline: none;
+
     background-color: #ffffff;
     color: #333;
+
     font-size: 9px;
     font-style: italic;
+
     transition: 0.2s;
 }
 
 .form-group input::placeholder {
     color: #999;
+
     opacity: 1;
+
     text-align: center;
 }
 
 .form-group input:focus {
     border-color: #2d8b2d;
-    box-shadow: 0 0 0 2px rgba(45, 139, 45, 0.1);
+
+    box-shadow:
+        0 0 0 2px rgba(45, 139, 45, 0.1);
 }
+
+
+/* =========================
+   SELECT ROLE
+========================= */
 
 .form-group select {
     width: 100%;
     height: 31px;
+
     padding: 0 14px;
+
     border: 1px solid #555;
     border-radius: 8px;
+
     outline: none;
+
     background-color: white;
     color: #999;
+
     font-size: 9px;
     font-style: italic;
+
     text-align: center;
+
     cursor: pointer;
 }
 
 .form-group select:focus {
     border-color: #2d8b2d;
-    box-shadow: 0 0 0 2px rgba(45, 139, 45, 0.1);
+
+    box-shadow:
+        0 0 0 2px rgba(45, 139, 45, 0.1);
 }
 
 .form-group select option {
     color: #333;
+
     font-style: normal;
 }
 
+
+/* =========================
+   BUTTON REGISTER
+========================= */
+
 .card-register button {
     display: block;
+
     width: 164px;
     height: 40px;
+
     margin: 15px auto 0;
+
     border: none;
+
     border-radius: 25px;
+
     background-color: #ffd65a;
     color: #111;
+
     font-size: 16px;
     font-weight: 700;
+
     cursor: pointer;
+
     transition: all 0.2s ease;
 }
 
 .card-register button:hover {
     background-color: #f5c943;
+
     transform: translateY(-1px);
 }
 
@@ -247,16 +397,26 @@ body {
     transform: translateY(0);
 }
 
+
+/* =========================
+   LOGIN LINK
+========================= */
+
 .register-wrapper > p {
     margin-top: 10px;
+
     font-size: 11px;
+
     color: #333;
+
     text-align: center;
 }
 
 .register-wrapper > p a {
     color: #2d8b2d;
+
     font-weight: 700;
+
     text-decoration: none;
 }
 
@@ -264,10 +424,16 @@ body {
     text-decoration: underline;
 }
 
+
+/* =========================
+   TABLET
+========================= */
+
 @media (max-width: 768px) {
 
     .sidebar {
         width: 230px;
+
         padding: 25px 20px;
     }
 
@@ -285,27 +451,48 @@ body {
     }
 
     .card-register {
-        width: 300px;
+        width: 100%;
+        max-width: 300px;
     }
 }
+
+
+/* =========================
+   HP
+========================= */
 
 @media (max-width: 600px) {
 
     .container {
         flex-direction: column;
+        min-height: 100vh;
     }
 
+    /* SIDEBAR HP */
+
     .sidebar {
+        position: relative;
+
         width: 100%;
         max-width: none;
+
         min-height: auto;
+        height: auto;
+
         padding: 25px;
+
         text-align: center;
+
+        display: flex;
+        flex-direction: column;
+
+        align-items: center;
     }
 
     .logo {
         width: 100px;
         height: 110px;
+
         margin: 0 auto 10px;
     }
 
@@ -320,12 +507,33 @@ body {
     .description {
         width: 100%;
         max-width: 300px;
-        margin: auto;
+
+        margin: 0 auto;
     }
+
+    /* TOMBOL KEMBALI HP */
+
+    .btn-kembali {
+        position: static;
+
+        width: 150px;
+        height: 45px;
+
+        margin: 25px auto 0;
+
+        flex-shrink: 0;
+
+        left: auto;
+        bottom: auto;
+    }
+
+    /* CONTENT HP */
 
     .content {
         width: 100%;
+
         min-height: auto;
+
         padding: 35px 15px;
     }
 
@@ -337,8 +545,60 @@ body {
         font-size: 32px;
     }
 
+    .header-register p {
+        max-width: 260px;
+    }
+
     .card-register {
         width: 100%;
-        max-width: 300px;
+        max-width: 320px;
+
+        padding: 12px 20px 15px;
+    }
+
+    /* Cegah auto-zoom Safari iOS pada input/select dengan font-size < 16px */
+    .form-group input,
+    .form-group select {
+        font-size: 16px;
+        height: 38px;
+    }
+
+    .form-group label {
+        font-size: 12px;
+    }
+}
+
+
+/* =========================
+   HP KECIL
+========================= */
+
+@media (max-width: 400px) {
+
+    .sidebar {
+        padding: 20px 15px;
+    }
+
+    .brand-text h1 {
+        font-size: 28px;
+    }
+
+    .description {
+        font-size: 12px;
+    }
+
+    .btn-kembali {
+        width: 150px;
+        height: 45px;
+
+        font-size: 16px;
+    }
+
+    .content {
+        padding: 25px 10px;
+    }
+
+    .card-register {
+        padding: 12px 16px 15px;
     }
 }
