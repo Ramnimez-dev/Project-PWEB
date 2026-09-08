@@ -49,6 +49,7 @@ button, input, select, textarea {
     gap: 10px; 
     padding: 0 12px 30px; 
 }
+
 .brand-mark img { 
     width: 30px; 
     height: 30px; 
@@ -59,6 +60,7 @@ button, input, select, textarea {
     justify-content: center; 
 
 }
+
 .brand-name { 
     font: bold 17px 'Barlow Condensed'; 
     color: #fff; 

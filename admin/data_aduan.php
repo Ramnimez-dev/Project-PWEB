@@ -84,9 +84,9 @@ $statusSukses   = isset($_GET['status_sukses']);
 
 $sql = "
     SELECT a.id_aduan AS id, a.barang_aduan AS barang, a.lokasi, a.status, a.tanggal,
-           k.nama_kategori AS kategori, u.nama AS pelapor,
-           (SELECT COUNT(*) FROM lampiran l WHERE l.aduan_id = a.id_aduan) AS jml_lampiran,
-           (SELECT COUNT(*) FROM komentar_aduan c WHERE c.aduan_id = a.id_aduan) AS jml_komentar
+        k.nama_kategori AS kategori, u.nama AS pelapor,
+        (SELECT COUNT(*) FROM lampiran l WHERE l.aduan_id = a.id_aduan) AS jml_lampiran,
+        (SELECT COUNT(*) FROM komentar_aduan c WHERE c.aduan_id = a.id_aduan) AS jml_komentar
     FROM aduan a
     LEFT JOIN kategori_barang k ON k.id_kategori = a.kategori_id
     LEFT JOIN users u ON u.id_user = a.user_id
@@ -133,8 +133,8 @@ if (!empty($_GET['id'])) {
 
     $stmtD = mysqli_prepare($koneksi, "
         SELECT a.id_aduan AS id, a.barang_aduan AS barang, a.jumlah_barang AS jumlah,
-               a.lokasi, a.isi_keluhan AS isi, a.status, a.tanggal,
-               k.nama_kategori AS kategori, u.nama AS pelapor
+            a.lokasi, a.isi_keluhan AS isi, a.status, a.tanggal,
+            k.nama_kategori AS kategori, u.nama AS pelapor
         FROM aduan a
         LEFT JOIN kategori_barang k ON k.id_kategori = a.kategori_id
         LEFT JOIN users u ON u.id_user = a.user_id
@@ -166,7 +166,10 @@ if (!empty($_GET['id'])) {
 }
 
 $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
+
 ?>
+
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -189,16 +192,17 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
         </div>
 
         <div class="nav-label">Menu Utama</div>
-        <a href="dashboard.php" class="nav-item"><span class="label">Dashboard</span></a>
+        <a href="dashboard.php" class="nav-item"><span class="label">Beranda</span></a>
         <a href="data_aduan.php" class="nav-item active"><span class="label">Data Aduan</span>
             <?php if ($belumCount > 0): ?><span class="badge"><?= $belumCount ?></span><?php endif; ?>
         </a>
         <a href="kategori_barang.php" class="nav-item"><span class="label">Kategori barang</span></a>
         <a href="data_pengguna.php" class="nav-item"><span class="label">Data Pengguna</span></a>
+        <a href="laporan.php" class="nav-item"><span class="label">Laporan</span></a>
         
         <div style="flex:1"></div>
         <div class="sidebar-footer">
-             <a href="../auth/logout.php" onclick="return confirm('Yakin Ingin Logout?')" class="nav-item"><span class="label">Keluar</span></a>
+            <a href="../auth/logout.php" onclick="return confirm('Yakin Ingin Logout?')" class="nav-item"><span class="label">Keluar</span></a>
         </div>
     </aside>
 
@@ -225,7 +229,7 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
 
         <div class="content">
             <div class="section-header">
-                <h1 class="section-title">Data Aduan Sarpras</h1>
+                <h1 class="section-title">Data Aduan SarPras</h1>
                 <div class="stats-summary">
                     <div class="stat-pill">Belum: <strong><?= $belumCount ?></strong></div>
                     <div class="stat-pill">Proses: <strong><?= $prosesCount ?></strong></div>
@@ -253,10 +257,10 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
                     <tr>
                         <th style="width:60px">ID</th>
                         <th>Barang & Lokasi</th>
+                        <th style="width:160px">Tanggal Laporan</th>
                         <th style="width:120px">Kategori</th>
-                        <th style="width:140px">Pelapor</th>
+                        <th style="width:150px">Pelapor</th>
                         <th style="width:130px">Status</th>
-                        <th style="width:60px">Info</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -270,15 +274,10 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
                                 <div class="row-title"><?= htmlspecialchars($a['barang']) ?></div>
                                 <div class="row-sub"><?= htmlspecialchars($a['lokasi']) ?></div>
                             </td>
+                            <td><?= htmlspecialchars($a['tanggal'] ?? '-') ?></td>
                             <td><?= htmlspecialchars($a['kategori'] ?? '-') ?></td>
                             <td><?= htmlspecialchars($a['pelapor'] ?? '-') ?></td>
                             <td><?= statusPill($a['status']) ?></td>
-                            <td>
-                                <div class="meta-icons">
-                                    <span title="Lampiran"> <?= (int)$a['jml_lampiran'] ?></span>
-                                    <span title="Komentar"> <?= (int)$a['jml_komentar'] ?></span>
-                                </div>
-                            </td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
@@ -436,6 +435,8 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
     })();
 </script>
 <?php endif; ?>
+
+
 
 </body>
 </html>

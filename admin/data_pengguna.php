@@ -66,11 +66,12 @@ $filtered = array_filter($usersData, function ($u) use ($q, $roleFilter) {
         </div>
 
         <div class="nav-label">Menu</div>
-        <a href="dashboard.php" class="nav-item"><span class="label">Dashboard</span></a>
+        <a href="dashboard.php" class="nav-item"><span class="label">Beranda</span></a>
         <a href="data_aduan.php" class="nav-item"><span class="label">Data Aduan</span>
         </a>
         <a href="kategori_barang.php" class="nav-item"><span class="label">Kategori Barang</span></a>
         <a href="data_pengguna.php" class="nav-item active"><span class="label">Data Pengguna</span></a>
+        <a href="laporan.php" class="nav-item"><span class="label">Laporan</span></a>
 
         <div style="flex:1"></div>
         <div class="sidebar-footer">

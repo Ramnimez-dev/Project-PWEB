@@ -127,7 +127,8 @@ $totalSaya = count($aduanSaya);
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard — Sarpras</title>
+<title>Beranda User — Sarpras</title>
+<link rel="shortcut icon" href="../img/logo sapras.png">
 <link rel="stylesheet" href="style.css">
 </head>
 

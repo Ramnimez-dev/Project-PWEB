@@ -89,9 +89,9 @@ $balasanSukses = isset($_GET['balasan_sukses']);
 
 $sql = "
     SELECT a.id_aduan AS id, a.barang_aduan AS barang, a.lokasi, a.status, a.tanggal,
-           k.nama_kategori AS kategori,
-           (SELECT COUNT(*) FROM lampiran l WHERE l.aduan_id = a.id_aduan) AS jml_lampiran,
-           (SELECT COUNT(*) FROM komentar_aduan c WHERE c.aduan_id = a.id_aduan) AS jml_komentar
+        k.nama_kategori AS kategori,
+        (SELECT COUNT(*) FROM lampiran l WHERE l.aduan_id = a.id_aduan) AS jml_lampiran,
+        (SELECT COUNT(*) FROM komentar_aduan c WHERE c.aduan_id = a.id_aduan) AS jml_komentar
     FROM aduan a
     LEFT JOIN kategori_barang k ON k.id_kategori = a.kategori_id
     WHERE a.user_id = ?
@@ -137,8 +137,8 @@ if (!empty($_GET['id'])) {
 
     $stmtD = mysqli_prepare($koneksi, "
         SELECT a.id_aduan AS id, a.barang_aduan AS barang, a.jumlah_barang AS jumlah,
-               a.lokasi, a.isi_keluhan AS isi, a.status, a.tanggal,
-               k.nama_kategori AS kategori
+            a.lokasi, a.isi_keluhan AS isi, a.status, a.tanggal,
+            k.nama_kategori AS kategori
         FROM aduan a
         LEFT JOIN kategori_barang k ON k.id_kategori = a.kategori_id
         WHERE a.id_aduan = ? AND a.user_id = ?
@@ -184,7 +184,8 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Riwayat Aduan — Sarpras</title>
+<title>Riwayat Aduan User — Sarpras</title>
+<link rel="shortcut icon" href="../img/logo sapras.png">
 <link rel="stylesheet" href="style.css">
 <style>
 .lampiran-grid {

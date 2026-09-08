@@ -61,12 +61,13 @@ $belumCount = 2; // dummy badge sidebar, nanti diganti query COUNT status 'Belum
         </div>
 
         <div class="nav-label">Menu</div>
-        <a href="dashboard.php" class="nav-item"><span class="label">Dashboard</span></a>
+        <a href="dashboard.php" class="nav-item"><span class="label">Beranda</span></a>
         <a href="data_aduan.php" class="nav-item"><span class="label">Data Aduan</span>
             <?php if ($belumCount > 0): ?><span class="badge"><?= $belumCount ?></span><?php endif; ?>
         </a>
         <a href="kategori_barang.php" class="nav-item active"><span class="label">Kategori Barang</span></a>
         <a href="data_pengguna.php" class="nav-item"><span class="label">Data Pengguna</span></a>
+        <a href="laporan.php" class="nav-item"><span class="label">Laporan</span></a>
 
         <div style="flex:1"></div>
         <div class="sidebar-footer">
@@ -152,8 +153,8 @@ $belumCount = 2; // dummy badge sidebar, nanti diganti query COUNT status 'Belum
                 <?php endif; ?>
                 <div class="field-label">Nama kategori</div>
                 <input type="text" name="nama_kategori" class="field-input" required
-                       value="<?= $mode === 'edit' ? htmlspecialchars($editData['nama']) : '' ?>"
-                       placeholder="Misal: Elektronik">
+                    value="<?= $mode === 'edit' ? htmlspecialchars($editData['nama']) : '' ?>"
+                    placeholder="Misal: Elektronik">
                 <div class="modal-footer">
                     <a href="kategori.php?q=<?= urlencode($q) ?>" class="btn">Batal</a>
                     <button type="submit" class="btn btn-primary">Simpan</button>

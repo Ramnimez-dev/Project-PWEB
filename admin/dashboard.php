@@ -51,12 +51,15 @@ function statusPill(string $status): string {
 $hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][date('w')];
 $bulan = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'][date('n')];
 $tanggalText = "$hari, " . date('j') . " $bulan " . date('Y');
+
 ?>
+
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard — SarPras</title>
+<title>Beranda Admin — SarPras</title>
 <link rel="shortcut icon" href="../img/logo sapras.png">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -65,16 +68,20 @@ $tanggalText = "$hari, " . date('j') . " $bulan " . date('Y');
     <aside class="sidebar">
         <div class="brand">
             <div class="brand-mark"><img src="../img/logo sapras.png" alt="logo sarpras"></div>
-            <div><div class="brand-name">SARPRAS</div><div class="brand-sub">PANEL ADMIN</div></div>
+            <div>
+                <div class="brand-name">SARPRAS</div>
+                <div class="brand-sub">PANEL ADMIN</div>
+            </div>
         </div>
         <div class="nav-label">Menu</div>
-        <a href="dashboard.php" class="nav-item active"><span>Dashboard</span></a>
+        <a href="dashboard.php" class="nav-item active"><span>Beranda</span></a>
         <a href="data_aduan.php" class="nav-item"><span>Data Aduan</span>
             <?php if ($belumCount > 0): ?><span class="badge"><?= $belumCount ?></span><?php endif; ?>
         </a>
         <a href="kategori_barang.php" class="nav-item"><span>Kategori Barang</span></a>
         <a href="data_pengguna.php" class="nav-item"><span>Data Pengguna</span></a>
-        
+        <a href="laporan.php" class="nav-item"><span>Laporan</span></a>
+
         <div style="flex:1"></div>
         <div class="sidebar-footer">
             <a href="../auth/logout.php" onclick="return confirm('Yakin Ingin Logout?')" class="nav-item"><span class="label">Keluar</span></a>
@@ -100,7 +107,7 @@ $tanggalText = "$hari, " . date('j') . " $bulan " . date('Y');
 
         <div class="content">
             <div class="eyebrow">Ringkasan hari ini</div>
-            <h1 class="section-title">Dashboard SarPras</h1>
+            <h1 class="section-title">Beranda SarPras</h1>
 
             <div class="stat-grid">
                 <div class="stat-card">

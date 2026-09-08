@@ -35,7 +35,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Registrasi - SarPras</title>
+    <link rel="shortcut icon" href="../img/logo sapras.png">
     <link rel="stylesheet" href="register.css">
 </head>
 <body>
@@ -98,7 +99,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <option value="user">User</option>
                             </select>
                         </div>
-                        <button type="submit">Login</button>
+                        <button type="submit">Registrasi</button>
                     </form>
                 </div>
                 <p>Sudah Punya Akun? <a href="login.php">Login</a></p>
