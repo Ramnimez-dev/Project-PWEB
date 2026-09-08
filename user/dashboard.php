@@ -15,7 +15,6 @@ function icon(string $name, int $size = 17, string $color = 'currentColor'): str
     $stroke = "stroke=\"$color\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"";
     $paths = [
         'grid'      => '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>',
-        'menu'      => '<path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/>',
         'history'   => '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 7v5l4 2"/>',
         'user'      => '<circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/>',
         'bell'      => '<path d="M6 8a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
@@ -131,14 +130,12 @@ $totalSaya = count($aduanSaya);
 <title>Beranda User — Sarpras</title>
 <link rel="shortcut icon" href="../img/logo sapras.png">
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="responsive.css">
 </head>
 
 <body>
 <div class="layout">
 
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
-    <aside class="sidebar" id="mainSidebar">
+    <aside class="sidebar">
         <div class="brand">
             <div class="brand-mark"><img src="../img/logo sapras.png" alt="logo sarpras"></div>
             <div>
@@ -159,13 +156,13 @@ $totalSaya = count($aduanSaya);
 
     <main class="main">
         <header class="topbar">
-            <button class="hamburger-btn" onclick="toggleSidebar()" aria-label="Menu"><?= icon('menu', 20) ?></button>
             <div class="topbar-date"><?php
                 $hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
                 $bulan = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
                 echo $hari[date('w')] . ', ' . date('j') . ' ' . $bulan[(int)date('n')] . ' ' . date('Y');
             ?></div>
             <div class="topbar-right">
+                <button class="bell-btn" aria-label="Notifikasi"><?= icon('bell', 18) ?></button>
                 <div style="display:flex;align-items:center;gap:8px;">
                     <div class="avatar-circle">
                         <?php
@@ -177,6 +174,7 @@ $totalSaya = count($aduanSaya);
                         <div class="admin-name"><?= htmlspecialchars($userName) ?></div>
                         <div class="admin-role">Pelapor</div>
                     </div>
+                    <?= icon('chevron', 14, '#6B756C') ?>
                 </div>
             </div>
         </header>
@@ -185,7 +183,7 @@ $totalSaya = count($aduanSaya);
             <div class="section-header">
                 <div>
                     <div class="eyebrow">Selamat datang</div>
-                    <h1 class="section-title">Halo, <?= htmlspecialchars(explode(' ', $userName)[0]) ?> 👋</h1>
+                    <h1 class="section-title">Halo, <?= htmlspecialchars($userName)?> 👋</h1>
                     <div class="section-desc">Laporkan kerusakan sarana & prasarana di sini.</div>
                 </div>
             </div>
@@ -347,7 +345,7 @@ function openStatModal(statusFilter) {
         list.innerHTML = '<p style="color:var(--sub);font-size:13px;font-style:italic;">Tidak ada aduan pada kategori ini.</p>';
     } else {
         list.innerHTML = data.map(a => `
-            <a href="riwayat.php?id=${a.id}" class="recent-row" style="text-decoration:none;color:inherit;">
+            <a href="riwayat.php?id=${a.id}" class="recent-row" style="text-decoration:none;color:inherit;border-bottom:1px solid var(--border,#eee);padding:10px 0;">
                 <div class="pin"></div>
                 <div style="flex:1;min-width:0;">
                     <div class="recent-title">${escapeHtml(a.barang)}</div>
@@ -369,16 +367,6 @@ function escapeHtml(str) {
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
-}
-</script>
-<script>
-function toggleSidebar() {
-    document.getElementById('mainSidebar').classList.toggle('open');
-    document.getElementById('sidebarOverlay').classList.toggle('show');
-}
-function closeSidebar() {
-    document.getElementById('mainSidebar').classList.remove('open');
-    document.getElementById('sidebarOverlay').classList.remove('show');
 }
 </script>
 </body>
