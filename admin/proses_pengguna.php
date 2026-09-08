@@ -21,7 +21,7 @@ if($aksi === 'tambah') {
     $query = "INSERT INTO users(nomor_induk, nama, username, password, no_telp, role) VALUES('$nomor_induk', '$nama', '$username', '$password', '$no_telp', '$role')";
     
     if(mysqli_query($koneksi, $query)) {
-        header("Location: data_pengguna.php?status=success_add");
+        header("Location: data_pengguna.php?status=add_success");
     } else {
         header("Location: data_pengguna.php?status=failed");
     }
@@ -52,7 +52,7 @@ if($aksi === 'edit') {
     $query = "UPDATE users SET nama = '$nama', username = '$username', no_telp = '$no_telp', role = '$role' WHERE nomor_induk = '$nomor_induk'";
 
     if(mysqli_query($koneksi, $query)) {
-        header("Location: data_pengguna.php?status=success_update");
+        header("Location: data_pengguna.php?status=update_success");
     }else {
         header("Locatioin: data_pengguna.php?status=failed");
     }
@@ -66,7 +66,7 @@ if($aksi === 'delete') {
     $query = "DELETE FROM users nomor_induk='$nomor_induk'";
 
     if(mysqli_query($koneksi, $query)) {
-        header("Location: data_pengguna.php?status=success_delete");
+        header("Location: data_pengguna.php?status=delete_success");
     }else {
         header("Location: data_pengguna.php?status=failed");
     }

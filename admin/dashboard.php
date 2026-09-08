@@ -48,7 +48,6 @@ function statusPill(string $status): string {
     return '<span class="pill ' . $class . '"><span class="pill-dot"></span>' . htmlspecialchars($status) . '</span>';
 }
 
-// Format Tanggal Singkat
 $hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][date('w')];
 $bulan = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'][date('n')];
 $tanggalText = "$hari, " . date('j') . " $bulan " . date('Y');

@@ -106,7 +106,7 @@ $belumCount = 2; // dummy badge sidebar, nanti diganti query COUNT status 'Belum
 
             <form method="get" class="toolbar">
                 <div class="search-box">
-                    <input type="text" name="q" value="<?= htmlspecialchars($q) ?>" placeholder="Cari nama kategori...">
+                    <input type="text" name="q" value="<?= htmlspecialchars($q) ?>" placeholder="Cari kategori...">
                 </div>
             </form>
 
