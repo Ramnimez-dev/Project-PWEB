@@ -184,7 +184,7 @@ $totalSaya = count($aduanSaya);
             <div class="section-header">
                 <div>
                     <div class="eyebrow">Selamat datang</div>
-                    <h1 class="section-title">Halo, <?= htmlspecialchars(explode(' ', $userName)[0]) ?> 👋</h1>
+                    <h1 class="section-title">Halo, <?= htmlspecialchars($userName) ?> 👋</h1>
                     <div class="section-desc">Laporkan kerusakan sarana & prasarana di sini.</div>
                 </div>
             </div>
