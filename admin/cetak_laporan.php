@@ -54,7 +54,7 @@ $result = mysqli_fetch_all(mysqli_stmt_get_result($stmt), MYSQLI_ASSOC);
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Cetak Laporan <?= $judul_waktu ?> - SarPras</title>
+    <title>Cetak Laporan <?= $judul_waktu ?> - Halo SarPras</title>
     <link rel="shortcut icon" href="../img/logo sapras.png">
     <link rel="stylesheet" href="style.css">
 </head>
