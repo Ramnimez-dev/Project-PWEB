@@ -2368,7 +2368,6 @@ button {
     display: none; 
 }
 
-
 /* ============================================================
    RESPONSIVE — HP & TABLET
    ============================================================ */
@@ -2382,6 +2381,7 @@ button {
     .btn-print {
         width: 100%;
     }
+}
 
 /* pop up halaman data pengguna */
 .modal-overlay {
@@ -2464,5 +2464,4 @@ button {
   text-decoration: none; 
   font-size: 0.85rem; 
   display: inline-block; 
-
 }

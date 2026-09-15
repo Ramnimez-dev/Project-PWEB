@@ -258,15 +258,15 @@ $totalSaya = count($aduanSaya);
                             </div>
 
                             <div class="field">
-                                <label class="field-label">Lampiran foto (opsional)</label>
-                                <label class="upload-box" for="lampiran">
-                                    <div><?= icon('upload', 22) ?></div>
-                                    <div><strong>Klik untuk unggah</strong> atau seret file ke sini</div>
-                                    <div style="margin-top:2px;">JPG, PNG, atau PDF, maks. 5MB</div>
-                                </label>
-                                <input type="file" id="lampiran" name="lampiran[]" multiple accept=".jpg,.jpeg,.png,.pdf" style="display:none;">
+                                <label class="field-label">Lampiran (opsional)</label>
+                                <div class="upload-box">
+                                    <input type="file" name="lampiran[]" id="lampiran" multiple accept=".jpg,.jpeg,.png,.pdf">
+                                    <div>
+                                        <div>Seret file ke sini atau klik untuk memilih</div>
+                                        <div style="font-size:12px;color:var(--sub);margin-top:4px;">Format: JPG, PNG, PDF. Maks 5MB per file.</div>
+                                    </div>
+                                </div>
                             </div>
-
                             <button type="submit" class="btn btn-primary"><?= icon('send', 15) ?> Kirim aduan</button>
                         </form>
                     </div>
