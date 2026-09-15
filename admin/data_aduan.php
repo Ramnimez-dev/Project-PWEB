@@ -224,7 +224,7 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
         <header class="topbar">
             <div class="topbar-date"><?php
                 $hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-                $bulan = ['','Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agt','Sep','Okt','Nov','Des'];
+                $bulan = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
                 echo $hari[date('w')] . ', ' . date('j') . ' ' . $bulan[(int)date('n')] . ' ' . date('Y');
             ?></div>
             <div class="topbar-right">

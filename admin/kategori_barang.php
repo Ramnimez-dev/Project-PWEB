@@ -1,10 +1,9 @@
 <?php
-
 session_start();
 require '../config/koneksi.php';
 
-if(!isset($_SESSION['nama'])) {
-    header("Location: ../config/koneksi.php");
+if (!isset($_SESSION['nama'])) {
+    header("Location: ../auth/login.php");
     exit();
 }
 
@@ -12,30 +11,26 @@ $adminName = $_SESSION['nama'];
 $potongNama = explode(' ', trim($adminName));
 $inisial = strtoupper(substr($potongNama[0], 0, 1) . substr(end($potongNama), 0, 1));
 
-// ---------- DATA DUMMY (nanti diganti query PDO ke tabel kategori_barang, join COUNT(*) dari aduan) ----------
-$kategoriData = [
-    ['id' => 1, 'nama' => 'Elektronik',    'jumlah' => 12],
-    ['id' => 2, 'nama' => 'Furnitur',      'jumlah' => 27],
-    ['id' => 3, 'nama' => 'Sanitasi',      'jumlah' => 9],
-    ['id' => 4, 'nama' => 'Jaringan & IT', 'jumlah' => 6],
-    ['id' => 5, 'nama' => 'Bangunan',      'jumlah' => 14],
-];
+// ---------- MENGAMBIL DATA DARI DATABASE ----------
+$queryKategori = "SELECT k.id_kategori AS id, k.nama_kategori AS nama, COUNT(a.id_aduan) AS jumlah FROM kategori_barang k LEFT JOIN aduan a ON k.id_kategori = a.kategori_id GROUP BY k.id_kategori, k.nama_kategori";
 
-// ---------- PENCARIAN (dari query string, nanti tinggal ganti WHERE nama_kategori LIKE di SQL) ----------
+$resultKategori = mysqli_query($koneksi, $queryKategori);
+
+
+$kategoriData = [];
+while ($row = mysqli_fetch_assoc($resultKategori)) {
+    $kategoriData[] = [
+        'id'     => (int)$row['id'],
+        'nama'   => $row['nama'],
+        'jumlah' => (int)$row['jumlah']
+    ];
+}
+
+// ---------- PENCARIAN & FILTERING ----------
 $q = trim($_GET['q'] ?? '');
 
 $filtered = array_filter($kategoriData, fn($k) => $q === '' || stripos($k['nama'], $q) !== false);
 usort($filtered, fn($a, $b) => strcmp($a['nama'], $b['nama']));
-
-// ---------- MODE FORM (tambah / edit lewat query string, mirip pola di aduan.php) ----------
-$mode      = $_GET['mode'] ?? null; // 'tambah' atau 'edit'
-$editId    = isset($_GET['id']) ? (int)$_GET['id'] : null;
-$editData  = null;
-if ($mode === 'edit' && $editId) {
-    foreach ($kategoriData as $k) {
-        if ($k['id'] === $editId) { $editData = $k; break; }
-    }
-}
 
 $counts = ['Belum Dikerjakan' => 0, 'Sedang Dikerjakan' => 0, 'Selesai' => 0];
 $hasil = mysqli_query($koneksi, "SELECT status, COUNT(*) AS jumlah FROM aduan GROUP BY status");
@@ -48,8 +43,8 @@ $belumCount = $counts['Belum Dikerjakan'];
 $result = mysqli_query($koneksi, "SELECT COUNT(*) AS jumlah FROM users");
 $row = mysqli_fetch_assoc($result);
 $totally = array_sum($row);
-
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -96,9 +91,6 @@ $totally = array_sum($row);
                 echo $hari[date('w')] . ', ' . date('j') . ' ' . $bulan[(int)date('n')] . ' ' . date('Y');
             ?></div>
             <div class="topbar-right">
-                <button class="bell-btn" aria-label="Notifikasi">
-                    <?php if ($belumCount > 0): ?><span class="bell-dot"></span><?php endif; ?>
-                </button>
                 <div style="display:flex;align-items:center;gap:8px;">
                     <div class="avatar-circle"><?= $inisial ?></div>
                     <div>
@@ -115,34 +107,40 @@ $totally = array_sum($row);
                     <div class="eyebrow"><?= count($filtered) ?> kategori</div>
                     <h1 class="section-title">Kategori Barang</h1>
                 </div>
-                <a href="kategori.php?mode=tambah" class="btn btn-primary">Tambah kategori</a>
+                <button type="button" class="btn btn-primary" onclick="openTambahKategoriModal()">Tambah kategori</button>
             </div>
 
             <form method="get" class="toolbar">
                 <div class="search-box">
                     <input type="text" name="q" value="<?= htmlspecialchars($q) ?>" placeholder="Cari kategori...">
+                    <?php if (!empty($q)): ?>
+                    <a href="kategori_barang.php" class="btn-reset" title="Reset Pencarian">Reset</a>
+                    <?php endif; ?>
                 </div>
             </form>
 
             <?php if (empty($filtered)): ?>
                 <div class="empty-state">
-                    <div><?= icon('tags', 34) ?></div>
                     <div>Tidak ada kategori yang cocok dengan pencarian "<?= htmlspecialchars($q) ?>".</div>
                 </div>
             <?php else: ?>
                 <div class="kategori-grid">
-                    <?php foreach ($filtered as $i => $k): ?>
+                    <?php foreach ($filtered as $i => $k): 
+                        $kataKategori = explode(' ', trim($k['nama']));
+                        if (count($kataKategori) > 1) {
+                            $iconInisial = strtoupper(substr($kataKategori[0], 0, 1) . substr(end($kataKategori), 0, 1));
+                        } else {
+                            $iconInisial = strtoupper(substr($k['nama'], 0, 2));
+                        }    
+                    ?>
                         <div class="kategori-card">
                             <div class="kategori-rank">#<?= str_pad($k['id'], 2, '0', STR_PAD_LEFT) ?></div>
-                            <div class="kategori-icon"></div>
+                            <div class="kategori-icon"><?= $iconInisial ?></div>
                             <div class="kategori-name"><?= htmlspecialchars($k['nama']) ?></div>
                             <div class="kategori-count"><?= $k['jumlah'] ?> laporan tercatat</div>
                             <div class="kategori-actions">
-                                <a href="kategori.php?mode=edit&id=<?= $k['id'] ?>" class="btn-ghost"></a>
-                                <form method="post" action="kategori_hapus.php" onsubmit="return confirm('Hapus kategori &quot;<?= htmlspecialchars($k['nama']) ?>&quot;?');" style="display:inline;">
-                                    <input type="hidden" name="id_kategori" value="<?= $k['id'] ?>">
-                                    <button type="submit" class="btn-danger-ghost"></button>
-                                </form>
+                                <button type="button" class="btn-ghost" onclick="openEditKategoriModal('<?= $k['id'] ?>', '<?= htmlspecialchars($k['nama'], ENT_QUOTES) ?>')">Edit</button>
+                                <a href="proses_kategori.php?aksi=delete&id=<?= $k['id'] ?>" class="btn-danger-ghost" onclick="return confirm('Hapus kategori &quot;<?= htmlspecialchars($k['nama']) ?>&quot;?');">Hapus</a>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -152,30 +150,61 @@ $totally = array_sum($row);
     </main>
 </div>
 
-<?php if ($mode === 'tambah' || ($mode === 'edit' && $editData)): ?>
-<div class="modal-backdrop" onclick="if(event.target===this) window.location='kategori.php?q=<?= urlencode($q) ?>'">
-    <div class="modal-box">
-        <div class="modal-head">
-            <div class="modal-title"><?= $mode === 'tambah' ? 'Tambah kategori' : 'Edit kategori' ?></div>
-            <a class="modal-close" href="kategori.php?q=<?= urlencode($q) ?>"><?= icon('x', 20) ?></a>
+<!-- Modal Tambah Kategori -->
+<div class="modal-overlay" id="modalTambahKategori">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3>Tambah Kategori Barang</h3>
+            <button class="modal-close" onclick="closeKategoriModal('modalTambahKategori')">&times;</button>
         </div>
-        <form method="post" action="<?= $mode === 'tambah' ? 'kategori_tambah.php' : 'kategori_edit.php' ?>">
-            <div class="modal-body">
-                <?php if ($mode === 'edit'): ?>
-                    <input type="hidden" name="id_kategori" value="<?= $editData['id'] ?>">
-                <?php endif; ?>
-                <div class="field-label">Nama kategori</div>
-                <input type="text" name="nama_kategori" class="field-input" required
-                    value="<?= $mode === 'edit' ? htmlspecialchars($editData['nama']) : '' ?>"
-                    placeholder="Misal: Elektronik">
-                <div class="modal-footer">
-                    <a href="kategori.php?q=<?= urlencode($q) ?>" class="btn">Batal</a>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
+        <form action="proses_kategori.php?aksi=tambah" method="post" class="modal-form">
+            <div class="form-group">
+                <label>Nama Kategori</label>
+                <input type="text" name="nama_kategori" placeholder="Contoh: Elektronik, Furnitur" required autofocus>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeKategoriModal('modalTambahKategori')">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
             </div>
         </form>
     </div>
 </div>
-<?php endif; ?>
+
+<!-- Modal Edit Kategori -->
+<div class="modal-overlay" id="modalEditKategori">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3>Edit Kategori Barang</h3>
+            <button class="modal-close" onclick="closeKategoriModal('modalEditKategori')">&times;</button>
+        </div>
+        <form action="proses_kategori.php?aksi=edit" method="post" class="modal-form">
+            <input type="hidden" name="id_kategori" id="edit_kategori_id">
+            <div class="form-group">
+                <label>Nama Kategori</label>
+                <input type="text" name="nama_kategori" id="edit_kategori_nama" required>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeKategoriModal('modalEditKategori')">Batal</button>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openTambahKategoriModal() {
+    document.getElementById('modalTambahKategori').classList.add('active');
+}
+
+function openEditKategoriModal(id, nama) {
+    document.getElementById('edit_kategori_id').value = id;
+    document.getElementById('edit_kategori_nama').value = nama;
+    document.getElementById('modalEditKategori').classList.add('active');
+}
+
+function closeKategoriModal(id) {
+    document.getElementById(id).classList.remove('active');
+}
+</script>
 </body>
 </html>
