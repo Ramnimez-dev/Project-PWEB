@@ -248,7 +248,6 @@ a {
     background: var(--green-faint); 
     color: var(--green); 
     border-color: rgba(61,122,85,.2); 
-    transform: rotate(-1.5deg); 
 }
 .status-selesai .pill-dot { 
     background: var(--green); 
