@@ -43,7 +43,7 @@ if ($aksi === 'edit') {
     $no_telp     = trim($_POST['no_telp'] ?? '');
     $role        = trim($_POST['role'] ?? 'user');
 
-    // Jika password diisi, password diubah
+    // Jika password diisi, password diubah dari yang sebelumnya
     if ($password !== '') {
 
         $query = "UPDATE users SET nama = '$nama', username = '$username', password = '$password',no_telp = '$no_telp', role = '$role' WHERE nomor_induk = '$nomor_induk'";
