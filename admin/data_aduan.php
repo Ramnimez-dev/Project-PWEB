@@ -62,6 +62,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
+// ---------- HELPER IKON (sebelumnya belum ada, dipakai di icon('check',...) dan icon('paperclip',...) di bawah) ----------
+function icon(string $name, int $size = 16, string $color = 'currentColor'): string
+{
+    $stroke = "stroke=\"$color\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"";
+    $paths = [
+        'check'     => '<path d="M20 6 9 17l-5-5"/>',
+        'paperclip' => '<path d="M17.5 6.5 8.6 15.4a3 3 0 1 0 4.2 4.2l8-8a5 5 0 0 0-7-7l-8.4 8.3"/>',
+        'x'         => '<path d="M18 6 6 18M6 6l12 12"/>',
+        'menu'      => '<path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/>',
+    ];
+    $body = $paths[$name] ?? '';
+    return "<svg width=\"$size\" height=\"$size\" viewBox=\"0 0 24 24\" $stroke>$body</svg>";
+}
+
 function statusPill(string $status): string
 {
     $class = match ($status) {
@@ -194,7 +208,8 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
 <body>
 <div class="layout">
 
-    <aside class="sidebar">
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+    <aside class="sidebar" id="mainSidebar">
         <div class="brand">
             <div class="brand-mark"><img src="../img/logo sapras.png" alt="logo sarpras"></div>
             <div>
@@ -222,6 +237,7 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
 
     <main class="main">
         <header class="topbar">
+            <button class="hamburger-btn" onclick="toggleSidebar()" aria-label="Menu"><?= icon('menu', 20) ?></button>
             <div class="topbar-date"><?php
                 $hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
                 $bulan = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
@@ -321,7 +337,7 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
                     <span><?= htmlspecialchars($detail['lokasi']) ?></span>
                 </div>
             </div>
-            <a class="modal-close" href="data_aduan.php?<?= $backQuery ?>" aria-label="Tutup"></a>
+            <a class="modal-close" href="data_aduan.php?<?= $backQuery ?>" aria-label="Tutup"><?= icon('x', 18) ?></a>
         </div>
 
         <!-- Body Pop Up -->
@@ -446,5 +462,17 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
     })();
 </script>
 <?php endif; ?>
+
+<script>
+function toggleSidebar() {
+    document.getElementById('mainSidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('show');
+}
+function closeSidebar() {
+    document.getElementById('mainSidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('show');
+}
+</script>
+
 </body>
 </html>
