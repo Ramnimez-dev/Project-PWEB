@@ -1990,7 +1990,7 @@ button {
   padding: 8px 12px;
   background-color: var(--surface);
   flex: 1;
-  width: 50px;
+  min-width: 320px;
 }
 
 .search-box input {
@@ -1999,7 +1999,6 @@ button {
   font-family: 'Inter', sans-serif;
   font-size: 13px;
   flex: 1;
-  width: 50%;
   background: transparent;
 }
 

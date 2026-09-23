@@ -446,8 +446,5 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
     })();
 </script>
 <?php endif; ?>
-
-
-
 </body>
 </html>
