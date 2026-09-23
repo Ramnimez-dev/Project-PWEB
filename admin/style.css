@@ -2338,6 +2338,35 @@ button {
             .no-print { display: none !important; } 
         }
 
+/* Container Utama Tanda Tangan */
+.legalisasi {
+    display: flex;
+    justify-content: space-between; /* Membuat satu di kiri penuh dan satu di kanan penuh */
+    align-items: flex-start;
+    margin-top: 40px;
+    page-break-inside: avoid; /* Mencegah tanda tangan terpotong halaman saat diprint */
+}
+
+/* Box Tanda Tangan */
+.ttd-box {
+    width: 250px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Jarak/Spasi untuk Tanda Tangan Basah & Stempel */
+.ttd-space {
+    height: 70px; 
+}
+
+/* Nama Penandatangan */
+.ttd-nama {
+    font-weight: bold;
+    text-decoration: underline;
+    margin-bottom: 2px;
+}
+
 /* halaman laporan.php */
 .filter-card { 
   background: white; 

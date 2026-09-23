@@ -114,10 +114,18 @@ $result = mysqli_fetch_all(mysqli_stmt_get_result($stmt), MYSQLI_ASSOC);
 
         <!-- LEGALISASI / TANDA TANGAN -->
         <div class="legalisasi">
+            <!-- KIRI: WAKASEK SARPRAS -->
             <div class="ttd-box">
-                <p>Bekasi, <?= date('d F Y') ?><br>Mengetahui,<br>Administrator SarPras</p>
-                <br><br><br><br>
-                <!-- Ruang kosong untuk tanda tangan basah / stempel -->
+                <p>Mengetahui,<br>Wakasek Bid. Sarpras</p>
+                <div class="ttd-space"></div>
+                <p class="ttd-nama">Koderi, S.T.</p>
+                <p>NIP. -</p>
+            </div>
+
+            <!-- KANAN: ADMINISTRATOR -->
+            <div class="ttd-box">
+                <p>Bekasi, <?= date('d F Y') ?><br>Petugas / Administrator</p>
+                <div class="ttd-space"></div>
                 <p class="ttd-nama"><?= htmlspecialchars($_SESSION['nama']) ?></p>
                 <p>NIP. <?= htmlspecialchars($_SESSION['nomor_induk']) ?></p>
             </div>

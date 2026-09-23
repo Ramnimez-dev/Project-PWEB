@@ -312,6 +312,11 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
                 <div class="search-box">
                     <?= icon('search', 15, '#6B756C') ?>
                     <input type="text" name="q" value="<?= htmlspecialchars($q) ?>" placeholder="Cari nama barang atau ID aduan...">
+
+                    <?php if (!empty($q) || 'Semua'): ?>
+                    <a href="riwayat.php" class="btn-reset" title="Reset Pencarian">Reset
+                    </a>
+                    <?php endif; ?>
                 </div>
                 <div class="filter-group">
                     <?php foreach ($statusOptions as $opt): ?>
@@ -370,10 +375,15 @@ $backQuery = http_build_query(['q' => $q, 'status' => $statusFilter]);
             <div>
                 <div class="modal-eyebrow">ADUAN #<?= $detail['id'] ?></div>
                 <div class="modal-title"><?= htmlspecialchars($detail['barang']) ?></div>
+                <div class="modal-cetak">
+                    <a href="cetak_aduan.php?id=<?= (int)$detail['id'] ?>" target="_blank" class="btn-btn-primary">🖨 Cetak</a>
+                </div>
             </div>
             <a class="modal-close" href="riwayat.php?<?= $backQuery ?>"><?= icon('x', 20) ?></a>
         </div>
         <div class="modal-body">
+
+
 
             <?php if ($balasanSukses): ?>
             <div class="alert-success">
